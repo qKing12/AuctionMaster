@@ -331,4 +331,4 @@ blacklist-item-message: '&cThis item is not auctionable!'
 #This option is configurable in menu's file.
 
 #Please do not modify this
-version: 2.3
+version: 3.0

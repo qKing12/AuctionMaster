@@ -167,7 +167,7 @@ public class AuctionMaster extends JavaPlugin{
 
         MetricsLite metrics = new MetricsLite(this, 8726);
 
-        if(this.getConfig().getDouble("version")<2.3){
+        if(this.getConfig().getDouble("version")<3.0){
             new ConfigUpdater(this);
             saveDefaultConfig();
         }

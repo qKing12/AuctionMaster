@@ -98,7 +98,7 @@ public class ConfigUpdater {
             String thisLine = "";
             while ((thisLine = in.readLine()) != null) {
                 if (thisLine.startsWith("version:"))
-                    out.println("version: 2.3");
+                    out.println("version: 3.0");
                 else {
                     out.println(thisLine);
                     if(thisLine.startsWith("delivery-menu-name:")){
