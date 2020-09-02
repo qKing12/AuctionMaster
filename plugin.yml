@@ -1,0 +1,18 @@
+name: AuctionMaster
+author: qKing12
+version: "3.0-BETA"
+main: me.qKing12.AuctionMaster.Main
+description: A not so simple plugin for auctions.
+
+api-version: "1.13"
+
+softdepend: [Citizens, Vault, PlayerPoints, TokenManager, PlaceholderAPI, Skript, ProtocolLib]
+
+commands:
+  auction:
+    aliases: [ah, auctions, auctionhouse, ahouse]
+    description: Use this command to open the auction menu.
+  ahview:
+    description: View an auction.
+  ahadmin:
+    description: Use this command for admin things.
