@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.FilesHandle;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -47,15 +47,15 @@ public class Deliveries {
                         " PRIMARY KEY ( id ))")
                 ) {
             stmt.execute();
-            Main.plugin.getLogger().info("Succesfully connected to the Deliveries SQL.");
+            AuctionMaster.plugin.getLogger().info("Succesfully connected to the Deliveries SQL.");
         }catch(Exception x){
-            Main.plugin.getLogger().info("Failed to connect to Deliveries SQL.");
+            AuctionMaster.plugin.getLogger().info("Failed to connect to Deliveries SQL.");
             x.printStackTrace();
         }
     }
 
     public Deliveries(){
-        url = "jdbc:sqlite:"+ Main.plugin.getDataFolder()+"/database/deliveries.db";
+        url = "jdbc:sqlite:"+ AuctionMaster.plugin.getDataFolder()+"/database/deliveries.db";
         try{
             Connection Deliveries = DriverManager.getConnection(url);
             loadDeliveryFile();
@@ -94,7 +94,7 @@ public class Deliveries {
     }
 
     public void removeDelivery(String uuid){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
                     PreparedStatement stmt = Deliveries.prepareStatement("DELETE FROM Deliveries WHERE id = ?");
@@ -104,7 +104,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Removed] All deliveries were removed for player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> removeDelivery(uuid), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> removeDelivery(uuid), 7);
                 } else
                     x.printStackTrace();
             }
@@ -113,7 +113,7 @@ public class Deliveries {
 
     public void setCoinsAndItems(String uuid, ArrayList<ItemStack> items, double coins){
         String toSet = getStringItems(items);
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
                     PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET items = ?,coins=? WHERE id = ?");
@@ -132,7 +132,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Updated] Deliveries were set to " + items.size() + " items and " + coins + " coins for player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> setCoinsAndItems(uuid, items, coins), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> setCoinsAndItems(uuid, items, coins), 7);
                 } else
                     x.printStackTrace();
             }
@@ -141,7 +141,7 @@ public class Deliveries {
 
     public void setItems(String uuid, ArrayList<ItemStack> items){
         String toSet = getStringItems(items);
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
                     PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET items = ? WHERE id = ?");
@@ -158,7 +158,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Updated Items] Deliveries were set to " + items.size() + " items for player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> setItems(uuid, items), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> setItems(uuid, items), 7);
                 } else
                     x.printStackTrace();
             }
@@ -167,7 +167,7 @@ public class Deliveries {
 
     public void addItem(String uuid, ItemStack item){
         String toAdd = utils.itemToBase64(item);
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
                     PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET items = items || (CASE WHEN items = '' THEN '" + toAdd + "' ELSE '." + toAdd + "' END) WHERE id = ?");
@@ -183,7 +183,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Updated Item Added] Sent one item to player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> addItem(uuid, item), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> addItem(uuid, item), 7);
                 } else
                     x.printStackTrace();
             }
@@ -191,7 +191,7 @@ public class Deliveries {
     }
 
     public void setCoins(String uuid, double coins){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
                     PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET coins = ? WHERE id = ?");
@@ -208,7 +208,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Updated Coins] Deliveries were set to " + coins + " coins for player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> setCoins(uuid, coins), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> setCoins(uuid, coins), 7);
                 } else
                     x.printStackTrace();
             }
@@ -216,7 +216,7 @@ public class Deliveries {
     }
 
     public void addCoins(String uuid, double coins){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (Connection Deliveries = DriverManager.getConnection(url);
                  PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET coins = coins+? WHERE id = ?");
                  PreparedStatement stmt2 = Deliveries.prepareStatement("INSERT INTO Deliveries VALUES (?, ?, '')");
@@ -232,7 +232,7 @@ public class Deliveries {
                 utils.injectToLog("[Delivery Updated Coins Added] Sent " + coins + " coins to player with UUID=" + uuid);
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> addCoins(uuid, coins), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> addCoins(uuid, coins), 7);
                 } else
                     x.printStackTrace();
             }

@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.AuctionObjects;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,19 +28,19 @@ public class SortingObject {
     private String clickToSwitchBIN;
 
     public SortingObject(){
-        sortItem= Main.itemConstructor.getItem(Main.auctionsManagerCfg.getString("sort-auction-item"), utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-name")), null);
-        sortItemBIN=Main.itemConstructor.getItem(Main.buyItNowCfg.getString("sort-item.material"), utils.chat(Main.buyItNowCfg.getString("sort-item.name")),null);
+        sortItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item"), utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-name")), null);
+        sortItemBIN= AuctionMaster.itemConstructor.getItem(AuctionMaster.buyItNowCfg.getString("sort-item.material"), utils.chat(AuctionMaster.buyItNowCfg.getString("sort-item.name")),null);
 
-        highestBid=utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-sorting.highest-bid"));
-        lowestBid=utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-sorting.lowest-bid"));
-        endingSoon=utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-sorting.ending-soon"));
-        mostBids=utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-sorting.most-bids"));
-        clickToSwitch=utils.chat(Main.auctionsManagerCfg.getString("sort-auction-item-sorting.click-to-switch"));
+        highestBid=utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-sorting.highest-bid"));
+        lowestBid=utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-sorting.lowest-bid"));
+        endingSoon=utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-sorting.ending-soon"));
+        mostBids=utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-sorting.most-bids"));
+        clickToSwitch=utils.chat(AuctionMaster.auctionsManagerCfg.getString("sort-auction-item-sorting.click-to-switch"));
 
-        allAuctions=utils.chat(Main.buyItNowCfg.getString("sort-item.show-all"));
-        binOnly=utils.chat(Main.buyItNowCfg.getString("sort-item.bin-only"));
-        auctionsOnly=utils.chat(Main.buyItNowCfg.getString("sort-item.auctions-only"));
-        clickToSwitchBIN=utils.chat(Main.buyItNowCfg.getString("sort-item.click-to-switch"));
+        allAuctions=utils.chat(AuctionMaster.buyItNowCfg.getString("sort-item.show-all"));
+        binOnly=utils.chat(AuctionMaster.buyItNowCfg.getString("sort-item.bin-only"));
+        auctionsOnly=utils.chat(AuctionMaster.buyItNowCfg.getString("sort-item.auctions-only"));
+        clickToSwitchBIN=utils.chat(AuctionMaster.buyItNowCfg.getString("sort-item.click-to-switch"));
 
     }
 

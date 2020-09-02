@@ -4,7 +4,7 @@ import me.qKing12.AuctionMaster.API.Events.AuctionCreateEvent;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionBIN;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionClassic;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class CreateAuctionConfirmMenu {
 
@@ -31,24 +31,24 @@ public class CreateAuctionConfirmMenu {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
             this.fee = fee;
-            inventory = Bukkit.createInventory(player, Main.configLoad.createAuctionConfirmMenuSize, utilsAPI.chat(player, Main.configLoad.createAuctionConfirmMenuName));
+            inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.createAuctionConfirmMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.createAuctionConfirmMenuName));
 
-            if (Main.configLoad.useBackgoundGlass)
-                for (int i = 0; i < Main.configLoad.createAuctionConfirmMenuSize; i++)
-                    inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
+            if (AuctionMaster.configLoad.useBackgoundGlass)
+                for (int i = 0; i < AuctionMaster.configLoad.createAuctionConfirmMenuSize; i++)
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.confirmItemLore)
-                lore.add(utilsAPI.chat(player, line.replace("%cost%", Main.numberFormatHelper.formatNumber(fee))));
-            inventory.setItem(Main.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot"), itemConstructor.getItem(Main.configLoad.confirmItemMaterial, utilsAPI.chat(player, Main.configLoad.confirmItemName.replace("%cost%", Main.numberFormatHelper.formatNumber(fee))), lore));
+            for (String line : AuctionMaster.configLoad.confirmItemLore)
+                lore.add(utilsAPI.chat(player, line.replace("%cost%", AuctionMaster.numberFormatHelper.formatNumber(fee))));
+            inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot"), itemConstructor.getItem(AuctionMaster.configLoad.confirmItemMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.confirmItemName.replace("%cost%", AuctionMaster.numberFormatHelper.formatNumber(fee))), lore));
 
             lore = new ArrayList<>();
-            for (String line : Main.configLoad.cancelItemLore)
+            for (String line : AuctionMaster.configLoad.cancelItemLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(Main.menusCfg.getInt("create-auction-confirm-menu.cancel-item-slot"), itemConstructor.getItem(Main.configLoad.cancelItemMaterial, utilsAPI.chat(player, Main.configLoad.cancelItemName), lore));
+            inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.cancel-item-slot"), itemConstructor.getItem(AuctionMaster.configLoad.cancelItemMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.cancelItemName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });
@@ -62,35 +62,35 @@ public class CreateAuctionConfirmMenu {
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
                 if(e.getClickedInventory().equals(inventory)) {
-                    if (e.getSlot() == Main.menusCfg.getInt("create-auction-confirm-menu.cancel-item-slot")) {
+                    if (e.getSlot() == AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.cancel-item-slot")) {
                         utils.playSound(player, "auction-cancel");
                         new CreateAuctionMainMenu(player);
                     }
-                    else if (e.getSlot() == Main.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot")){
+                    else if (e.getSlot() == AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot")){
                         utils.playSound(player, "auction-confirm");
                         String uuid = player.getUniqueId().toString();
                         double startingBid;
-                        if(Main.auctionsHandler.startingBid.containsKey(player.getUniqueId().toString()))
-                            startingBid=Main.auctionsHandler.startingBid.get(uuid);
+                        if(AuctionMaster.auctionsHandler.startingBid.containsKey(player.getUniqueId().toString()))
+                            startingBid= AuctionMaster.auctionsHandler.startingBid.get(uuid);
                         else
-                            startingBid=Main.configLoad.defaultStartingBid;
+                            startingBid= AuctionMaster.configLoad.defaultStartingBid;
                         long duration;
-                        if(Main.auctionsHandler.startingDuration.containsKey(uuid))
-                            duration=Main.auctionsHandler.startingDuration.get(uuid);
+                        if(AuctionMaster.auctionsHandler.startingDuration.containsKey(uuid))
+                            duration= AuctionMaster.auctionsHandler.startingDuration.get(uuid);
                         else
-                            duration=Main.configLoad.defaultDuration;
-                        Main.economy.removeMoney(player, fee);
+                            duration= AuctionMaster.configLoad.defaultDuration;
+                        AuctionMaster.economy.removeMoney(player, fee);
                         Auction auction;
-                        if(Main.auctionsHandler.buyItNowSelected!=null && Main.auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString()))
-                            Main.auctionsHandler.createAuction(auction=new AuctionBIN(player, startingBid, duration, Main.auctionsHandler.previewItems.get(uuid)));
+                        if(AuctionMaster.auctionsHandler.buyItNowSelected!=null && AuctionMaster.auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString()))
+                            AuctionMaster.auctionsHandler.createAuction(auction=new AuctionBIN(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
                         else
-                            Main.auctionsHandler.createAuction(auction=new AuctionClassic(player, startingBid, duration, Main.auctionsHandler.previewItems.get(uuid)));
+                            AuctionMaster.auctionsHandler.createAuction(auction=new AuctionClassic(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
                         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new AuctionCreateEvent(player, auction)));
-                        player.sendMessage(utilsAPI.chat(player, Main.auctionsManagerCfg.getString("auction-created-message")));
-                        Main.auctionsHandler.startingBid.remove(uuid);
-                        Main.auctionsHandler.startingDuration.remove(uuid);
-                        Main.auctionsHandler.previewItems.remove(uuid);
-                        Main.auctionsDatabase.removePreviewItem(uuid);
+                        player.sendMessage(utilsAPI.chat(player, AuctionMaster.auctionsManagerCfg.getString("auction-created-message")));
+                        AuctionMaster.auctionsHandler.startingBid.remove(uuid);
+                        AuctionMaster.auctionsHandler.startingDuration.remove(uuid);
+                        AuctionMaster.auctionsHandler.previewItems.remove(uuid);
+                        AuctionMaster.auctionsDatabase.removePreviewItem(uuid);
                         player.closeInventory();
                     }
                 }

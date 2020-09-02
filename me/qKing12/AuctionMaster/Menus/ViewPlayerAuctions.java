@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.Menus;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class ViewPlayerAuctions {
 
@@ -27,7 +27,7 @@ public class ViewPlayerAuctions {
     private String uuid;
 
     private void keepUpdated(){
-        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, () -> {
+        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
@@ -40,7 +40,7 @@ public class ViewPlayerAuctions {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
 
-            if(Main.auctionsHandler.ownAuctions.get(uuid)==null){
+            if(AuctionMaster.auctionsHandler.ownAuctions.get(uuid)==null){
                 player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("no-auctions-message")));
                 return;
             }
@@ -64,16 +64,16 @@ public class ViewPlayerAuctions {
                 size += 1;
             size *= 9;
 
-            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, Main.configLoad.viewPlayerAuctionsMenuName.replace("%player%", Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName())));
+            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, AuctionMaster.configLoad.viewPlayerAuctionsMenuName.replace("%player%", Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName())));
 
             int relativeSlot = size - 9;
             for (int i = 1; i < 8; i++) {
-                inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
-                inventory.setItem(relativeSlot + i, Main.configLoad.backgroundGlass.clone());
+                inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
+                inventory.setItem(relativeSlot + i, AuctionMaster.configLoad.backgroundGlass.clone());
             }
             for (int i = 0; i < size; i += 9) {
-                inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
-                inventory.setItem(i + 8, Main.configLoad.backgroundGlass.clone());
+                inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
+                inventory.setItem(i + 8, AuctionMaster.configLoad.backgroundGlass.clone());
             }
 
             int slot = 10;
@@ -88,7 +88,7 @@ public class ViewPlayerAuctions {
             keepUpdated();
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });

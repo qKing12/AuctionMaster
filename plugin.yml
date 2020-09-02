@@ -1,7 +1,7 @@
 name: AuctionMaster
 author: qKing12
 version: "3.0-BETA"
-main: me.qKing12.AuctionMaster.Main
+main: me.qKing12.AuctionMaster.AuctionMaster
 description: A not so simple plugin for auctions.
 
 api-version: "1.13"

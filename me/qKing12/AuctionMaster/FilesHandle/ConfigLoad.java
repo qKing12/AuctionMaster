@@ -1,7 +1,6 @@
 package me.qKing12.AuctionMaster.FilesHandle;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -11,10 +10,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.ArrayList;
-import java.util.List;
 
-import static me.qKing12.AuctionMaster.Main.adminCfg;
-import static me.qKing12.AuctionMaster.Main.buyItNowCfg;
+import static me.qKing12.AuctionMaster.AuctionMaster.adminCfg;
+import static me.qKing12.AuctionMaster.AuctionMaster.buyItNowCfg;
 
 public class ConfigLoad {
 
@@ -33,7 +31,7 @@ public class ConfigLoad {
                     return true;
             }
 
-        if(Main.upperVersion){
+        if(AuctionMaster.upperVersion){
             for(ItemStack item2 : blacklistIds)
                 if(item.getType().equals(item2.getType()))
                     return true;
@@ -402,320 +400,320 @@ public class ConfigLoad {
 
     public ConfigLoad(){
 
-        if(Main.upperVersion) {
+        if(AuctionMaster.upperVersion) {
             skullItem = new ItemStack(Material.getMaterial("PLAYER_HEAD"), 1);
         }
         else {
             skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
         }
 
-        endOwnAuction=Main.plugin.getConfig().getBoolean("use-end-own-auction");
+        endOwnAuction= AuctionMaster.plugin.getConfig().getBoolean("use-end-own-auction");
 
-        backgroundGlass=Main.itemConstructor.getItem("160:"+Main.plugin.getConfig().getInt("background-color"),  " ", null);
+        backgroundGlass= AuctionMaster.itemConstructor.getItem("160:"+ AuctionMaster.plugin.getConfig().getInt("background-color"),  " ", null);
 
-        mainMenuName=Main.plugin.getConfig().getString("starting-menu-name");
-        mainMenuSize=Main.menusCfg.getInt("main-menu.size");
+        mainMenuName= AuctionMaster.plugin.getConfig().getString("starting-menu-name");
+        mainMenuSize= AuctionMaster.menusCfg.getInt("main-menu.size");
 
-        useBackgoundGlass=Main.plugin.getConfig().getBoolean("use-background-glass");
+        useBackgoundGlass= AuctionMaster.plugin.getConfig().getBoolean("use-background-glass");
 
-        goBackName=Main.plugin.getConfig().getString("go-back-item-name");
-        goBackLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("go-back-item-lore");
-        goBackMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("go-back-item"));
+        goBackName= AuctionMaster.plugin.getConfig().getString("go-back-item-name");
+        goBackLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("go-back-item-lore");
+        goBackMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("go-back-item"));
 
-        previousPageName=Main.plugin.getConfig().getString("previous-page-item-name");
-        previousPageLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("previous-page-item-lore");
-        previousPageMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("previous-page-item"));
+        previousPageName= AuctionMaster.plugin.getConfig().getString("previous-page-item-name");
+        previousPageLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("previous-page-item-lore");
+        previousPageMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("previous-page-item"));
 
-        nextPageName=Main.plugin.getConfig().getString("next-page-item-name");
-        nextPageLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("next-page-item-lore");
-        nextPageMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("next-page-item"));
+        nextPageName= AuctionMaster.plugin.getConfig().getString("next-page-item-name");
+        nextPageLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("next-page-item-lore");
+        nextPageMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("next-page-item"));
 
-        closeMenuName=Main.plugin.getConfig().getString("close-menu-item-name");
-        closeMenuLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("close-menu-item-lore");
-        closeMenuMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("close-menu-item"));
+        closeMenuName= AuctionMaster.plugin.getConfig().getString("close-menu-item-name");
+        closeMenuLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("close-menu-item-lore");
+        closeMenuMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("close-menu-item"));
 
-        browsingMenuItemName=Main.plugin.getConfig().getString("browsing-menu-item-name");
-        browsingMenuItemLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("browsing-menu-item-lore");
-        browsingMenuItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("browsing-menu-item"));
+        browsingMenuItemName= AuctionMaster.plugin.getConfig().getString("browsing-menu-item-name");
+        browsingMenuItemLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("browsing-menu-item-lore");
+        browsingMenuItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("browsing-menu-item"));
 
-        viewBidsMenuItemName=Main.plugin.getConfig().getString("view-bids-menu-item-name");
-        viewBidsMenuItemLoreWithBids=(ArrayList<String>)Main.plugin.getConfig().getStringList("view-bids-menu-item-lore.with-bids");
-        viewBidsMenuItemLoreWithoutBids=(ArrayList<String>)Main.plugin.getConfig().getStringList("view-bids-menu-item-lore.without-bids");
-        viewBidsMenuItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("view-bids-menu-item"));
+        viewBidsMenuItemName= AuctionMaster.plugin.getConfig().getString("view-bids-menu-item-name");
+        viewBidsMenuItemLoreWithBids=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("view-bids-menu-item-lore.with-bids");
+        viewBidsMenuItemLoreWithoutBids=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("view-bids-menu-item-lore.without-bids");
+        viewBidsMenuItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("view-bids-menu-item"));
 
-        manageAuctionsItemName=Main.auctionsManagerCfg.getString("manage-menu-item-name");
-        manageAuctionsItemLoreWithAuctions=(ArrayList<String>)Main.auctionsManagerCfg.getStringList("manage-menu-item-lore.manage-with-own-auctions");
-        manageAuctionsItemLoreWithoutAuctions=(ArrayList<String>)Main.auctionsManagerCfg.getStringList("manage-menu-item-lore.manage-no-own-auctions");
-        manageAuctionsItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("manage-menu-item"));
+        manageAuctionsItemName= AuctionMaster.auctionsManagerCfg.getString("manage-menu-item-name");
+        manageAuctionsItemLoreWithAuctions=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("manage-menu-item-lore.manage-with-own-auctions");
+        manageAuctionsItemLoreWithoutAuctions=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("manage-menu-item-lore.manage-no-own-auctions");
+        manageAuctionsItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("manage-menu-item"));
 
-        deliveryMenuName=Main.plugin.getConfig().getString("delivery-menu-name");
+        deliveryMenuName= AuctionMaster.plugin.getConfig().getString("delivery-menu-name");
 
-        deliveryItemNoName=Main.plugin.getConfig().getString("delivery-item.no-delivery-name");
-        deliveryItemYesName=Main.plugin.getConfig().getString("delivery-item.yes-delivery-name");
-        deliveryItemNoLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("delivery-item.no-delivery-lore");
-        deliveryItemYesLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("delivery-item.yes-delivery-lore");
+        deliveryItemNoName= AuctionMaster.plugin.getConfig().getString("delivery-item.no-delivery-name");
+        deliveryItemYesName= AuctionMaster.plugin.getConfig().getString("delivery-item.yes-delivery-name");
+        deliveryItemNoLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("delivery-item.no-delivery-lore");
+        deliveryItemYesLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("delivery-item.yes-delivery-lore");
 
-        mainMenuDeliveryName=Main.plugin.getConfig().getString("delivery-menu-item-name");
-        mainMenuDeliveryLore=(ArrayList<String>)Main.plugin.getConfig().getStringList("delivery-menu-item-lore");
-        mainMenuDeliveryItem=Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("delivery-menu-item"));
+        mainMenuDeliveryName= AuctionMaster.plugin.getConfig().getString("delivery-menu-item-name");
+        mainMenuDeliveryLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("delivery-menu-item-lore");
+        mainMenuDeliveryItem= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("delivery-menu-item"));
 
-        createAuctionMenuName = Main.auctionsManagerCfg.getString("create-menu-name");
-        createAuctionMenuSize = Main.menusCfg.getInt("create-auction-menu.size");
+        createAuctionMenuName = AuctionMaster.auctionsManagerCfg.getString("create-menu-name");
+        createAuctionMenuSize = AuctionMaster.menusCfg.getInt("create-auction-menu.size");
 
-        createAuctionConfirmMenuName = Main.auctionsManagerCfg.getString("auction-confirm-menu-name");
-        createAuctionConfirmMenuSize = Main.menusCfg.getInt("create-auction-confirm-menu.size");
+        createAuctionConfirmMenuName = AuctionMaster.auctionsManagerCfg.getString("auction-confirm-menu-name");
+        createAuctionConfirmMenuSize = AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.size");
 
-        createAuctionPreviewNameNoItem = Main.auctionsManagerCfg.getString("preview-no-item-selected-name");
-        createAuctionPreviewLoreNoItem = (ArrayList<String>)Main.auctionsManagerCfg.getStringList("preview-no-item-selected-lore");
-        createAuctionPreviewItemSelectedLoreAdd = Main.auctionsManagerCfg.getString("preview-selected-item-take-back");
-        createAuctionPreviewNameYesItem = Main.auctionsManagerCfg.getString("preview-selected-item-name");
-        createAuctionPreviewMaterial = Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("preview-no-item-selected"));
+        createAuctionPreviewNameNoItem = AuctionMaster.auctionsManagerCfg.getString("preview-no-item-selected-name");
+        createAuctionPreviewLoreNoItem = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("preview-no-item-selected-lore");
+        createAuctionPreviewItemSelectedLoreAdd = AuctionMaster.auctionsManagerCfg.getString("preview-selected-item-take-back");
+        createAuctionPreviewNameYesItem = AuctionMaster.auctionsManagerCfg.getString("preview-selected-item-name");
+        createAuctionPreviewMaterial = AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("preview-no-item-selected"));
 
-        createAuctionConfirmNoName = Main.auctionsManagerCfg.getString("create-auction-item.no-item-selected-name");
-        createAuctionConfirmNoLore = (ArrayList<String>)Main.auctionsManagerCfg.getStringList("create-auction-item.no-item-selected-lore");
-        createAuctionConfirmNoMaterial = Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("create-auction-item.no-item-selected-material"));
+        createAuctionConfirmNoName = AuctionMaster.auctionsManagerCfg.getString("create-auction-item.no-item-selected-name");
+        createAuctionConfirmNoLore = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("create-auction-item.no-item-selected-lore");
+        createAuctionConfirmNoMaterial = AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("create-auction-item.no-item-selected-material"));
 
-        createAuctionConfirmYesName = Main.auctionsManagerCfg.getString("create-auction-item.item-selected-name");
-        createAuctionConfirmYesLore = (ArrayList<String>)Main.auctionsManagerCfg.getStringList("create-auction-item.item-selected-lore");
-        createAuctionConfirmYesMaterial = Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("create-auction-item.item-selected-material"));
+        createAuctionConfirmYesName = AuctionMaster.auctionsManagerCfg.getString("create-auction-item.item-selected-name");
+        createAuctionConfirmYesLore = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("create-auction-item.item-selected-lore");
+        createAuctionConfirmYesMaterial = AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("create-auction-item.item-selected-material"));
 
-        startingBidItemName=Main.auctionsManagerCfg.getString("starting-bid-item-name");
-        startingBidItemLore=(ArrayList<String>) Main.auctionsManagerCfg.getStringList("starting-bid-item-lore");
-        startingBidItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("starting-bid-item"));
+        startingBidItemName= AuctionMaster.auctionsManagerCfg.getString("starting-bid-item-name");
+        startingBidItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-item-lore");
+        startingBidItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("starting-bid-item"));
 
-        durationItemName=Main.auctionsManagerCfg.getString("duration-item-name");
-        durationItemLore=(ArrayList<String>) Main.auctionsManagerCfg.getStringList("duration-item-lore");
-        durationItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("duration-item"));
+        durationItemName= AuctionMaster.auctionsManagerCfg.getString("duration-item-name");
+        durationItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("duration-item-lore");
+        durationItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("duration-item"));
 
-        confirmItemName=Main.auctionsManagerCfg.getString("auction-confirm-item-name");
-        confirmItemLore=(ArrayList<String>) Main.auctionsManagerCfg.getStringList("auction-confirm-item-lore");
-        confirmItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("auction-confirm-item-material"));
+        confirmItemName= AuctionMaster.auctionsManagerCfg.getString("auction-confirm-item-name");
+        confirmItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("auction-confirm-item-lore");
+        confirmItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("auction-confirm-item-material"));
 
-        cancelItemName=Main.auctionsManagerCfg.getString("auction-cancel-item-name");
-        cancelItemLore=(ArrayList<String>) Main.auctionsManagerCfg.getStringList("auction-cancel-item-lore");
-        cancelItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("auction-cancel-item-material"));
+        cancelItemName= AuctionMaster.auctionsManagerCfg.getString("auction-cancel-item-name");
+        cancelItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("auction-cancel-item-lore");
+        cancelItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("auction-cancel-item-material"));
 
-        second = Main.auctionsManagerCfg.getString("second");
-        seconds = Main.auctionsManagerCfg.getString("seconds");
-        minute = Main.auctionsManagerCfg.getString("minute");
-        minutes = Main.auctionsManagerCfg.getString("minutes");
-        hour = Main.auctionsManagerCfg.getString("hour");
-        hours = Main.auctionsManagerCfg.getString("hours");
-        day = Main.auctionsManagerCfg.getString("day");
-        days = Main.auctionsManagerCfg.getString("days");
-        short_second = Main.auctionsManagerCfg.getString("short_second");
-        short_minute = Main.auctionsManagerCfg.getString("short_minute");
-        short_hour = Main.auctionsManagerCfg.getString("short_hour");
-        short_day = Main.auctionsManagerCfg.getString("short_day");
-        formula = Main.auctionsManagerCfg.getString("extra-fee-formula");
+        second = AuctionMaster.auctionsManagerCfg.getString("second");
+        seconds = AuctionMaster.auctionsManagerCfg.getString("seconds");
+        minute = AuctionMaster.auctionsManagerCfg.getString("minute");
+        minutes = AuctionMaster.auctionsManagerCfg.getString("minutes");
+        hour = AuctionMaster.auctionsManagerCfg.getString("hour");
+        hours = AuctionMaster.auctionsManagerCfg.getString("hours");
+        day = AuctionMaster.auctionsManagerCfg.getString("day");
+        days = AuctionMaster.auctionsManagerCfg.getString("days");
+        short_second = AuctionMaster.auctionsManagerCfg.getString("short_second");
+        short_minute = AuctionMaster.auctionsManagerCfg.getString("short_minute");
+        short_hour = AuctionMaster.auctionsManagerCfg.getString("short_hour");
+        short_day = AuctionMaster.auctionsManagerCfg.getString("short_day");
+        formula = AuctionMaster.auctionsManagerCfg.getString("extra-fee-formula");
 
-        defaultDuration= utils.toMiliseconds(Main.auctionsManagerCfg.getString("default-starting-duration"));
-        defaultStartingBid=Double.parseDouble(Main.auctionsManagerCfg.getString("default-starting-bid"));
+        defaultDuration= utils.toMiliseconds(AuctionMaster.auctionsManagerCfg.getString("default-starting-duration"));
+        defaultStartingBid=Double.parseDouble(AuctionMaster.auctionsManagerCfg.getString("default-starting-bid"));
 
-        minutesFee=Double.parseDouble(Main.auctionsManagerCfg.getString("extra-fee-minutes"));
-        startingBidFee=Double.parseDouble(Main.auctionsManagerCfg.getString("starting-bid-fee-procent"));
+        minutesFee=Double.parseDouble(AuctionMaster.auctionsManagerCfg.getString("extra-fee-minutes"));
+        startingBidFee=Double.parseDouble(AuctionMaster.auctionsManagerCfg.getString("starting-bid-fee-procent"));
         startingBidBINFee=buyItNowCfg.getDouble("buy-it-now-fee");
 
-        double time = Main.menusCfg.getDouble("duration-select-menu.first-item.hours");
+        double time = AuctionMaster.menusCfg.getDouble("duration-select-menu.first-item.hours");
         ArrayList<String> lore = new ArrayList<>();
         if(time<1){
             double fractional = time - Math.floor(time);
             fractional*=100;
             int minutes = (int) fractional;
-            double firstTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
+            double firstTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(firstTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(firstTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            firstTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            firstTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
         }
         else{
             int hours=(int)time;
-            double firstTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
+            double firstTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(firstTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(firstTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            firstTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            firstTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
         }
 
-        time = Main.menusCfg.getDouble("duration-select-menu.second-item.hours");
+        time = AuctionMaster.menusCfg.getDouble("duration-select-menu.second-item.hours");
         lore = new ArrayList<>();
         if(time<1){
             double fractional = time - Math.floor(time);
             fractional*=100;
             int minutes = (int) fractional;
-            double secondTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
+            double secondTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(secondTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(secondTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            secondTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            secondTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
         }
         else{
             int hours=(int)time;
-            double secondTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
+            double secondTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(secondTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(secondTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            secondTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            secondTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
         }
 
-        time = Main.menusCfg.getDouble("duration-select-menu.third-item.hours");
+        time = AuctionMaster.menusCfg.getDouble("duration-select-menu.third-item.hours");
         lore = new ArrayList<>();
         if(time<1){
             double fractional = time - Math.floor(time);
             fractional*=100;
             int minutes = (int) fractional;
-            double thirdTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
+            double thirdTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(thirdTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(thirdTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            thirdTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            thirdTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
         }
         else{
             int hours=(int)time;
-            double thirdTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
+            double thirdTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(thirdTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(thirdTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            thirdTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            thirdTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
         }
 
-        time = Main.menusCfg.getDouble("duration-select-menu.forth-item.hours");
+        time = AuctionMaster.menusCfg.getDouble("duration-select-menu.forth-item.hours");
         lore = new ArrayList<>();
         if(time<1){
             double fractional = time - Math.floor(time);
             fractional*=100;
             int minutes = (int) fractional;
-            double forthTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
+            double forthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(forthTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(forthTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            forthTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            forthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
         }
         else{
             int hours=(int)time;
-            double forthTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
+            double forthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(forthTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(forthTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            forthTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            forthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
         }
 
-        time = Main.menusCfg.getDouble("duration-select-menu.fifth-item.hours");
+        time = AuctionMaster.menusCfg.getDouble("duration-select-menu.fifth-item.hours");
         lore = new ArrayList<>();
         if(time<1){
             double fractional = time - Math.floor(time);
             fractional*=100;
             int minutes = (int) fractional;
-            double fifthTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
+            double fifthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(fifthTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(fifthTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            fifthTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            fifthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
         }
         else{
             int hours=(int)time;
-            double fifthTimeFee = Main.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
+            double fifthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(fifthTimeFee!=0)
-                lore.add(utils.chat("&7")+Main.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+Main.numberFormatHelper.formatNumber(fifthTimeFee));
+                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
             lore.add("");
-            lore.add(utils.chat(Main.auctionsManagerCfg.getString("duration-selection-lore")));
-            fifthTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
+            lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
+            fifthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
         }
 
         lore=new ArrayList<>();
-        for(String line : Main.auctionsManagerCfg.getStringList("duration-select-item-lore")){
+        for(String line : AuctionMaster.auctionsManagerCfg.getStringList("duration-select-item-lore")){
             lore.add(utils.chat(line));
         }
-        customTimeItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.menusCfg.getString("duration-select-menu.custom-time-item-material")), utils.chat(Main.auctionsManagerCfg.getString("duration-select-item-name")), lore);
+        customTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.custom-time-item-material")), utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-select-item-name")), lore);
 
-        collectAllMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("collect-all-item"));
-        collectAllName=Main.auctionsManagerCfg.getString("collect-all-item-name");
-        collectAllLoreOwnAuctions=(ArrayList<String>)Main.auctionsManagerCfg.getStringList("collect-all-item-lore.own-auctions");
-        collectAllLoreBids=(ArrayList<String>)Main.auctionsManagerCfg.getStringList("collect-all-item-lore.own-bids");
+        collectAllMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("collect-all-item"));
+        collectAllName= AuctionMaster.auctionsManagerCfg.getString("collect-all-item-name");
+        collectAllLoreOwnAuctions=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("collect-all-item-lore.own-auctions");
+        collectAllLoreBids=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("collect-all-item-lore.own-bids");
 
-        manageOwnAuctionsMenuName=Main.auctionsManagerCfg.getString("manage-own-auctions-menu-name");
-        browsingMenuName=Main.plugin.getConfig().getString("browsing-menu-name");
+        manageOwnAuctionsMenuName= AuctionMaster.auctionsManagerCfg.getString("manage-own-auctions-menu-name");
+        browsingMenuName= AuctionMaster.plugin.getConfig().getString("browsing-menu-name");
 
-        searchItemName=Main.auctionsManagerCfg.getString("search-auction-item-name");
-        searchItemLore=(ArrayList<String>)Main.auctionsManagerCfg.getStringList("search-auction-item-lore");
-        searchItemMaterial=Main.itemConstructor.getItemFromMaterial(Main.auctionsManagerCfg.getString("search-auction-item"));
+        searchItemName= AuctionMaster.auctionsManagerCfg.getString("search-auction-item-name");
+        searchItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("search-auction-item-lore");
+        searchItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("search-auction-item"));
 
-        viewAuctionMenuName=Main.bidsRelatedCfg.getString("bids-menu-name");
-        viewAuctionMenuSize=Main.menusCfg.getInt("view-auction-menu.size");
+        viewAuctionMenuName= AuctionMaster.bidsRelatedCfg.getString("bids-menu-name");
+        viewAuctionMenuSize= AuctionMaster.menusCfg.getInt("view-auction-menu.size");
 
-        editBidMaterial=Main.itemConstructor.getItemFromMaterial(Main.bidsRelatedCfg.getString("edit-bid-item"));
-        editBidName=Main.bidsRelatedCfg.getString("edit-bid-item-name");
-        editBidLore=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("edit-bid-item-lore");
+        editBidMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("edit-bid-item"));
+        editBidName= AuctionMaster.bidsRelatedCfg.getString("edit-bid-item-name");
+        editBidLore=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("edit-bid-item-lore");
 
-        cantAffordSubmitBidMaterial=Main.itemConstructor.getItemFromMaterial(Main.bidsRelatedCfg.getString("submit-bid-cannot-afford-item"));
-        cantAffordSubmitBidName=Main.bidsRelatedCfg.getString("submit-bid-cannot-afford-item-name");
-        cantAffordSubmitBidLore=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("submit-bid-cannot-afford-item-lore");
+        cantAffordSubmitBidMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("submit-bid-cannot-afford-item"));
+        cantAffordSubmitBidName= AuctionMaster.bidsRelatedCfg.getString("submit-bid-cannot-afford-item-name");
+        cantAffordSubmitBidLore=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("submit-bid-cannot-afford-item-lore");
 
-        submitBidMaterial=Main.itemConstructor.getItemFromMaterial(Main.bidsRelatedCfg.getString("submit-bid-item"));
-        submitBidName=Main.bidsRelatedCfg.getString("submit-bid-item-name");
-        submitBidLoreNoPreviousBids=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("submit-bid-item-lore.no-previous-bids");
-        submitBidLoreWithPreviousBids=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("submit-bid-item-lore.with-previous-bids");
+        submitBidMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("submit-bid-item"));
+        submitBidName= AuctionMaster.bidsRelatedCfg.getString("submit-bid-item-name");
+        submitBidLoreNoPreviousBids=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("submit-bid-item-lore.no-previous-bids");
+        submitBidLoreWithPreviousBids=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("submit-bid-item-lore.with-previous-bids");
 
-        collectAuctionMaterial=Main.itemConstructor.getItemFromMaterial(Main.bidsRelatedCfg.getString("collect-bid-item"));
-        collectAuctionName=Main.bidsRelatedCfg.getString("collect-bid-item-name");
-        collectAuctionCoins=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("collect-bid-item-lore.collect-coins");
-        collectAuctionItem=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("collect-bid-item-lore.collect-item");
+        collectAuctionMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("collect-bid-item"));
+        collectAuctionName= AuctionMaster.bidsRelatedCfg.getString("collect-bid-item-name");
+        collectAuctionCoins=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("collect-bid-item-lore.collect-coins");
+        collectAuctionItem=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("collect-bid-item-lore.collect-item");
 
         lore=new ArrayList<>();
-        for(String line : Main.bidsRelatedCfg.getStringList("bid-history-item-lore.no-bids"))
+        for(String line : AuctionMaster.bidsRelatedCfg.getStringList("bid-history-item-lore.no-bids"))
             lore.add(utils.chat(line));
-        bidHistoryDefaultItem=Main.itemConstructor.getItem(Main.itemConstructor.getItemFromMaterial(Main.bidsRelatedCfg.getString("bid-history-item")), utils.chat(Main.bidsRelatedCfg.getString("bid-history-item-name")), lore);
-        bidHistoryItemLoreStructure=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("bid-history-item-lore.bid-structure");
+        bidHistoryDefaultItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("bid-history-item")), utils.chat(AuctionMaster.bidsRelatedCfg.getString("bid-history-item-name")), lore);
+        bidHistoryItemLoreStructure=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("bid-history-item-lore.bid-structure");
 
-        outbidMessage=(ArrayList<String>)Main.bidsRelatedCfg.getStringList("outbid-message");
+        outbidMessage=(ArrayList<String>) AuctionMaster.bidsRelatedCfg.getStringList("outbid-message");
 
-        viewPlayerAuctionsMenuName=Main.plugin.getConfig().getString("player-auction-menu-name");
+        viewPlayerAuctionsMenuName= AuctionMaster.plugin.getConfig().getString("player-auction-menu-name");
 
         blacklistIds=new ArrayList<>();
-        for(String item : Main.plugin.getConfig().getStringList("blacklist-item-id")){
-            blacklistIds.add(Main.itemConstructor.getItemFromMaterial(item));
+        for(String item : AuctionMaster.plugin.getConfig().getStringList("blacklist-item-id")){
+            blacklistIds.add(AuctionMaster.itemConstructor.getItemFromMaterial(item));
         }
 
         blacklistNames=new ArrayList<>();
-        for(String name : Main.plugin.getConfig().getStringList("blacklist-item-name"))
+        for(String name : AuctionMaster.plugin.getConfig().getStringList("blacklist-item-name"))
             blacklistNames.add(utils.chat(name));
 
         blacklistLore=new ArrayList<>();
-        for(String key : Main.plugin.getConfig().getConfigurationSection("blacklist-item-lore").getKeys(false)) {
+        for(String key : AuctionMaster.plugin.getConfig().getConfigurationSection("blacklist-item-lore").getKeys(false)) {
             ArrayList<String> loreToBlacklist = new ArrayList<>();
-            for (String line : Main.plugin.getConfig().getStringList("blacklist-item-lore." + key))
+            for (String line : AuctionMaster.plugin.getConfig().getStringList("blacklist-item-lore." + key))
                 loreToBlacklist.add(line);
             blacklistLore.add(loreToBlacklist);
         }
 
         loadAdminItems();
 
-        cantAffordSubmitBuyLore=(ArrayList<String>)Main.buyItNowCfg.getStringList("view-auction-buy-now-button.cannot-afford.lore");
-        cantAffordSubmitBuyMaterial=Main.itemConstructor.getItemFromMaterial(Main.buyItNowCfg.getString("view-auction-buy-now-button.cannot-afford.material"));
+        cantAffordSubmitBuyLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("view-auction-buy-now-button.cannot-afford.lore");
+        cantAffordSubmitBuyMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("view-auction-buy-now-button.cannot-afford.material"));
 
-        submitBuyName=Main.buyItNowCfg.getString("view-auction-buy-now-button.name");
-        submitBuyMaterial=Main.itemConstructor.getItemFromMaterial(Main.buyItNowCfg.getString("view-auction-buy-now-button.click-to-buy.material"));
-        submitBuyLore=(ArrayList<String>)Main.buyItNowCfg.getStringList("view-auction-buy-now-button.click-to-buy.lore");
+        submitBuyName= AuctionMaster.buyItNowCfg.getString("view-auction-buy-now-button.name");
+        submitBuyMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("view-auction-buy-now-button.click-to-buy.material"));
+        submitBuyLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("view-auction-buy-now-button.click-to-buy.lore");
 
-        switchToAuctionName=Main.buyItNowCfg.getString("switch-button.switch-to-auction.name");
-        switchToAuctionLore=(ArrayList<String>)Main.buyItNowCfg.getStringList("switch-button.switch-to-auction.lore");
-        switchToAuctionMaterial=Main.itemConstructor.getItemFromMaterial(Main.buyItNowCfg.getString("switch-button.switch-to-auction.material"));
+        switchToAuctionName= AuctionMaster.buyItNowCfg.getString("switch-button.switch-to-auction.name");
+        switchToAuctionLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("switch-button.switch-to-auction.lore");
+        switchToAuctionMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("switch-button.switch-to-auction.material"));
 
-        switchToBinName=Main.buyItNowCfg.getString("switch-button.switch-to-bin.name");
-        switchToBinLore=(ArrayList<String>)Main.buyItNowCfg.getStringList("switch-button.switch-to-bin.lore");
-        switchToBinMaterial=Main.itemConstructor.getItemFromMaterial(Main.buyItNowCfg.getString("switch-button.switch-to-bin.material"));
+        switchToBinName= AuctionMaster.buyItNowCfg.getString("switch-button.switch-to-bin.name");
+        switchToBinLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("switch-button.switch-to-bin.lore");
+        switchToBinMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("switch-button.switch-to-bin.material"));
 
-        editBINPriceName=Main.buyItNowCfg.getString("buy-it-now-select-price.name");
-        editBINPriceLore=(ArrayList<String>)Main.buyItNowCfg.getStringList("buy-it-now-select-price.lore");
-        editBINPriceMaterial=Main.itemConstructor.getItemFromMaterial(Main.buyItNowCfg.getString("buy-it-now-select-price.item-id"));
+        editBINPriceName= AuctionMaster.buyItNowCfg.getString("buy-it-now-select-price.name");
+        editBINPriceLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("buy-it-now-select-price.lore");
+        editBINPriceMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("buy-it-now-select-price.item-id"));
     }
 }

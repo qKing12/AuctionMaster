@@ -1,7 +1,6 @@
 package me.qKing12.AuctionMaster.Menus.AdminMenus;
 
-import me.qKing12.AuctionMaster.Main;
-import me.qKing12.AuctionMaster.Menus.*;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class MainAdminMenu {
 
@@ -28,23 +27,23 @@ public class MainAdminMenu {
             this.player = player;
             inventory = Bukkit.createInventory(player, 36, utils.chat("&8Admin Menu"));
 
-            if (Main.configLoad.useBackgoundGlass)
+            if (AuctionMaster.configLoad.useBackgoundGlass)
                 for (int i = 0; i < 36; i++)
-                    inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
-            inventory.setItem(10, Main.configLoad.adminDelivery);
-            inventory.setItem(12, Main.configLoad.adminNpcCreate);
-            inventory.setItem(13, Main.configLoad.adminHelp);
-            inventory.setItem(14, Main.configLoad.adminDebugNames);
-            inventory.setItem(16, Main.configLoad.adminManageEndedAuctions);
+            inventory.setItem(10, AuctionMaster.configLoad.adminDelivery);
+            inventory.setItem(12, AuctionMaster.configLoad.adminNpcCreate);
+            inventory.setItem(13, AuctionMaster.configLoad.adminHelp);
+            inventory.setItem(14, AuctionMaster.configLoad.adminDebugNames);
+            inventory.setItem(16, AuctionMaster.configLoad.adminManageEndedAuctions);
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.closeMenuLore)
+            for (String line : AuctionMaster.configLoad.closeMenuLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(31, itemConstructor.getItem(Main.configLoad.closeMenuMaterial, utilsAPI.chat(player, Main.configLoad.closeMenuName), lore));
+            inventory.setItem(31, itemConstructor.getItem(AuctionMaster.configLoad.closeMenuMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.closeMenuName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });
@@ -62,7 +61,7 @@ public class MainAdminMenu {
                         player.closeInventory();
                     }
                     else if(e.getSlot()==10){
-                        if(Main.deliveries==null){
+                        if(AuctionMaster.deliveries==null){
                             player.sendMessage(utils.chat("&cDeliveries are disabled!"));
                             return;
                         }
@@ -72,15 +71,15 @@ public class MainAdminMenu {
                         new EndedAuctionsMenu(player, 0);
                     }
                     else if(e.getSlot()==12){
-                        if(Main.auctionNPC!=null)
-                            Main.auctionNPC.createNpc(player);
+                        if(AuctionMaster.auctionNPC!=null)
+                            AuctionMaster.auctionNPC.createNpc(player);
                         else
                             player.sendMessage(utils.chat("&cYou either don't have Citizens Plugin or don't have auction-npc-use set to true in config.yml!"));
                         player.closeInventory();
                     }
                     else if(e.getSlot()==14){
-                        if(Main.auctionNPC!=null) {
-                            Main.auctionNPC.debugHolos();
+                        if(AuctionMaster.auctionNPC!=null) {
+                            AuctionMaster.auctionNPC.debugHolos();
                             player.sendMessage(utils.chat("&aDone!"));
                         }
                         else

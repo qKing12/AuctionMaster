@@ -3,12 +3,11 @@ package me.qKing12.AuctionMaster.Menus;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionObjects.Categories.*;
 import me.qKing12.AuctionMaster.InputGUIs.SearchGUI.SearchGUI;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class BrowsingAuctionsMenu {
 
@@ -45,7 +44,7 @@ public class BrowsingAuctionsMenu {
     }
 
     private void keepUpdated(){
-        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, () -> {
+        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
@@ -56,18 +55,18 @@ public class BrowsingAuctionsMenu {
 
     private void setupPreviousPage(){
         ArrayList<String> lore = new ArrayList<>();
-        for(String line : Main.configLoad.previousPageLore)
+        for(String line : AuctionMaster.configLoad.previousPageLore)
             lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page))));
 
-        inventory.setItem(46, itemConstructor.getItem(Main.configLoad.previousPageMaterial, utilsAPI.chat(player, Main.configLoad.previousPageName.replace("%page-number%", String.valueOf(page))), lore));
+        inventory.setItem(46, itemConstructor.getItem(AuctionMaster.configLoad.previousPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.previousPageName.replace("%page-number%", String.valueOf(page))), lore));
     }
 
     private void setupNextPage(){
         ArrayList<String> lore = new ArrayList<>();
-        for(String line : Main.configLoad.nextPageLore)
+        for(String line : AuctionMaster.configLoad.nextPageLore)
             lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page))));
 
-        inventory.setItem(53, itemConstructor.getItem(Main.configLoad.nextPageMaterial, utilsAPI.chat(player, Main.configLoad.nextPageName.replace("%page-number%", String.valueOf(page))), lore));
+        inventory.setItem(53, itemConstructor.getItem(AuctionMaster.configLoad.nextPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.nextPageName.replace("%page-number%", String.valueOf(page))), lore));
     }
 
 
@@ -144,20 +143,20 @@ public class BrowsingAuctionsMenu {
     }
 
     private void loadCategories(){
-        if(Main.auctionsHandler.weapons!=null)
-            inventory.setItem(Main.auctionsHandler.weapons.getSlot(), category instanceof Weapons ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.weapons.getDisplay());
-        if(Main.auctionsHandler.armor!=null)
-            inventory.setItem(Main.auctionsHandler.armor.getSlot(), category instanceof Armor ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.armor.getDisplay());
-        if(Main.auctionsHandler.tools!=null)
-            inventory.setItem(Main.auctionsHandler.tools.getSlot(), category instanceof Tools ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.tools.getDisplay());
-        if(Main.auctionsHandler.consumables!=null)
-            inventory.setItem(Main.auctionsHandler.consumables.getSlot(), category instanceof Consumables ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.consumables.getDisplay());
-        if(Main.auctionsHandler.blocks!=null)
-            inventory.setItem(Main.auctionsHandler.blocks.getSlot(), category instanceof Blocks ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.blocks.getDisplay());
-        if(Main.auctionsHandler.others!=null)
-            inventory.setItem(Main.auctionsHandler.others.getSlot(), category instanceof Others ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.others.getDisplay());
-        if(Main.auctionsHandler.global!=null)
-            inventory.setItem(Main.auctionsHandler.global.getSlot(), category instanceof Global ? category.getDisplayCategoryItemSelected() : Main.auctionsHandler.global.getDisplay());
+        if(AuctionMaster.auctionsHandler.weapons!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.weapons.getSlot(), category instanceof Weapons ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.weapons.getDisplay());
+        if(AuctionMaster.auctionsHandler.armor!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.armor.getSlot(), category instanceof Armor ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.armor.getDisplay());
+        if(AuctionMaster.auctionsHandler.tools!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.tools.getSlot(), category instanceof Tools ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.tools.getDisplay());
+        if(AuctionMaster.auctionsHandler.consumables!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.consumables.getSlot(), category instanceof Consumables ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.consumables.getDisplay());
+        if(AuctionMaster.auctionsHandler.blocks!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.blocks.getSlot(), category instanceof Blocks ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.blocks.getDisplay());
+        if(AuctionMaster.auctionsHandler.others!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.others.getSlot(), category instanceof Others ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.others.getDisplay());
+        if(AuctionMaster.auctionsHandler.global!=null)
+            inventory.setItem(AuctionMaster.auctionsHandler.global.getSlot(), category instanceof Global ? category.getDisplayCategoryItemSelected() : AuctionMaster.auctionsHandler.global.getDisplay());
     }
 
     public BrowsingAuctionsMenu(Player player, String category, int page, String search){
@@ -176,8 +175,8 @@ public class BrowsingAuctionsMenu {
                 this.search = search;
                 this.search = search.toLowerCase();
             }
-            inventory = Bukkit.createInventory(player, 54, utilsAPI.chat(player, Main.configLoad.browsingMenuName));
-            this.category = Main.auctionsHandler.getCategory(category);
+            inventory = Bukkit.createInventory(player, 54, utilsAPI.chat(player, AuctionMaster.configLoad.browsingMenuName));
+            this.category = AuctionMaster.auctionsHandler.getCategory(category);
 
             ItemStack backgroundGlass = this.category.getBackgroundGlass();
 
@@ -194,23 +193,23 @@ public class BrowsingAuctionsMenu {
             loadAuctions(false);
 
             if (auctionsHandler.buyItNowSelected != null)
-                inventory.setItem(51, Main.auctionsHandler.sortingObject.getSortItemBIN(player));
-            inventory.setItem(52, Main.auctionsHandler.sortingObject.getSortItem(player));
+                inventory.setItem(51, AuctionMaster.auctionsHandler.sortingObject.getSortItemBIN(player));
+            inventory.setItem(52, AuctionMaster.auctionsHandler.sortingObject.getSortItem(player));
 
             loadCategories();
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.searchItemLore)
+            for (String line : AuctionMaster.configLoad.searchItemLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(48, itemConstructor.getItem(Main.configLoad.searchItemMaterial, utilsAPI.chat(player, Main.configLoad.searchItemName), lore));
+            inventory.setItem(48, itemConstructor.getItem(AuctionMaster.configLoad.searchItemMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.searchItemName), lore));
 
             lore = new ArrayList<>();
-            for (String line : Main.configLoad.goBackLore)
+            for (String line : AuctionMaster.configLoad.goBackLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(49, itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+            inventory.setItem(49, itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                        Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                        Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                         player.openInventory(inventory);
                     });
             keepUpdated();
@@ -250,7 +249,7 @@ public class BrowsingAuctionsMenu {
                         if(auctionsHandler.buyItNowSelected==null)
                             return;
                         utils.playSound(player, "sort-item-click");
-                        Main.auctionsHandler.sortingObject.changeSortBIN(player);
+                        AuctionMaster.auctionsHandler.sortingObject.changeSortBIN(player);
                         page=0;
                         if(sortBIN==2)
                             sortBIN=0;
@@ -263,51 +262,51 @@ public class BrowsingAuctionsMenu {
                         else
                             checkForSort=(auction) -> auction.isBIN();
                         loadAuctions(true);
-                        inventory.setItem(51, Main.auctionsHandler.sortingObject.getSortItemBIN(player));
+                        inventory.setItem(51, AuctionMaster.auctionsHandler.sortingObject.getSortItemBIN(player));
                     }
                     else if(e.getSlot()==52){
                         utils.playSound(player, "sort-item-click");
-                        Main.auctionsHandler.sortingObject.changeSort(player);
+                        AuctionMaster.auctionsHandler.sortingObject.changeSort(player);
                         loadAuctions(false);
-                        inventory.setItem(52, Main.auctionsHandler.sortingObject.getSortItem(player));
+                        inventory.setItem(52, AuctionMaster.auctionsHandler.sortingObject.getSortItem(player));
                     }
-                    else if(Main.auctionsHandler.weapons!=null && e.getSlot()==Main.auctionsHandler.weapons.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.weapons!=null && e.getSlot()== AuctionMaster.auctionsHandler.weapons.getSlot()){
                         if(!(category instanceof Weapons)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "weapons", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.armor!=null && e.getSlot()==Main.auctionsHandler.armor.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.armor!=null && e.getSlot()== AuctionMaster.auctionsHandler.armor.getSlot()){
                         if(!(category instanceof Armor)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "armor", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.tools!=null && e.getSlot()==Main.auctionsHandler.tools.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.tools!=null && e.getSlot()== AuctionMaster.auctionsHandler.tools.getSlot()){
                         if(!(category instanceof Tools)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "tools", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.consumables!=null && e.getSlot()==Main.auctionsHandler.consumables.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.consumables!=null && e.getSlot()== AuctionMaster.auctionsHandler.consumables.getSlot()){
                         if(!(category instanceof Consumables)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "consumables", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.blocks!=null && e.getSlot()==Main.auctionsHandler.blocks.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.blocks!=null && e.getSlot()== AuctionMaster.auctionsHandler.blocks.getSlot()){
                         if(!(category instanceof Blocks)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "blocks", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.others!=null && e.getSlot()==Main.auctionsHandler.others.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.others!=null && e.getSlot()== AuctionMaster.auctionsHandler.others.getSlot()){
                         if(!(category instanceof Others)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "others", 0, null);
                         }
                     }
-                    else if(Main.auctionsHandler.global!=null && e.getSlot()==Main.auctionsHandler.global.getSlot()){
+                    else if(AuctionMaster.auctionsHandler.global!=null && e.getSlot()== AuctionMaster.auctionsHandler.global.getSlot()){
                         if(!(category instanceof Others)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "global", 0, null);

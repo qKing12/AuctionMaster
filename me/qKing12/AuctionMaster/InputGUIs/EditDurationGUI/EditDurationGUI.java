@@ -3,20 +3,17 @@ package me.qKing12.AuctionMaster.InputGUIs.EditDurationGUI;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.InputGUIs.AnvilGUI;
 import me.qKing12.AuctionMaster.InputGUIs.ChatListener;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.ViewAuctionAdminMenu;
-import me.qKing12.AuctionMaster.Menus.CreateAuctionMainMenu;
 import me.qKing12.AuctionMaster.Utils.utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.utilsAPI;
+import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class EditDurationGUI {
     private ItemStack paper;
@@ -28,16 +25,16 @@ public class EditDurationGUI {
     public static EditDuration editDuration;
 
     public EditDurationGUI(){
-        if(Main.plugin.getConfig().getBoolean("use-chat-instead-sign")){
+        if(AuctionMaster.plugin.getConfig().getBoolean("use-chat-instead-sign")){
             editDuration =this::chatTrigger;
         }
-        else if(Main.plugin.getConfig().getBoolean("use-anvil-instead-sign") || !Main.hasProtocolLib){
+        else if(AuctionMaster.plugin.getConfig().getBoolean("use-anvil-instead-sign") || !AuctionMaster.hasProtocolLib){
             paper = new ItemStack(Material.PAPER);
             ArrayList<String> lore=new ArrayList<>();
             lore.add(utils.chat("&fEnter minutes"));
             lore.add(utils.chat("&fExamples: 20"));
             lore.add(utils.chat("&for -20 to speed"));
-            paper=Main.itemConstructor.getItem(paper, " ", lore);
+            paper= AuctionMaster.itemConstructor.getItem(paper, " ", lore);
             editDuration =this::anvilTrigger;
         }
         else{

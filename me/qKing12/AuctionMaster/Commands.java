@@ -1,10 +1,6 @@
 package me.qKing12.AuctionMaster;
 
-import me.qKing12.AuctionMaster.AuctionObjects.AuctionsHandler;
 import me.qKing12.AuctionMaster.FilesHandle.ConfigLoad;
-import me.qKing12.AuctionMaster.FilesHandle.Deliveries;
-import me.qKing12.AuctionMaster.InputGUIs.DeliveryCoinsGUI.DeliveryCoinsGUI;
-import me.qKing12.AuctionMaster.InputGUIs.DeliveryGUI.DeliveryGUI;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.DeliveryAdminMenu;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.EndedAuctionsMenu;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.MainAdminMenu;
@@ -22,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 import static org.bukkit.Bukkit.getServer;
 
 public class Commands implements CommandExecutor {
@@ -43,7 +39,7 @@ public class Commands implements CommandExecutor {
                 String canAuction = plugin.getConfig().getString("auction-use-permission");
                 String canUseCommand = plugin.getConfig().getString("auction-command-use-permission");
 
-                if(Main.deliveries!=null && args.length>0 && args[0].equalsIgnoreCase("delivery")){
+                if(AuctionMaster.deliveries!=null && args.length>0 && args[0].equalsIgnoreCase("delivery")){
                     utils.playSound(p, "ah-delivery-command");
                     new DeliveryPlayerMenu(p, false);
                     return true;
@@ -85,9 +81,9 @@ public class Commands implements CommandExecutor {
             else if (cmd.getName().equalsIgnoreCase("ahview")) {
                 if(args.length>0){
                     try{
-                        new ViewAuctionMenu(p, Main.auctionsHandler.auctions.get(args[0]), "Close", 0);
+                        new ViewAuctionMenu(p, AuctionMaster.auctionsHandler.auctions.get(args[0]), "Close", 0);
                     }catch(Exception x){
-                        p.sendMessage(utilsAPI.chat(p, Main.bidsRelatedCfg.getString("too-late-to-open-now")));
+                        p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
                     }
                 }
             }
@@ -118,15 +114,15 @@ public class Commands implements CommandExecutor {
                         return true;
                     }
                     else if(args[0].equalsIgnoreCase("createNPC")){
-                        if(Main.auctionNPC!=null)
-                            Main.auctionNPC.createNpc(p);
+                        if(AuctionMaster.auctionNPC!=null)
+                            AuctionMaster.auctionNPC.createNpc(p);
                         else
                             p.sendMessage(utils.chat("&cYou either don't have Citizens Plugin or don't have auction-npc-use set to true in config.yml!"));
                         return true;
                     }
                     else if(args[0].equalsIgnoreCase("debugNames")){
-                        if(Main.auctionNPC!=null) {
-                            Main.auctionNPC.debugHolos();
+                        if(AuctionMaster.auctionNPC!=null) {
+                            AuctionMaster.auctionNPC.debugHolos();
                             p.sendMessage(utils.chat("&aDone!"));
                         }
                         else

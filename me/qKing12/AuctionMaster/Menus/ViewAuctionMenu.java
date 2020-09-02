@@ -4,7 +4,7 @@ import me.qKing12.AuctionMaster.API.Events.PlaceBidEvent;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionObjects.Bids;
 import me.qKing12.AuctionMaster.InputGUIs.BidSelectGUI.BidSelectGUI;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.ViewAuctionAdminMenu;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
@@ -22,7 +22,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class ViewAuctionMenu {
 
@@ -46,7 +46,7 @@ public class ViewAuctionMenu {
     private int clickCase;
 
     public int getMaximumBids(){
-        if(Main.plugin.getConfig().getBoolean("use-bid-limit")) {
+        if(AuctionMaster.plugin.getConfig().getBoolean("use-bid-limit")) {
             for (int start = 28; start >= 0; start--)
                 if (player.hasPermission("auctionmaster.limit.bids." + start))
                     return start;
@@ -56,13 +56,13 @@ public class ViewAuctionMenu {
 
     private void goBack(){
         if(goBackTo.equals("ownAuction")){
-            if(Main.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString()))
+            if(AuctionMaster.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString()))
                 new ManageOwnAuctionsMenu(player);
             else
                 player.closeInventory();
         }
         else if(goBackTo.equals("ownBids")){
-            if(Main.auctionsHandler.bidAuctions.containsKey(player.getUniqueId().toString()))
+            if(AuctionMaster.auctionsHandler.bidAuctions.containsKey(player.getUniqueId().toString()))
                 new ManageOwnBidsMenu(player);
             else
                 player.closeInventory();
@@ -83,9 +83,9 @@ public class ViewAuctionMenu {
     }
 
     private void keepUpdated(){
-        final int slot=Main.menusCfg.getInt("view-auction-menu.auction-display-slot");
+        final int slot= AuctionMaster.menusCfg.getInt("view-auction-menu.auction-display-slot");
         if(!auction.isEnded()) {
-            keepUpdated = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, () -> {
+            keepUpdated = Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
                     ItemStack getDisplay = auction.getUpdatedDisplay();
                     ItemMeta meta = getDisplay.getItemMeta();
                     meta.setLore(meta.getLore().subList(0, meta.getLore().size() - 2));
@@ -100,16 +100,16 @@ public class ViewAuctionMenu {
     private double calculateBidAmount(){
         double bidAmount=auction.getCoins();
 
-        double bidJump = Main.bidsRelatedCfg.getDouble("bid-jump");
+        double bidJump = AuctionMaster.bidsRelatedCfg.getDouble("bid-jump");
         if(auction.getBids().getNumberOfBids()!=0 && bidAmount<bidJump)
             bidAmount=bidJump;
         else if(auction.getBids().getNumberOfBids()!=0){
-            String toAddString = Main.bidsRelatedCfg.getString("bid-step");
+            String toAddString = AuctionMaster.bidsRelatedCfg.getString("bid-step");
             double toAddValue;
             if (toAddString.contains("%")) {
                 double percent = Double.parseDouble(toAddString.replace("%", ""));
                 toAddValue = bidAmount * percent / 100;
-                if (!Main.numberFormatHelper.useDecimals)
+                if (!AuctionMaster.numberFormatHelper.useDecimals)
                     toAddValue = Math.floor(toAddValue);
             } else {
                 toAddValue = Double.parseDouble(toAddString);
@@ -127,48 +127,48 @@ public class ViewAuctionMenu {
         Bids.Bid bid = auction.getLastBid(player.getUniqueId().toString());
         if(auction.isEnded()){
             if(!ownAuction && bid==null){
-                Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(utilsAPI.chat(player, Main.bidsRelatedCfg.getString("too-late-to-open-now"))));
+                Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now"))));
                 return false;
             }
             else{
                 if(ownAuction){
                     if(auction.getBids().getNumberOfBids()==0){
-                        for(String line : Main.configLoad.collectAuctionItem)
+                        for(String line : AuctionMaster.configLoad.collectAuctionItem)
                             lore.add(utilsAPI.chat(player, line));
                         clickCase=2;
                     }
                     else {
-                        for (String line : Main.configLoad.collectAuctionCoins)
-                            lore.add(utilsAPI.chat(player, line.replace("%coins%", Main.numberFormatHelper.formatNumber(auction.getCoins()))));
+                        for (String line : AuctionMaster.configLoad.collectAuctionCoins)
+                            lore.add(utilsAPI.chat(player, line.replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins()))));
                         clickCase=1;
                     }
                 }
                 else{
                     if(player.getUniqueId().toString().equals(auction.getBids().getTopBidUUID())){
-                        for(String line : Main.configLoad.collectAuctionItem)
+                        for(String line : AuctionMaster.configLoad.collectAuctionItem)
                             lore.add(utilsAPI.chat(player, line));
                         clickCase=3;
                     }
                     else{
-                        for (String line : Main.configLoad.collectAuctionCoins)
-                            lore.add(utilsAPI.chat(player, line.replace("%coins%", Main.numberFormatHelper.formatNumber(bid.getCoins()))));
+                        for (String line : AuctionMaster.configLoad.collectAuctionCoins)
+                            lore.add(utilsAPI.chat(player, line.replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(bid.getCoins()))));
                         clickCase=5;
                     }
                 }
-                toSubmitSlot= itemConstructor.getItem(Main.configLoad.collectAuctionMaterial, utilsAPI.chat(player, Main.configLoad.collectAuctionName), lore);
+                toSubmitSlot= itemConstructor.getItem(AuctionMaster.configLoad.collectAuctionMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.collectAuctionName), lore);
             }
         }
         else{
             clickCase=4;
             if(bid==null){
-                if(hasCoins=Main.economy.hasMoney(player, bidAmount)) {
-                    for (String line : Main.configLoad.submitBidLoreNoPreviousBids)
+                if(hasCoins= AuctionMaster.economy.hasMoney(player, bidAmount)) {
+                    for (String line : AuctionMaster.configLoad.submitBidLoreNoPreviousBids)
                         lore.add(utilsAPI.chat(player, line
-                                .replace("%bid-amount%", Main.numberFormatHelper.formatNumber(bidAmount))
+                                .replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
                         ));
                 }
                 else{
-                    for(String line : Main.configLoad.cantAffordSubmitBidLore)
+                    for(String line : AuctionMaster.configLoad.cantAffordSubmitBidLore)
                         lore.add(utilsAPI.chat(player, line
                                 .replace("%bid-amount%", numberFormatHelper.formatNumber(bidAmount))
                         ));
@@ -176,32 +176,32 @@ public class ViewAuctionMenu {
             }
             else{
                 amountToSkip=bidAmount-bid.getCoins();
-                if(hasCoins=Main.economy.hasMoney(player, amountToSkip)) {
-                    for (String line : Main.configLoad.submitBidLoreWithPreviousBids)
+                if(hasCoins= AuctionMaster.economy.hasMoney(player, amountToSkip)) {
+                    for (String line : AuctionMaster.configLoad.submitBidLoreWithPreviousBids)
                         lore.add(utilsAPI.chat(player, line
-                                .replace("%bid-amount%", Main.numberFormatHelper.formatNumber(bidAmount))
-                                .replace("%previous-bid%", Main.numberFormatHelper.formatNumber(bid.getCoins()))
-                                .replace("%coins-to-pay%", Main.numberFormatHelper.formatNumber(amountToSkip))
+                                .replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
+                                .replace("%previous-bid%", AuctionMaster.numberFormatHelper.formatNumber(bid.getCoins()))
+                                .replace("%coins-to-pay%", AuctionMaster.numberFormatHelper.formatNumber(amountToSkip))
                         ));
                 }
                 else{
-                    for(String line : Main.configLoad.cantAffordSubmitBidLore)
-                        lore.add(utilsAPI.chat(player, line.replace("%bid-amount%", Main.numberFormatHelper.formatNumber(bidAmount))));
+                    for(String line : AuctionMaster.configLoad.cantAffordSubmitBidLore)
+                        lore.add(utilsAPI.chat(player, line.replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))));
                 }
             }
             if(ownAuction){
                 lore.add("");
-                lore.add(utilsAPI.chat(player, Main.bidsRelatedCfg.getString("own-auction-message")));
+                lore.add(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("own-auction-message")));
             }
             if(hasCoins) {
-                toSubmitSlot = itemConstructor.getItem(Main.configLoad.submitBidMaterial, utilsAPI.chat(player, Main.configLoad.submitBidName), lore);
+                toSubmitSlot = itemConstructor.getItem(AuctionMaster.configLoad.submitBidMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.submitBidName), lore);
                 toSubmitSlot.setAmount(2);
             }
             else{
-                toSubmitSlot=itemConstructor.getItem(Main.configLoad.cantAffordSubmitBidMaterial, utilsAPI.chat(player, Main.configLoad.cantAffordSubmitBidName), lore);
+                toSubmitSlot=itemConstructor.getItem(AuctionMaster.configLoad.cantAffordSubmitBidMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.cantAffordSubmitBidName), lore);
             }
         }
-        inventory.setItem(Main.menusCfg.getInt("view-auction-menu.place-bid-slot"), toSubmitSlot);
+        inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.place-bid-slot"), toSubmitSlot);
         return true;
     }
 
@@ -210,29 +210,29 @@ public class ViewAuctionMenu {
         ArrayList<String> lore = new ArrayList<>();
         if(auction.isEnded()){
             if(!ownAuction){
-                Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(utilsAPI.chat(player, Main.bidsRelatedCfg.getString("too-late-to-open-now"))));
+                Bukkit.getScheduler().runTask(plugin, () -> player.sendMessage(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now"))));
                 return false;
             }
             else {
                 if (auction.getBids().getNumberOfBids() == 0) {
-                    for (String line : Main.configLoad.collectAuctionItem)
+                    for (String line : AuctionMaster.configLoad.collectAuctionItem)
                         lore.add(utilsAPI.chat(player, line));
                     clickCase = 2;
                 } else {
-                    for (String line : Main.configLoad.collectAuctionCoins)
-                        lore.add(utilsAPI.chat(player, line.replace("%coins%", Main.numberFormatHelper.formatNumber(auction.getCoins()))));
+                    for (String line : AuctionMaster.configLoad.collectAuctionCoins)
+                        lore.add(utilsAPI.chat(player, line.replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins()))));
                     clickCase = 1;
                 }
 
-                toSubmitSlot = itemConstructor.getItem(Main.configLoad.collectAuctionMaterial, utilsAPI.chat(player, Main.configLoad.collectAuctionName), lore);
+                toSubmitSlot = itemConstructor.getItem(AuctionMaster.configLoad.collectAuctionMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.collectAuctionName), lore);
             }
         }
         else{
             clickCase=4;
-                if(hasCoins=Main.economy.hasMoney(player, bidAmount)) {
+                if(hasCoins= AuctionMaster.economy.hasMoney(player, bidAmount)) {
                     for (String line : configLoad.submitBuyLore)
                         lore.add(utilsAPI.chat(player, line
-                                .replace("%price%", Main.numberFormatHelper.formatNumber(bidAmount))
+                                .replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
                         ));
                 }
                 else{
@@ -243,28 +243,28 @@ public class ViewAuctionMenu {
                 }
             if(ownAuction){
                 lore.add("");
-                lore.add(utilsAPI.chat(player, Main.bidsRelatedCfg.getString("own-auction-message")));
+                lore.add(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("own-auction-message")));
             }
             if(hasCoins) {
-                toSubmitSlot = itemConstructor.getItem(Main.configLoad.submitBuyMaterial, utilsAPI.chat(player, Main.configLoad.submitBuyName), lore);
+                toSubmitSlot = itemConstructor.getItem(AuctionMaster.configLoad.submitBuyMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.submitBuyName), lore);
                 toSubmitSlot.setAmount(2);
             }
             else{
                 toSubmitSlot=itemConstructor.getItem(configLoad.cantAffordSubmitBuyMaterial, utilsAPI.chat(player, configLoad.submitBuyName), lore);
             }
         }
-        inventory.setItem(Main.menusCfg.getInt("view-auction-menu.buy-it-now-slot"), toSubmitSlot);
+        inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.buy-it-now-slot"), toSubmitSlot);
         return true;
     }
 
     private boolean canEndAuction=false;
     private void generateEndOwnAuction(){
-        if(Main.configLoad.endOwnAuction && !auction.isEnded() && ownAuction){
-            String permission = Main.plugin.getConfig().getString("use-end-own-auction-permission");
+        if(AuctionMaster.configLoad.endOwnAuction && !auction.isEnded() && ownAuction){
+            String permission = AuctionMaster.plugin.getConfig().getString("use-end-own-auction-permission");
             if(permission.equals("none") || player.hasPermission(permission)){
                 canEndAuction=true;
                 ArrayList<String> lore = new ArrayList<>();
-                for(String line : Main.plugin.getConfig().getStringList("end-own-auction-lore")){
+                for(String line : AuctionMaster.plugin.getConfig().getStringList("end-own-auction-lore")){
                     lore.add(utilsAPI.chat(player, line));
                 }
                 inventory.setItem(menusCfg.getInt("view-auction-menu.end-own-auction-slot"), itemConstructor.getItem(itemConstructor.getItemFromMaterial(plugin.getConfig().getString("end-own-auction-item")), utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-name")), lore));
@@ -278,11 +278,11 @@ public class ViewAuctionMenu {
             this.goBackTo = goBackTo;
             this.auction = auction;
             this.cacheBids = auction.getBids().getNumberOfBids();
-            inventory = Bukkit.createInventory(player, Main.configLoad.viewAuctionMenuSize, utilsAPI.chat(player, Main.configLoad.viewAuctionMenuName));
+            inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.viewAuctionMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.viewAuctionMenuName));
 
-            if (Main.configLoad.useBackgoundGlass)
-                for (int i = 0; i < Main.configLoad.viewAuctionMenuSize; i++)
-                    inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
+            if (AuctionMaster.configLoad.useBackgoundGlass)
+                for (int i = 0; i < AuctionMaster.configLoad.viewAuctionMenuSize; i++)
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
             if (!auction.isBIN()) {
                 double calculatedBid = calculateBidAmount();
@@ -294,14 +294,14 @@ public class ViewAuctionMenu {
                     this.bidAmount = bidAmount;
                 if (auction.getSellerUUID().equalsIgnoreCase(player.getUniqueId().toString())) {
                     ownAuction = true;
-                } else if (!auction.isEnded() && Main.economy.hasMoney(player, this.bidAmount)) {
+                } else if (!auction.isEnded() && AuctionMaster.economy.hasMoney(player, this.bidAmount)) {
                     ArrayList<String> lore = new ArrayList<>();
-                    for (String line : Main.configLoad.editBidLore)
+                    for (String line : AuctionMaster.configLoad.editBidLore)
                         lore.add(utilsAPI.chat(player, line
-                                .replace("%current-bid%", Main.numberFormatHelper.formatNumber(this.bidAmount))
-                                .replace("%minimum-bid%", Main.numberFormatHelper.formatNumber(calculatedBid))
+                                .replace("%current-bid%", AuctionMaster.numberFormatHelper.formatNumber(this.bidAmount))
+                                .replace("%minimum-bid%", AuctionMaster.numberFormatHelper.formatNumber(calculatedBid))
                         ));
-                    inventory.setItem(Main.menusCfg.getInt("view-auction-menu.bid-amount-change-slot"), itemConstructor.getItem(Main.configLoad.editBidMaterial, utilsAPI.chat(player, Main.configLoad.editBidName.replace("%current-bid%", Main.numberFormatHelper.formatNumber(this.bidAmount)).replace("%minimum-bid%", Main.numberFormatHelper.formatNumber(calculatedBid))), lore));
+                    inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.bid-amount-change-slot"), itemConstructor.getItem(AuctionMaster.configLoad.editBidMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.editBidName.replace("%current-bid%", AuctionMaster.numberFormatHelper.formatNumber(this.bidAmount)).replace("%minimum-bid%", AuctionMaster.numberFormatHelper.formatNumber(calculatedBid))), lore));
                 }
 
                 if (!submitBidSetup()) {
@@ -311,19 +311,19 @@ public class ViewAuctionMenu {
 
                 generateEndOwnAuction();
 
-                inventory.setItem(Main.menusCfg.getInt("view-auction-menu.bid-history-slot"), auction.getBidHistory());
+                inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.bid-history-slot"), auction.getBidHistory());
 
                 if (player.hasPermission("auctionmaster.admin")) {
                     ArrayList<String> adminLore = new ArrayList<>();
                     adminLore.add(utils.chat("&7Open this auction"));
                     adminLore.add(utils.chat("&7in admin view!"));
-                    inventory.setItem(Main.menusCfg.getInt("view-auction-menu.admin-view-slot"), itemConstructor.getItem(Material.DRAGON_EGG, utils.chat("&cAdmin View"), adminLore));
+                    inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot"), itemConstructor.getItem(Material.DRAGON_EGG, utils.chat("&cAdmin View"), adminLore));
                 }
 
                 ArrayList<String> lore = new ArrayList<>();
-                for (String line : Main.configLoad.goBackLore)
+                for (String line : AuctionMaster.configLoad.goBackLore)
                     lore.add(utilsAPI.chat(player, line));
-                inventory.setItem(Main.menusCfg.getInt("view-auction-menu.go-back-slot"), itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+                inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot"), itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
             } else {
                 this.bidAmount = auction.getCoins();
                 if (auction.getSellerUUID().equalsIgnoreCase(player.getUniqueId().toString()))
@@ -344,18 +344,18 @@ public class ViewAuctionMenu {
                 ArrayList<String> adminLore = new ArrayList<>();
                 adminLore.add(utils.chat("&7Open this auction"));
                 adminLore.add(utils.chat("&7in admin view!"));
-                inventory.setItem(Main.menusCfg.getInt("view-auction-menu.admin-view-slot"), itemConstructor.getItem(Material.DRAGON_EGG, utils.chat("&cAdmin View"), adminLore));
+                inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot"), itemConstructor.getItem(Material.DRAGON_EGG, utils.chat("&cAdmin View"), adminLore));
             }
 
             utils.playSound(player, "auction-view-menu-open");
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.goBackLore)
+            for (String line : AuctionMaster.configLoad.goBackLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(Main.menusCfg.getInt("view-auction-menu.go-back-slot"), itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+            inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot"), itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(auction.isBIN() ? new ClickListenBIN() : new ClickListen(), Main.plugin);
+                Bukkit.getPluginManager().registerEvents(auction.isBIN() ? new ClickListenBIN() : new ClickListen(), AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });
@@ -369,11 +369,11 @@ public class ViewAuctionMenu {
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
                 if(e.getClickedInventory().equals(inventory)) {
-                    if(e.getSlot() == Main.menusCfg.getInt("view-auction-menu.go-back-slot")) {
+                    if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot")) {
                         goBack();
                         utils.playSound(player, "go-back-click");
                     }
-                    else if(e.getSlot()==Main.menusCfg.getInt("view-auction-menu.admin-view-slot")){
+                    else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
                         new ViewAuctionAdminMenu(player, auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
@@ -389,20 +389,20 @@ public class ViewAuctionMenu {
                             }
                         }
                     }
-                    else if(e.getSlot()==Main.menusCfg.getInt("view-auction-menu.buy-it-now-slot")){
+                    else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.buy-it-now-slot")){
                         utils.playSound(player, "auction-submit-bid");
                         if(clickCase==4){
                             if(ownAuction || !hasCoins)
                                 return;
                             if(e.getWhoClicked().getInventory().firstEmpty()==-1){
-                                player.sendMessage(utils.chat(Main.auctionsManagerCfg.getString("not-enough-inventory-space")));
+                                player.sendMessage(utils.chat(AuctionMaster.auctionsManagerCfg.getString("not-enough-inventory-space")));
                                 return;
                             }
                             if(e.getCurrentItem().getAmount()==2){
                                 e.getCurrentItem().setAmount(1);
                             }
                             else {
-                                Main.economy.removeMoney(player, bidAmount);
+                                AuctionMaster.economy.removeMoney(player, bidAmount);
                                 auction.placeBid(player, bidAmount, cacheBids);
 
                                 player.getInventory().addItem(auction.getItemStack());
@@ -415,7 +415,7 @@ public class ViewAuctionMenu {
                                 goBack();
                             }
                             else
-                                player.sendMessage(utils.chat(Main.auctionsManagerCfg.getString("not-enough-inventory-space")));
+                                player.sendMessage(utils.chat(AuctionMaster.auctionsManagerCfg.getString("not-enough-inventory-space")));
                         }
                         else if(clickCase==1){
                             auction.sellerClaim(player);
@@ -446,15 +446,15 @@ public class ViewAuctionMenu {
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
                 if(e.getClickedInventory().equals(inventory)) {
-                    if(e.getSlot() == Main.menusCfg.getInt("view-auction-menu.bid-amount-change-slot")){
+                    if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.bid-amount-change-slot")){
                         utils.playSound(player, "bid-editor-click");
                         BidSelectGUI.selectUpdateBid.openGUI(player, auction, goBackTo, bidAmount);
                     }
-                    else if(e.getSlot() == Main.menusCfg.getInt("view-auction-menu.go-back-slot")) {
+                    else if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot")) {
                         goBack();
                         utils.playSound(player, "go-back-click");
                     }
-                    else if(e.getSlot()==Main.menusCfg.getInt("view-auction-menu.admin-view-slot")){
+                    else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
                         new ViewAuctionAdminMenu(player, auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
@@ -470,32 +470,32 @@ public class ViewAuctionMenu {
                             }
                         }
                     }
-                    else if(e.getSlot()==Main.menusCfg.getInt("view-auction-menu.place-bid-slot")){
+                    else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.place-bid-slot")){
                         utils.playSound(player, "auction-submit-bid");
                         if(clickCase==4){
                             if(ownAuction || !hasCoins)
                                 return;
-                            if(Main.auctionsHandler.bidAuctions.getOrDefault(player.getUniqueId().toString(), new ArrayList<>()).size()>=getMaximumBids()) {
-                                player.sendMessage(utilsAPI.chat(player, Main.plugin.getConfig().getString("bid-limit-reached-message")));
+                            if(AuctionMaster.auctionsHandler.bidAuctions.getOrDefault(player.getUniqueId().toString(), new ArrayList<>()).size()>=getMaximumBids()) {
+                                player.sendMessage(utilsAPI.chat(player, AuctionMaster.plugin.getConfig().getString("bid-limit-reached-message")));
                                 return;
                             }
                             if(e.getCurrentItem().getAmount()!=3) {
                                 if (e.getCurrentItem().getAmount() == 2) {
                                     e.getCurrentItem().setAmount(1);
                                 } else {
-                                    if (Main.plugin.getConfig().getBoolean("outbid-yourself") || !player.getUniqueId().toString().equals(auction.getBids().getTopBidUUID())) {
+                                    if (AuctionMaster.plugin.getConfig().getBoolean("outbid-yourself") || !player.getUniqueId().toString().equals(auction.getBids().getTopBidUUID())) {
                                         PlaceBidEvent event = new PlaceBidEvent(player, auction, amountToSkip == 0 ? bidAmount : amountToSkip);
                                         Bukkit.getPluginManager().callEvent(event);
                                         if (event.isCancelled())
                                             return;
                                         if (!auction.placeBid(player, bidAmount, cacheBids)) {
                                             new ViewAuctionMenu(player, auction, goBackTo, 0);
-                                            for (String line : Main.bidsRelatedCfg.getStringList("bid-error-message")) {
+                                            for (String line : AuctionMaster.bidsRelatedCfg.getStringList("bid-error-message")) {
                                                 player.sendMessage(utilsAPI.chat(player, line));
                                             }
                                         } else {
                                             e.getCurrentItem().setAmount(3);
-                                            Main.economy.removeMoney(player, amountToSkip == 0 ? bidAmount : amountToSkip);
+                                            AuctionMaster.economy.removeMoney(player, amountToSkip == 0 ? bidAmount : amountToSkip);
                                             goBack();
                                         }
                                     }
@@ -512,7 +512,7 @@ public class ViewAuctionMenu {
                                 goBack();
                             }
                             else
-                                player.sendMessage(utils.chat(Main.auctionsManagerCfg.getString("not-enough-inventory-space")));
+                                player.sendMessage(utils.chat(AuctionMaster.auctionsManagerCfg.getString("not-enough-inventory-space")));
                         }
                         else if(clickCase==2){
                             if(player.getInventory().firstEmpty()!=-1){
@@ -520,7 +520,7 @@ public class ViewAuctionMenu {
                                 goBack();
                             }
                             else
-                                player.sendMessage(utils.chat(Main.auctionsManagerCfg.getString("not-enough-inventory-space")));
+                                player.sendMessage(utils.chat(AuctionMaster.auctionsManagerCfg.getString("not-enough-inventory-space")));
                         }
                         else if(clickCase==1){
                             auction.sellerClaim(player);

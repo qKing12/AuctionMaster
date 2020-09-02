@@ -5,9 +5,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.mysql.fabric.xmlrpc.base.Array;
 import me.qKing12.AuctionMaster.InputGUIs.MinecraftReflector;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.CreateAuctionMainMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,7 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.utilsAPI;
+import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class SelectDurationSignGUI {
 
@@ -50,14 +49,14 @@ public class SelectDurationSignGUI {
         p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
-        ArrayList<String> lines = (ArrayList<String>)Main.auctionsManagerCfg.getStringList("duration-sign-message");
-        sign.setLine(1, utilsAPI.chat(p, lines.get(0).replace("%time-format%", minutes? Main.configLoad.minutes : Main.configLoad.hours)));
-        sign.setLine(2, utilsAPI.chat(p, lines.get(1).replace("%time-format%", minutes? Main.configLoad.minutes : Main.configLoad.hours)));
-        sign.setLine(3, utilsAPI.chat(p, lines.get(2).replace("%time-format%", minutes? Main.configLoad.minutes : Main.configLoad.hours)));
+        ArrayList<String> lines = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("duration-sign-message");
+        sign.setLine(1, utilsAPI.chat(p, lines.get(0).replace("%time-format%", minutes? AuctionMaster.configLoad.minutes : AuctionMaster.configLoad.hours)));
+        sign.setLine(2, utilsAPI.chat(p, lines.get(1).replace("%time-format%", minutes? AuctionMaster.configLoad.minutes : AuctionMaster.configLoad.hours)));
+        sign.setLine(3, utilsAPI.chat(p, lines.get(2).replace("%time-format%", minutes? AuctionMaster.configLoad.minutes : AuctionMaster.configLoad.hours)));
 
         sign.update(false, false);
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(AuctionMaster.plugin, () -> {
             try {
                 openSignEditor(p, sign);
             } catch (Exception e) {
@@ -65,7 +64,7 @@ public class SelectDurationSignGUI {
             }
         }, 2);
 
-        Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+        Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
         //if(!auxiliar.equals(Material.WALL_SIGN))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
@@ -164,7 +163,7 @@ public class SelectDurationSignGUI {
 
     private void registerSignUpdateListener() {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        packetListener = new PacketAdapter(Main.plugin, PacketType.Play.Client.UPDATE_SIGN) {
+        packetListener = new PacketAdapter(AuctionMaster.plugin, PacketType.Play.Client.UPDATE_SIGN) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if(event.getPlayer().equals(p)) {
@@ -174,33 +173,33 @@ public class SelectDurationSignGUI {
                     else
                         input = event.getPacket().getStringArrays().read(0)[0];
 
-                    Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                    Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> {
                         try{
                             int timeInput = Integer.parseInt(input);
                             if(minutes){
                                 if(timeInput>59 || timeInput<1){
-                                    p.sendMessage(utilsAPI.chat(p, Main.auctionsManagerCfg.getString("duration-sign-deny")));
+                                    p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("duration-sign-deny")));
                                 }
                                 else {
-                                    Main.auctionsHandler.startingDuration.put(p.getUniqueId().toString(), timeInput*60000);
+                                    AuctionMaster.auctionsHandler.startingDuration.put(p.getUniqueId().toString(), timeInput*60000);
                                 }
                             }
                             else{
                                 if(timeInput>168 || timeInput<1){
-                                    p.sendMessage(utilsAPI.chat(p, Main.auctionsManagerCfg.getString("duration-sign-deny")));
+                                    p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("duration-sign-deny")));
                                 }
                                 else{
                                     if(maximum_hours!=-1 && maximum_hours<timeInput)
-                                        p.sendMessage(utilsAPI.chat(p, Main.plugin.getConfig().getString("duration-limit-reached-message")));
+                                        p.sendMessage(utilsAPI.chat(p, AuctionMaster.plugin.getConfig().getString("duration-limit-reached-message")));
                                     else
-                                        Main.auctionsHandler.startingDuration.put(p.getUniqueId().toString(), timeInput*3600000);
+                                        AuctionMaster.auctionsHandler.startingDuration.put(p.getUniqueId().toString(), timeInput*3600000);
                                 }
                             }
                         }catch(Exception x){
-                            p.sendMessage(utilsAPI.chat(p, Main.auctionsManagerCfg.getString("duration-sign-deny")));
+                            p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("duration-sign-deny")));
                         }
 
-                        Bukkit.getScheduler().runTask(Main.plugin, () -> sign.getBlock().setType(Material.AIR));
+                        Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> sign.getBlock().setType(Material.AIR));
                         manager.removePacketListener(this);
                         HandlerList.unregisterAll(listener);
                         new CreateAuctionMainMenu(p);

@@ -3,13 +3,10 @@ package me.qKing12.AuctionMaster.AuctionObjects;
 import me.qKing12.AuctionMaster.API.Events.BINPurchaseEvent;
 import me.qKing12.AuctionMaster.API.Events.SellerClaimEndedAuctionEvent;
 import me.qKing12.AuctionMaster.API.Events.SellerClaimExpiredAuctionEvent;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -43,7 +40,7 @@ public class AuctionBIN implements Auction{
         endingDate = ZonedDateTime.now().toInstant().toEpochMilli();
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
         return true;
     }
 
@@ -51,33 +48,33 @@ public class AuctionBIN implements Auction{
         endingDate+=minutes*60000;
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
     }
 
     public void setEndingDate(long date){
         endingDate=date;
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
     }
 
     public void adminRemoveAuction(boolean withDeliveries){
         if(withDeliveries) {
             if (bids.getNumberOfBids() == 0 || !isEnded())
-                Main.deliveries.addItem(sellerUUID, item);
+                AuctionMaster.deliveries.addItem(sellerUUID, item);
             else
-                Main.deliveries.addCoins(sellerUUID, coins);
+                AuctionMaster.deliveries.addCoins(sellerUUID, coins);
         }
 
-        Main.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
-        Main.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
-        if(Main.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()){
-            Main.auctionsHandler.ownAuctions.remove(sellerUUID);
+        AuctionMaster.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
+        AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
+        if(AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()){
+            AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
         }
 
-        Main.auctionsDatabase.deleteAuction(id);
-        Main.auctionsHandler.removeAuctionFromBrowse(this);
-        Main.auctionsHandler.auctions.remove(id);
+        AuctionMaster.auctionsDatabase.deleteAuction(id);
+        AuctionMaster.auctionsHandler.removeAuctionFromBrowse(this);
+        AuctionMaster.auctionsHandler.auctions.remove(id);
         bids=null;
         sellerDisplayName=null;
         sellerName=null;
@@ -116,23 +113,23 @@ public class AuctionBIN implements Auction{
 
     public void sellerClaim(Player player){
             if(bids.getNumberOfBids()==0) {
-                Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimExpiredAuctionEvent(player, this, item)));
+                Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimExpiredAuctionEvent(player, this, item)));
                 player.getInventory().addItem(item);
                 utils.playSound(player, "claim-item");
             }
             else {
-                Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimEndedAuctionEvent(player, this, coins)));
-                Main.economy.addMoney(player, coins);
+                Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimEndedAuctionEvent(player, this, coins)));
+                AuctionMaster.economy.addMoney(player, coins);
                 utils.playSound(player, "claim-money");
             }
             String uuid = player.getUniqueId().toString();
-            Main.auctionsHandler.ownAuctions.get(uuid).remove(this);
-            if(Main.auctionsHandler.ownAuctions.get(uuid).isEmpty()){
-                Main.auctionsHandler.ownAuctions.remove(uuid);
+            AuctionMaster.auctionsHandler.ownAuctions.get(uuid).remove(this);
+            if(AuctionMaster.auctionsHandler.ownAuctions.get(uuid).isEmpty()){
+                AuctionMaster.auctionsHandler.ownAuctions.remove(uuid);
             }
-            Main.auctionsDatabase.removeFromOwnAuctions(uuid, id);
-        Main.auctionsDatabase.deleteAuction(id);
-        Main.auctionsHandler.auctions.remove(id);
+            AuctionMaster.auctionsDatabase.removeFromOwnAuctions(uuid, id);
+        AuctionMaster.auctionsDatabase.deleteAuction(id);
+        AuctionMaster.auctionsHandler.auctions.remove(id);
     }
 
     public void claimBid(Player player){
@@ -148,7 +145,7 @@ public class AuctionBIN implements Auction{
     }
 
     public boolean placeBid(Player player, double amount, int cacheBids){
-        Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new BINPurchaseEvent(player, this, amount)));
+        Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new BINPurchaseEvent(player, this, amount)));
         bids.placeBids(player, amount);
         endingDate=ZonedDateTime.now().toInstant().toEpochMilli()-1000;
         this.cacheBids=1;
@@ -159,14 +156,14 @@ public class AuctionBIN implements Auction{
         fields.put("coins", String.valueOf(coins));
         fields.put("ending", String.valueOf(endingDate));
         fields.put("bids", "'BIN"+bids.getBidsAsString()+"'");
-        Main.auctionsDatabase.updateAuctionField(id, fields);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, fields);
 
         Player seller = Bukkit.getPlayer(UUID.fromString(sellerUUID));
         if(seller!=null){
-            seller.sendMessage(utils.chat(Main.buyItNowCfg.getString("bought-seller-notification")).replace("%bidder-display-name%", player.getDisplayName()).replace("%bidder-name%", player.getName()).replace("%price%", Main.numberFormatHelper.formatNumber(coins)).replace("%item%", displayName));
+            seller.sendMessage(utils.chat(AuctionMaster.buyItNowCfg.getString("bought-seller-notification")).replace("%bidder-display-name%", player.getDisplayName()).replace("%bidder-name%", player.getName()).replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(coins)).replace("%item%", displayName));
         }
 
-        player.sendMessage(utils.chat(Main.buyItNowCfg.getString("bought-item-message").replace("%item%", displayName).replace("%seller-display-name%", sellerDisplayName).replace("%seller-name%", sellerName).replace("%coins%", Main.numberFormatHelper.formatNumber(coins))));
+        player.sendMessage(utils.chat(AuctionMaster.buyItNowCfg.getString("bought-item-message").replace("%item%", displayName).replace("%seller-display-name%", sellerDisplayName).replace("%seller-name%", sellerName).replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(coins))));
 
         return true;
     }
@@ -192,18 +189,18 @@ public class AuctionBIN implements Auction{
             lore.addAll(meta.getLore());
         durationLine=lore.size();
         if(bids.getNumberOfBids()==0){
-            for(String line : Main.buyItNowCfg.getStringList("buy-it-now-lore.expired")) {
+            for(String line : AuctionMaster.buyItNowCfg.getStringList("buy-it-now-lore.expired")) {
                 lore.add(utils.chat(line
                         .replace("%display-name-seller%", sellerDisplayName)
-                        .replace("%price%", Main.numberFormatHelper.formatNumber(coins))
+                        .replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                 ));
             }
         }
         else{
-            for(String line : Main.buyItNowCfg.getStringList("buy-it-now-lore.bought")) {
+            for(String line : AuctionMaster.buyItNowCfg.getStringList("buy-it-now-lore.bought")) {
                 lore.add(utils.chat(line
                         .replace("%display-name-seller%", sellerDisplayName)
-                        .replace("%price%", Main.numberFormatHelper.formatNumber(coins))
+                        .replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                         .replace("%buyer-display-name%", bids.getTopBid())
                 ));
             }
@@ -224,10 +221,10 @@ public class AuctionBIN implements Auction{
         durationLine=lore.size();
         if(bids.getNumberOfBids()==0){
             int index=0;
-            for(String line : Main.buyItNowCfg.getStringList("buy-it-now-lore.on-going")) {
+            for(String line : AuctionMaster.buyItNowCfg.getStringList("buy-it-now-lore.on-going")) {
                 lore.add(utils.chat(line
                     .replace("%display-name-seller%", sellerDisplayName)
-                    .replace("%starting-bid%", Main.numberFormatHelper.formatNumber(coins))
+                    .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                     .replace("%duration%", utils.fromMilisecondsAuction(endingDate-ZonedDateTime.now().toInstant().toEpochMilli()))
                 ));
                 if(line.contains("%duration%")){

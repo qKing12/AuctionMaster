@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.Menus;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class ManageOwnBidsMenu {
 
@@ -34,12 +34,12 @@ public class ManageOwnBidsMenu {
     private ArrayList<Auction> toCollectAll=new ArrayList<>();
 
     private void collectAll() {
-        player.sendMessage(utilsAPI.chat(player, Main.auctionsManagerCfg.getString("collect-all-message")));
+        player.sendMessage(utilsAPI.chat(player, AuctionMaster.auctionsManagerCfg.getString("collect-all-message")));
         for (Auction auction : toCollectAll) {
             if (player.getInventory().firstEmpty() != -1) {
                 auction.claimBid(player);
             } else {
-                player.sendMessage(utilsAPI.chat(player, Main.auctionsManagerCfg.getString("not-enough-inventory-space")));
+                player.sendMessage(utilsAPI.chat(player, AuctionMaster.auctionsManagerCfg.getString("not-enough-inventory-space")));
                 break;
             }
         }
@@ -47,7 +47,7 @@ public class ManageOwnBidsMenu {
     }
 
     private void keepUpdated(){
-        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(Main.plugin, () -> {
+        keepUpdated=Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
@@ -60,7 +60,7 @@ public class ManageOwnBidsMenu {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
 
-            ArrayList<Auction> auctions = Main.auctionsHandler.bidAuctions.get(player.getUniqueId().toString());
+            ArrayList<Auction> auctions = AuctionMaster.auctionsHandler.bidAuctions.get(player.getUniqueId().toString());
 
             int size = 2;
             size += auctions.size() / 9;
@@ -68,16 +68,16 @@ public class ManageOwnBidsMenu {
                 size += 1;
             size *= 9;
 
-            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, Main.configLoad.manageOwnAuctionsMenuName));
+            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, AuctionMaster.configLoad.manageOwnAuctionsMenuName));
 
             int relativeSlot = size - 9;
             for (int i = 1; i < 8; i++) {
-                inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
-                inventory.setItem(relativeSlot + i, Main.configLoad.backgroundGlass.clone());
+                inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
+                inventory.setItem(relativeSlot + i, AuctionMaster.configLoad.backgroundGlass.clone());
             }
             for (int i = 0; i < size; i += 9) {
-                inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
-                inventory.setItem(i + 8, Main.configLoad.backgroundGlass.clone());
+                inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
+                inventory.setItem(i + 8, AuctionMaster.configLoad.backgroundGlass.clone());
             }
 
             int slot = 10;
@@ -94,9 +94,9 @@ public class ManageOwnBidsMenu {
             keepUpdated();
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.goBackLore)
+            for (String line : AuctionMaster.configLoad.goBackLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(goBackSlot = size - 5, itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+            inventory.setItem(goBackSlot = size - 5, itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
             if (toCollectAll.size() > 1) {
                 double coinsToCollect = 0;
@@ -109,17 +109,17 @@ public class ManageOwnBidsMenu {
                 }
                 collectAllSlot = size - 8;
                 lore = new ArrayList<>();
-                for (String line : Main.configLoad.collectAllLoreOwnAuctions)
+                for (String line : AuctionMaster.configLoad.collectAllLoreOwnAuctions)
                     lore.add(utilsAPI.chat(player, line
                             .replace("%auctions%", String.valueOf(toCollectAll.size()))
-                            .replace("%coins%", Main.numberFormatHelper.formatNumber(coinsToCollect))
+                            .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(coinsToCollect))
                             .replace("%items%", String.valueOf(contor))
                     ));
-                inventory.setItem(size - 8, itemConstructor.getItem(Main.configLoad.collectAllMaterial, utilsAPI.chat(player, Main.configLoad.collectAllName), lore));
+                inventory.setItem(size - 8, itemConstructor.getItem(AuctionMaster.configLoad.collectAllMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.collectAllName), lore));
             }
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });

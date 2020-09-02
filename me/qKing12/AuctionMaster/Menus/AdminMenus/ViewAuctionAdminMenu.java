@@ -1,10 +1,8 @@
 package me.qKing12.AuctionMaster.Menus.AdminMenus;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.AuctionObjects.Bids;
-import me.qKing12.AuctionMaster.InputGUIs.BidSelectGUI.BidSelectGUI;
 import me.qKing12.AuctionMaster.InputGUIs.EditDurationGUI.EditDurationGUI;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.*;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
@@ -17,13 +15,10 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class ViewAuctionAdminMenu {
 
@@ -38,28 +33,28 @@ public class ViewAuctionAdminMenu {
             this.player = player;
             this.auction = auction;
             this.goBackTo = goBackTo;
-            inventory = Bukkit.createInventory(player, Main.configLoad.viewAuctionMenuSize, utilsAPI.chat(player, Main.configLoad.viewAuctionMenuName));
+            inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.viewAuctionMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.viewAuctionMenuName));
 
-            if (Main.configLoad.useBackgoundGlass)
-                for (int i = 0; i < Main.configLoad.viewAuctionMenuSize; i++)
-                    inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
+            if (AuctionMaster.configLoad.useBackgoundGlass)
+                for (int i = 0; i < AuctionMaster.configLoad.viewAuctionMenuSize; i++)
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
             inventory.setItem(13, auction.getUpdatedDisplay());
 
-            inventory.setItem(28, Main.configLoad.adminDeleteWithDelivery.clone());
-            inventory.setItem(29, Main.configLoad.adminDeleteWithoutDelivery.clone());
-            inventory.setItem(31, Main.configLoad.adminCopyAuction);
-            inventory.setItem(33, Main.configLoad.adminEditDurationAuction);
-            inventory.setItem(34, Main.configLoad.adminForceEndAuction.clone());
+            inventory.setItem(28, AuctionMaster.configLoad.adminDeleteWithDelivery.clone());
+            inventory.setItem(29, AuctionMaster.configLoad.adminDeleteWithoutDelivery.clone());
+            inventory.setItem(31, AuctionMaster.configLoad.adminCopyAuction);
+            inventory.setItem(33, AuctionMaster.configLoad.adminEditDurationAuction);
+            inventory.setItem(34, AuctionMaster.configLoad.adminForceEndAuction.clone());
 
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.goBackLore)
+            for (String line : AuctionMaster.configLoad.goBackLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(49, itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+            inventory.setItem(49, itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });
@@ -80,7 +75,7 @@ public class ViewAuctionAdminMenu {
                             new ViewAuctionMenu(player, auction, goBackTo, 0);
                     }
                     else if(e.getSlot()==28){
-                        if(Main.deliveries!=null) {
+                        if(AuctionMaster.deliveries!=null) {
                             if (e.getCurrentItem().getAmount() == 2)
                                 e.getCurrentItem().setAmount(1);
                             else {

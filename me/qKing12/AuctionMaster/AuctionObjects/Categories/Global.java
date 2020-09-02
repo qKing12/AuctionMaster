@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.AuctionObjects.Categories;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -60,7 +60,7 @@ public class Global implements Category {
     }
 
     public ArrayList<Auction> getAuctions(Player p) {
-        int sortIndex = Main.auctionsHandler.sortingObject.getSortIndex(p);
+        int sortIndex = AuctionMaster.auctionsHandler.sortingObject.getSortIndex(p);
         if (sortIndex == 0) {
             ArrayList<Auction> auctions = (ArrayList<Auction>) orderedAuctionsMoney.clone();
             Collections.reverse(auctions);
@@ -76,30 +76,30 @@ public class Global implements Category {
     }
 
     public Global() {
-        backgroundGlass = Main.itemConstructor.getItemFromMaterial("160:" + Main.plugin.getConfig().getString("global-menu-color"));
+        backgroundGlass = AuctionMaster.itemConstructor.getItemFromMaterial("160:" + AuctionMaster.plugin.getConfig().getString("global-menu-color"));
         ItemMeta meta = backgroundGlass.getItemMeta();
         meta.setDisplayName(" ");
         backgroundGlass.setItemMeta(meta);
 
-        displayCategoryItem = Main.itemConstructor.getItemFromMaterial(Main.plugin.getConfig().getString("global-category-item"));
+        displayCategoryItem = AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("global-category-item"));
         meta = displayCategoryItem.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-        meta.setDisplayName(utils.chat(Main.plugin.getConfig().getString("global-category-name")));
+        meta.setDisplayName(utils.chat(AuctionMaster.plugin.getConfig().getString("global-category-name")));
         ArrayList<String> lore = new ArrayList<>();
-        for (String line : Main.plugin.getConfig().getStringList("global-category-lore"))
+        for (String line : AuctionMaster.plugin.getConfig().getStringList("global-category-lore"))
             lore.add(utils.chat(line));
         lore.add(" ");
-        lore.add(utils.chat(Main.plugin.getConfig().getString("category-no-browsing")));
+        lore.add(utils.chat(AuctionMaster.plugin.getConfig().getString("category-no-browsing")));
         meta.setLore(lore);
         displayCategoryItem.setItemMeta(meta);
 
-        lore.set(lore.size() - 1, utils.chat(Main.plugin.getConfig().getString("category-browsing")));
+        lore.set(lore.size() - 1, utils.chat(AuctionMaster.plugin.getConfig().getString("category-browsing")));
         meta.setLore(lore);
         displayCategoryItemSelected = displayCategoryItem.clone();
         displayCategoryItemSelected.setItemMeta(meta);
         displayCategoryItemSelected.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
 
-        slot = Main.menusCfg.getInt("browsing-menu.global-slot");
+        slot = AuctionMaster.menusCfg.getInt("browsing-menu.global-slot");
     }
 
     public void sort() {

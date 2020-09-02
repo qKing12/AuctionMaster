@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.Menus;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class DeliveryPlayerMenu {
 
@@ -31,37 +31,37 @@ public class DeliveryPlayerMenu {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
             this.fromMainMenu = fromMainMenu;
-            this.deliveryCoins = Main.deliveries.getCoins(player.getUniqueId().toString());
-            this.deliveryItems = Main.deliveries.getDeliveryItems(player.getUniqueId().toString());
-            inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, utilsAPI.chat(player, Main.configLoad.deliveryMenuName));
+            this.deliveryCoins = AuctionMaster.deliveries.getCoins(player.getUniqueId().toString());
+            this.deliveryItems = AuctionMaster.deliveries.getDeliveryItems(player.getUniqueId().toString());
+            inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, utilsAPI.chat(player, AuctionMaster.configLoad.deliveryMenuName));
 
-            if (Main.configLoad.useBackgoundGlass)
+            if (AuctionMaster.configLoad.useBackgoundGlass)
                 for (int i = 0; i < 9; i++)
-                    inventory.setItem(i, Main.configLoad.backgroundGlass.clone());
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
             ArrayList<String> lore = new ArrayList<>();
             if (deliveryItems.isEmpty() && deliveryCoins == 0) {
-                for (String line : Main.configLoad.deliveryItemNoLore)
+                for (String line : AuctionMaster.configLoad.deliveryItemNoLore)
                     lore.add(utilsAPI.chat(player, line));
-                inventory.setItem(4, itemConstructor.getItem(Main.configLoad.mainMenuDeliveryItem, utilsAPI.chat(player, Main.configLoad.deliveryItemNoName), lore));
+                inventory.setItem(4, itemConstructor.getItem(AuctionMaster.configLoad.mainMenuDeliveryItem, utilsAPI.chat(player, AuctionMaster.configLoad.deliveryItemNoName), lore));
             } else {
-                for (String line : Main.configLoad.deliveryItemYesLore)
+                for (String line : AuctionMaster.configLoad.deliveryItemYesLore)
                     lore.add(utilsAPI.chat(player, line
-                            .replace("%coins%", Main.numberFormatHelper.formatNumber(deliveryCoins))
+                            .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(deliveryCoins))
                             .replace("%items-count%", String.valueOf(deliveryItems.size()))
                     ));
-                inventory.setItem(4, itemConstructor.getItem(Main.configLoad.mainMenuDeliveryItem, utilsAPI.chat(player, Main.configLoad.deliveryItemYesName), lore));
+                inventory.setItem(4, itemConstructor.getItem(AuctionMaster.configLoad.mainMenuDeliveryItem, utilsAPI.chat(player, AuctionMaster.configLoad.deliveryItemYesName), lore));
             }
 
             if (fromMainMenu) {
                 lore = new ArrayList<>();
-                for (String line : Main.configLoad.goBackLore)
+                for (String line : AuctionMaster.configLoad.goBackLore)
                     lore.add(utilsAPI.chat(player, line));
-                inventory.setItem(7, itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+                inventory.setItem(7, itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
             }
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });

@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.FilesHandle;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -10,8 +10,8 @@ import java.util.Set;
 public class ConfigUpdater {
 
     public static void generateFiles(){
-        if (!Main.plugin.getDataFolder().exists()) {
-            Main.plugin.getDataFolder().mkdir();
+        if (!AuctionMaster.plugin.getDataFolder().exists()) {
+            AuctionMaster.plugin.getDataFolder().mkdir();
         }
 
         ArrayList<String> fileNames = new ArrayList<>();
@@ -24,11 +24,11 @@ public class ConfigUpdater {
         fileNames.add("buyItNow.yml");
 
         for(String file : fileNames) {
-            File toCreate = new File(Main.plugin.getDataFolder(), file);
+            File toCreate = new File(AuctionMaster.plugin.getDataFolder(), file);
             if (!toCreate.exists()) {
                 try {
                     toCreate.createNewFile();
-                    InputStream input = Main.plugin.getClass().getResourceAsStream("/"+file);
+                    InputStream input = AuctionMaster.plugin.getClass().getResourceAsStream("/"+file);
                     OutputStream output = new FileOutputStream(toCreate);
                     int realLength;
                     byte[] buffer = new byte[1024];
@@ -38,9 +38,9 @@ public class ConfigUpdater {
                     }
                     output.flush();
                     output.close();
-                    Main.plugin.getLogger().info("Loading "+file+" config...");
+                    AuctionMaster.plugin.getLogger().info("Loading "+file+" config...");
                 } catch (IOException e) {
-                    Main.plugin.getLogger().info("Could not create the "+file+" config.");
+                    AuctionMaster.plugin.getLogger().info("Could not create the "+file+" config.");
                 }
             }
         }
@@ -53,16 +53,16 @@ public class ConfigUpdater {
         menuFileNames.add("tools.yml");
         menuFileNames.add("weapons.yml");
 
-        File directory = new File(Main.plugin.getDataFolder(), "menus");
+        File directory = new File(AuctionMaster.plugin.getDataFolder(), "menus");
         if(!directory.exists())
             directory.mkdir();
 
         for(String file : menuFileNames) {
-            File toCreate = new File(Main.plugin.getDataFolder(), "menus/"+file);
+            File toCreate = new File(AuctionMaster.plugin.getDataFolder(), "menus/"+file);
             if (!toCreate.exists()) {
                 try {
                     toCreate.createNewFile();
-                    InputStream input = Main.plugin.getClass().getResourceAsStream("/"+file);
+                    InputStream input = AuctionMaster.plugin.getClass().getResourceAsStream("/"+file);
                     OutputStream output = new FileOutputStream(toCreate);
                     int realLength;
                     byte[] buffer = new byte[1024];
@@ -72,15 +72,15 @@ public class ConfigUpdater {
                     }
                     output.flush();
                     output.close();
-                    Main.plugin.getLogger().info("Loading "+file+" config...");
+                    AuctionMaster.plugin.getLogger().info("Loading "+file+" config...");
                 } catch (IOException e) {
-                    Main.plugin.getLogger().info("Could not create the "+file+" config.");
+                    AuctionMaster.plugin.getLogger().info("Could not create the "+file+" config.");
                 }
             }
         }
     }
 
-    public ConfigUpdater(Main plugin){
+    public ConfigUpdater(AuctionMaster plugin){
         File inFile = new File(plugin.getDataFolder(), "config.yml");
         File outFile = new File(plugin.getDataFolder(), "$$$$$$$$.tmp");
 

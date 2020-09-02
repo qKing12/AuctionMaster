@@ -3,7 +3,7 @@ package me.qKing12.AuctionMaster.FilesHandle;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionBIN;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionClassic;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 
@@ -38,9 +38,9 @@ public class AuctionsDatabase {
                 ) {
 
             stmt.execute();
-            Main.plugin.getLogger().info("Succesfully connected to the Auctions Database SQL.");
+            AuctionMaster.plugin.getLogger().info("Succesfully connected to the Auctions Database SQL.");
         }catch(Exception x){
-            Main.plugin.getLogger().info("Failed to connect to Auctions Database SQL.");
+            AuctionMaster.plugin.getLogger().info("Failed to connect to Auctions Database SQL.");
             x.printStackTrace();
         }
 
@@ -54,9 +54,9 @@ public class AuctionsDatabase {
                         " PRIMARY KEY ( id ))");
         ){
             stmt.execute();
-            Main.plugin.getLogger().info("Succesfully connected to the Auctions Player List SQL.");
+            AuctionMaster.plugin.getLogger().info("Succesfully connected to the Auctions Player List SQL.");
         }catch(Exception x){
-            Main.plugin.getLogger().info("Failed to connect to Auctions Player List SQL.");
+            AuctionMaster.plugin.getLogger().info("Failed to connect to Auctions Player List SQL.");
             x.printStackTrace();
         }
 
@@ -69,9 +69,9 @@ public class AuctionsDatabase {
         ){
 
             stmt.execute();
-            Main.plugin.getLogger().info("Succesfully connected to the Preview Data SQL.");
+            AuctionMaster.plugin.getLogger().info("Succesfully connected to the Preview Data SQL.");
         }catch(Exception x){
-            Main.plugin.getLogger().info("Failed to connect to Preview Data SQL.");
+            AuctionMaster.plugin.getLogger().info("Failed to connect to Preview Data SQL.");
             x.printStackTrace();
         }
     }
@@ -92,14 +92,14 @@ public class AuctionsDatabase {
             }
         } catch (Exception x) {
             if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> registerPreviewItem(player, item), 7);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> registerPreviewItem(player, item), 7);
             } else
                 x.printStackTrace();
         }
     }
 
     public void removePreviewItem(String player){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt = Auctions.prepareStatement("DELETE FROM PreviewData WHERE id = ?");
@@ -108,7 +108,7 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> removePreviewItem(player), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> removePreviewItem(player), 7);
                 } else
                     x.printStackTrace();
             }
@@ -116,13 +116,13 @@ public class AuctionsDatabase {
     }
 
     public AuctionsDatabase() {
-        url = "jdbc:sqlite:" + Main.plugin.getDataFolder() + "/database/auctionsData.db";
+        url = "jdbc:sqlite:" + AuctionMaster.plugin.getDataFolder() + "/database/auctionsData.db";
         loadAuctionsFile();
         loadAuctionsDataFromFile();
     }
 
     public void insertAuction(Auction auction){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try(
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt = Auctions.prepareStatement("INSERT INTO Auctions VALUES (?, ?, ?, ?, ?, ?, ?, ?, '"+(auction.isBIN()?"BIN":"")+" 0,,, ', 0)");
@@ -138,7 +138,7 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             }catch(Exception x){
                 if(x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> insertAuction(auction), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> insertAuction(auction), 7);
                 }
                 else
                     x.printStackTrace();
@@ -147,7 +147,7 @@ public class AuctionsDatabase {
     }
 
     public void updateAuctionField(String id, HashMap<String, String> toUpdate){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             String toSet = "";
             for(Map.Entry<String, String> entry : toUpdate.entrySet()){
                 toSet=toSet.concat(","+entry.getKey()+"="+entry.getValue());
@@ -161,17 +161,17 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             }catch(Exception x){
                 if(x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> updateAuctionField(id, toUpdate), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> updateAuctionField(id, toUpdate), 7);
                 }
                 else
                     x.printStackTrace();
-                Main.plugin.getLogger().info(toSet);
+                AuctionMaster.plugin.getLogger().info(toSet);
             }
         });
     }
 
     public void deleteAuction(String id){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt = Auctions.prepareStatement("DELETE FROM Auctions WHERE id = ?");
@@ -180,7 +180,7 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> deleteAuction(id), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> deleteAuction(id), 7);
                 } else
                     x.printStackTrace();
             }
@@ -188,7 +188,7 @@ public class AuctionsDatabase {
     }
 
     public void addToOwnBids(String player, String toAdd){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt2 = Auctions.prepareStatement("INSERT INTO AuctionLists VALUES(?, '', ?)");
@@ -204,7 +204,7 @@ public class AuctionsDatabase {
                 }
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> addToOwnBids(player, toAdd), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> addToOwnBids(player, toAdd), 7);
                 } else
                     x.printStackTrace();
             }
@@ -212,7 +212,7 @@ public class AuctionsDatabase {
     }
 
     public void removeFromOwnBids(String player, String toRemove){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownBids = REPLACE(REPLACE(ownBids, '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
@@ -221,7 +221,7 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> removeFromOwnBids(player, toRemove), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> removeFromOwnBids(player, toRemove), 7);
                 } else
                     x.printStackTrace();
             }
@@ -229,7 +229,7 @@ public class AuctionsDatabase {
     }
 
     public void removeFromOwnAuctions(String player, String toRemove){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownAuctions = REPLACE(REPLACE(ownBids, '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
@@ -238,7 +238,7 @@ public class AuctionsDatabase {
                 stmt.executeUpdate();
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> removeFromOwnAuctions(player, toRemove), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> removeFromOwnAuctions(player, toRemove), 7);
                 } else
                     x.printStackTrace();
             }
@@ -246,7 +246,7 @@ public class AuctionsDatabase {
     }
 
     public void addToOwnAuctions(String player, String toAdd){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
                     PreparedStatement stmt2 = Auctions.prepareStatement("INSERT INTO AuctionLists VALUES(?, ?, '')");
@@ -262,7 +262,7 @@ public class AuctionsDatabase {
                 }
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> addToOwnAuctions(player, toAdd), 7);
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> addToOwnAuctions(player, toAdd), 7);
                 } else
                     x.printStackTrace();
             }
@@ -278,16 +278,16 @@ public class AuctionsDatabase {
             stmt.executeUpdate();
         } catch (Exception x) {
             if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(Main.plugin, () -> adjustAuctionTimers(toAdd), 7);
+                Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> adjustAuctionTimers(toAdd), 7);
             } else
                 x.printStackTrace();
         }
     }
 
     private void addAllToBrowse(){
-        for(Auction auction : Main.auctionsHandler.auctions.values())
+        for(Auction auction : AuctionMaster.auctionsHandler.auctions.values())
             if(!auction.isEnded()){
-                Main.auctionsHandler.addToBrowse(auction);
+                AuctionMaster.auctionsHandler.addToBrowse(auction);
             }
     }
 
@@ -314,9 +314,9 @@ public class AuctionsDatabase {
                 ){
             while(resultSet.next()) {
                 if(resultSet.getString(9).startsWith("BIN"))
-                    Main.auctionsHandler.auctions.put(resultSet.getString(1), new AuctionBIN(resultSet.getString(1), resultSet.getDouble(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getBoolean(10)));
+                    AuctionMaster.auctionsHandler.auctions.put(resultSet.getString(1), new AuctionBIN(resultSet.getString(1), resultSet.getDouble(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getBoolean(10)));
                 else
-                    Main.auctionsHandler.auctions.put(resultSet.getString(1), new AuctionClassic(resultSet.getString(1), resultSet.getDouble(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getBoolean(10)));
+                    AuctionMaster.auctionsHandler.auctions.put(resultSet.getString(1), new AuctionClassic(resultSet.getString(1), resultSet.getDouble(2), resultSet.getLong(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getBoolean(10)));
             }
         }catch(Exception x){
             x.printStackTrace();
@@ -343,28 +343,28 @@ public class AuctionsDatabase {
                 if(!ownAuctions.equals("")) {
                     for (String idToAdd : ownAuctions.split("\\.")) {
                         try {
-                            Auction auction = Main.auctionsHandler.auctions.get(idToAdd);
+                            Auction auction = AuctionMaster.auctionsHandler.auctions.get(idToAdd);
                             if(auction!=null)
                                 AuctionsArray.add(auction);
                             else
-                                Main.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own auctions. ID=" + idToAdd);
+                                AuctionMaster.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own auctions. ID=" + idToAdd);
                         } catch (Exception x) {
-                            Main.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own auctions. ID=" + idToAdd);
+                            AuctionMaster.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own auctions. ID=" + idToAdd);
                         }
                     }
                     if (!AuctionsArray.isEmpty())
-                        Main.auctionsHandler.ownAuctions.put(id, (ArrayList<Auction>)AuctionsArray.clone());
+                        AuctionMaster.auctionsHandler.ownAuctions.put(id, (ArrayList<Auction>)AuctionsArray.clone());
                     AuctionsArray.clear();
                 }
                 if(!ownBids.equals("")) {
                     for (String idToAdd : ownBids.split("\\."))
                         try {
-                            AuctionsArray.add(Main.auctionsHandler.auctions.get(idToAdd));
+                            AuctionsArray.add(AuctionMaster.auctionsHandler.auctions.get(idToAdd));
                         } catch (Exception x) {
-                            Main.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own bids. ID=" + idToAdd);
+                            AuctionMaster.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own bids. ID=" + idToAdd);
                         }
                     if (!AuctionsArray.isEmpty())
-                        Main.auctionsHandler.bidAuctions.put(id, AuctionsArray);
+                        AuctionMaster.auctionsHandler.bidAuctions.put(id, AuctionsArray);
                 }
             }
         }catch(Exception x){

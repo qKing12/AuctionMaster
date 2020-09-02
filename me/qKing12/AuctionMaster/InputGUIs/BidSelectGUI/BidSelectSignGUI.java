@@ -7,8 +7,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.InputGUIs.MinecraftReflector;
-import me.qKing12.AuctionMaster.Main;
-import me.qKing12.AuctionMaster.Menus.CreateAuctionMainMenu;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.ViewAuctionMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,7 +22,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import static me.qKing12.AuctionMaster.Main.utilsAPI;
+import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class BidSelectSignGUI {
 
@@ -53,14 +52,14 @@ public class BidSelectSignGUI {
         p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
-        ArrayList<String> lines = (ArrayList<String>) Main.auctionsManagerCfg.getStringList("starting-bid-sign-message");
+        ArrayList<String> lines = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message");
         sign.setLine(1, utilsAPI.chat(p, lines.get(0)));
         sign.setLine(2, utilsAPI.chat(p, lines.get(1)));
         sign.setLine(3, utilsAPI.chat(p, lines.get(2)));
 
         sign.update(false, false);
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(AuctionMaster.plugin, () -> {
             try {
                 openSignEditor(p, sign);
             } catch (Exception e) {
@@ -68,7 +67,7 @@ public class BidSelectSignGUI {
             }
         }, 2);
 
-        Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+        Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
         //if(!auxiliar.equals(Material.WALL_SIGN))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
@@ -167,7 +166,7 @@ public class BidSelectSignGUI {
 
     private void registerSignUpdateListener() {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        packetListener = new PacketAdapter(Main.plugin, PacketType.Play.Client.UPDATE_SIGN) {
+        packetListener = new PacketAdapter(AuctionMaster.plugin, PacketType.Play.Client.UPDATE_SIGN) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if(event.getPlayer().equals(p)) {
@@ -178,19 +177,19 @@ public class BidSelectSignGUI {
                         input = event.getPacket().getStringArrays().read(0)[0];
 
 
-                    Bukkit.getScheduler().runTask(Main.plugin, () -> {
+                    Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> {
                         try{
-                            double bidSelect = Main.numberFormatHelper.useDecimals? Double.parseDouble(input):Math.floor(Double.parseDouble(input));
+                            double bidSelect = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(input):Math.floor(Double.parseDouble(input));
                             if(bidSelect>=minimumBid)
                                 new ViewAuctionMenu(p, auction, goBackTo, bidSelect);
                             else
                                 new ViewAuctionMenu(p, auction, goBackTo, 0);
                         }catch(Exception x){
-                            p.sendMessage(utilsAPI.chat(p, Main.auctionsManagerCfg.getString("edit-bid-deny-message")));
+                            p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("edit-bid-deny-message")));
                             new ViewAuctionMenu(p, auction, goBackTo, 0);
                         }
 
-                        Bukkit.getScheduler().runTask(Main.plugin, () -> sign.getBlock().setType(Material.AIR));
+                        Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> sign.getBlock().setType(Material.AIR));
                         manager.removePacketListener(this);
                         HandlerList.unregisterAll(listener);
                     });

@@ -1,14 +1,8 @@
 package me.qKing12.AuctionMaster.Menus.AdminMenus;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.AuctionObjects.Categories.*;
-import me.qKing12.AuctionMaster.InputGUIs.SearchGUI.SearchGUI;
-import me.qKing12.AuctionMaster.Main;
-import me.qKing12.AuctionMaster.Menus.BrowsingAuctionsMenu;
-import me.qKing12.AuctionMaster.Menus.MainAuctionMenu;
-import me.qKing12.AuctionMaster.Menus.ViewAuctionMenu;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,14 +12,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class EndedAuctionsMenu {
 
@@ -39,24 +31,24 @@ public class EndedAuctionsMenu {
 
     private void setupPreviousPage(){
         ArrayList<String> lore = new ArrayList<>();
-        for(String line : Main.configLoad.previousPageLore)
+        for(String line : AuctionMaster.configLoad.previousPageLore)
             lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page))));
 
-        inventory.setItem(46, itemConstructor.getItem(Main.configLoad.previousPageMaterial, utilsAPI.chat(player, Main.configLoad.previousPageName.replace("%page-number%", String.valueOf(page))), lore));
+        inventory.setItem(46, itemConstructor.getItem(AuctionMaster.configLoad.previousPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.previousPageName.replace("%page-number%", String.valueOf(page))), lore));
     }
 
     private void setupNextPage(){
         ArrayList<String> lore = new ArrayList<>();
-        for(String line : Main.configLoad.nextPageLore)
+        for(String line : AuctionMaster.configLoad.nextPageLore)
             lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page))));
 
-        inventory.setItem(53, itemConstructor.getItem(Main.configLoad.nextPageMaterial, utilsAPI.chat(player, Main.configLoad.nextPageName.replace("%page-number%", String.valueOf(page))), lore));
+        inventory.setItem(53, itemConstructor.getItem(AuctionMaster.configLoad.nextPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.nextPageName.replace("%page-number%", String.valueOf(page))), lore));
     }
 
     private void loadAuctions() {
         auctions.clear();
 
-        Iterator<Auction> auctionIterator = Main.auctionsHandler.auctions.values().iterator();
+        Iterator<Auction> auctionIterator = AuctionMaster.auctionsHandler.auctions.values().iterator();
 
         int toSkip = page * 28;
 
@@ -87,9 +79,9 @@ public class EndedAuctionsMenu {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
             this.page = page;
-            inventory = Bukkit.createInventory(player, 54, utilsAPI.chat(player, Main.configLoad.browsingMenuName));
+            inventory = Bukkit.createInventory(player, 54, utilsAPI.chat(player, AuctionMaster.configLoad.browsingMenuName));
 
-            ItemStack backgroundGlass = Main.configLoad.backgroundGlass;
+            ItemStack backgroundGlass = AuctionMaster.configLoad.backgroundGlass;
 
             for (int i = 1; i < 8; i++) {
                 inventory.setItem(i, backgroundGlass.clone());
@@ -103,12 +95,12 @@ public class EndedAuctionsMenu {
             loadAuctions();
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : Main.configLoad.goBackLore)
+            for (String line : AuctionMaster.configLoad.goBackLore)
                 lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(49, itemConstructor.getItem(Main.configLoad.goBackMaterial, utilsAPI.chat(player, Main.configLoad.goBackName), lore));
+            inventory.setItem(49, itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+                Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
                 player.openInventory(inventory);
             });
         });
@@ -125,12 +117,12 @@ public class EndedAuctionsMenu {
                     if(e.getSlot()==49)
                         new MainAdminMenu(player);
                     else if(e.getSlot()==46){
-                        if(!e.getCurrentItem().equals(Main.configLoad.backgroundGlass)){
+                        if(!e.getCurrentItem().equals(AuctionMaster.configLoad.backgroundGlass)){
                             new EndedAuctionsMenu(player, page-1);
                         }
                     }
                     else if(e.getSlot()==53){
-                        if(!e.getCurrentItem().equals(Main.configLoad.backgroundGlass)){
+                        if(!e.getCurrentItem().equals(AuctionMaster.configLoad.backgroundGlass)){
                             new EndedAuctionsMenu(player, page+1);
                         }
                     }

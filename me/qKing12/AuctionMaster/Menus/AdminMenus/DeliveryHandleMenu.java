@@ -1,10 +1,6 @@
 package me.qKing12.AuctionMaster.Menus.AdminMenus;
 
-import me.qKing12.AuctionMaster.FilesHandle.ConfigLoad;
 import me.qKing12.AuctionMaster.InputGUIs.DeliveryCoinsGUI.DeliveryCoinsGUI;
-import me.qKing12.AuctionMaster.InputGUIs.DeliveryGUI.DeliveryGUI;
-import me.qKing12.AuctionMaster.Main;
-import me.qKing12.AuctionMaster.Utils.SkullTexture;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static me.qKing12.AuctionMaster.Main.*;
+import static me.qKing12.AuctionMaster.AuctionMaster.*;
 
 public class DeliveryHandleMenu {
 

@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.Utils;
 
 import com.google.common.base.Charsets;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,9 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class utils {
-    private static File log = new File(Main.plugin.getDataFolder(), "database/logs.txt");
+    private static File log = new File(AuctionMaster.plugin.getDataFolder(), "database/logs.txt");
     public static void injectToLog(String inject){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             if(!log.exists())
                 try {
                     log.createNewFile();
@@ -41,16 +41,16 @@ public class utils {
     }
 
     public static void playSound(Player p, String soundCfg){
-        Bukkit.getScheduler().runTaskAsynchronously(Main.plugin, () -> {
-            String sound = Main.soundsCfg.getString(soundCfg);
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
+            String sound = AuctionMaster.soundsCfg.getString(soundCfg);
             if (sound == null || sound.equals("none"))
                 return;
             try {
                 if (sound.contains(":")) {
                     String[] soundArgs = sound.split(":");
-                    Bukkit.getScheduler().runTask(Main.plugin, () -> p.playSound(p.getLocation(), Sound.valueOf(soundArgs[0]), 2, Integer.valueOf(soundArgs[1])));
+                    Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> p.playSound(p.getLocation(), Sound.valueOf(soundArgs[0]), 2, Integer.valueOf(soundArgs[1])));
                 } else
-                    Bukkit.getScheduler().runTask(Main.plugin, () -> p.playSound(p.getLocation(), Sound.valueOf(sound), 2, 2));
+                    Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> p.playSound(p.getLocation(), Sound.valueOf(sound), 2, 2));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -116,7 +116,7 @@ public class utils {
             dataOutput.close();
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Exception e) {
-            Main.plugin.getLogger().warning("Unable to save item stacks. "+ e);
+            AuctionMaster.plugin.getLogger().warning("Unable to save item stacks. "+ e);
         }
         return null;
     }
@@ -132,7 +132,7 @@ public class utils {
             dataInput.close();
             return item;
         } catch (Exception e) {
-            Main.plugin.getLogger().warning("Unable to decode class type. "+ e);
+            AuctionMaster.plugin.getLogger().warning("Unable to decode class type. "+ e);
         }
         return null;
     }
@@ -155,16 +155,16 @@ public class utils {
         Long secunda = a/1000;
         String timpFinal = "";
         if(zi>0) {
-            timpFinal=timpFinal.concat(zi+Main.configLoad.short_day);
+            timpFinal=timpFinal.concat(zi+ AuctionMaster.configLoad.short_day);
         }
         if(ora>0){
-            timpFinal=timpFinal.concat(ora+Main.configLoad.short_hour);
+            timpFinal=timpFinal.concat(ora+ AuctionMaster.configLoad.short_hour);
         }
         if(minut>0){
-            timpFinal=timpFinal.concat(minut+Main.configLoad.short_minute);
+            timpFinal=timpFinal.concat(minut+ AuctionMaster.configLoad.short_minute);
         }
         if(secunda>0){
-            timpFinal=timpFinal.concat(secunda+Main.configLoad.short_second);
+            timpFinal=timpFinal.concat(secunda+ AuctionMaster.configLoad.short_second);
             return timpFinal;
         }
         else
@@ -180,20 +180,20 @@ public class utils {
         int minut = a/60000;
         int secunda = a/1000;
         if(zi>0) {
-            if (zi == 1) return "1 ".concat(Main.configLoad.day);
-            return Integer.toString(zi).concat(" ").concat(Main.configLoad.days);
+            if (zi == 1) return "1 ".concat(AuctionMaster.configLoad.day);
+            return Integer.toString(zi).concat(" ").concat(AuctionMaster.configLoad.days);
         }
         else if(ora>0){
-            if(ora == 1) return "1 ".concat(Main.configLoad.hour);
-            return Integer.toString(ora).concat(" ").concat(Main.configLoad.hours);
+            if(ora == 1) return "1 ".concat(AuctionMaster.configLoad.hour);
+            return Integer.toString(ora).concat(" ").concat(AuctionMaster.configLoad.hours);
         }
         else if(minut>0){
-            if(minut == 1) return "1 ".concat(Main.configLoad.minute);
-            return Integer.toString(minut).concat(" ").concat(Main.configLoad.minutes);
+            if(minut == 1) return "1 ".concat(AuctionMaster.configLoad.minute);
+            return Integer.toString(minut).concat(" ").concat(AuctionMaster.configLoad.minutes);
         }
         else if(secunda>0){
-            if(secunda == 1) return "1 ".concat(Main.configLoad.second);
-            return Integer.toString(secunda).concat(" ").concat(Main.configLoad.seconds);
+            if(secunda == 1) return "1 ".concat(AuctionMaster.configLoad.second);
+            return Integer.toString(secunda).concat(" ").concat(AuctionMaster.configLoad.seconds);
         }
         else
             return utils.chat("&eEnding Soon!");

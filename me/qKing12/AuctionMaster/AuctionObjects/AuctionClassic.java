@@ -4,7 +4,7 @@ import me.qKing12.AuctionMaster.API.Events.LostBidClaim;
 import me.qKing12.AuctionMaster.API.Events.SellerClaimEndedAuctionEvent;
 import me.qKing12.AuctionMaster.API.Events.SellerClaimExpiredAuctionEvent;
 import me.qKing12.AuctionMaster.API.Events.TopBidClaim;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -36,8 +36,8 @@ public class AuctionClassic implements Auction{
 
     public boolean checkForDeletion(){
         if(sellerClaimed && bids.allBidsClaimed()){
-            Main.auctionsDatabase.deleteAuction(id);
-            Main.auctionsHandler.auctions.remove(id);
+            AuctionMaster.auctionsDatabase.deleteAuction(id);
+            AuctionMaster.auctionsHandler.auctions.remove(id);
             return true;
         }
         return false;
@@ -49,7 +49,7 @@ public class AuctionClassic implements Auction{
         endingDate = ZonedDateTime.now().toInstant().toEpochMilli();
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
         return true;
     }
 
@@ -57,56 +57,56 @@ public class AuctionClassic implements Auction{
         endingDate+=minutes*60000;
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
     }
 
     public void setEndingDate(long date){
         endingDate=date;
         HashMap<String, String> toChange = new HashMap<>();
         toChange.put("ending", String.valueOf(endingDate));
-        Main.auctionsDatabase.updateAuctionField(id, toChange);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
     }
 
     public void adminRemoveAuction(boolean withDeliveries){
         if(withDeliveries && !sellerClaimed) {
             if (bids.getNumberOfBids() == 0 || !isEnded())
-                Main.deliveries.addItem(sellerUUID, item);
+                AuctionMaster.deliveries.addItem(sellerUUID, item);
             else
-                Main.deliveries.addCoins(sellerUUID, coins);
+                AuctionMaster.deliveries.addCoins(sellerUUID, coins);
         }
         HashMap<String, Double> cache = new HashMap<>();
         for(Bids.Bid bid : bids.getBidList()){
             if(!bid.isClaimed() && !cache.containsKey(bid.getBidderUUID())) {
-                Main.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).remove(this);
-                if (Main.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).isEmpty())
-                    Main.auctionsHandler.bidAuctions.remove(bid.getBidderUUID());
+                AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).remove(this);
+                if (AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).isEmpty())
+                    AuctionMaster.auctionsHandler.bidAuctions.remove(bid.getBidderUUID());
             }
             cache.put(bid.getBidderUUID(), bid.getCoins());
         }
         for(String uuid : cache.keySet()){
-            Main.auctionsDatabase.removeFromOwnBids(uuid, id);
+            AuctionMaster.auctionsDatabase.removeFromOwnBids(uuid, id);
         }
         if(withDeliveries){
             if(bids.getNumberOfBids()!=0 && isEnded())
                 cache.put(bids.getTopBidUUID(), -1d);
             for(Map.Entry<String, Double> entry : cache.entrySet()){
                 if(entry.getValue()==-1)
-                    Main.deliveries.addItem(entry.getKey(), item);
-                Main.deliveries.addCoins(entry.getKey(), entry.getValue());
+                    AuctionMaster.deliveries.addItem(entry.getKey(), item);
+                AuctionMaster.deliveries.addCoins(entry.getKey(), entry.getValue());
             }
         }
 
         if(!sellerClaimed) {
-            Main.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
-            Main.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
-            if (Main.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()) {
-                Main.auctionsHandler.ownAuctions.remove(sellerUUID);
+            AuctionMaster.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
+            AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
+            if (AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()) {
+                AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
             }
         }
 
-        Main.auctionsDatabase.deleteAuction(id);
-        Main.auctionsHandler.removeAuctionFromBrowse(this);
-        Main.auctionsHandler.auctions.remove(id);
+        AuctionMaster.auctionsDatabase.deleteAuction(id);
+        AuctionMaster.auctionsHandler.removeAuctionFromBrowse(this);
+        AuctionMaster.auctionsHandler.auctions.remove(id);
         bids=null;
         sellerDisplayName=null;
         sellerName=null;
@@ -148,25 +148,25 @@ public class AuctionClassic implements Auction{
         if(!sellerClaimed){
             sellerClaimed=true;
             if(bids.getNumberOfBids()==0) {
-                Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimExpiredAuctionEvent(player, this, item)));
+                Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimExpiredAuctionEvent(player, this, item)));
                 player.getInventory().addItem(item);
                 utils.playSound(player, "claim-item");
             }
             else {
-                Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimEndedAuctionEvent(player, this, coins)));
-                Main.economy.addMoney(player, coins);
+                Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new SellerClaimEndedAuctionEvent(player, this, coins)));
+                AuctionMaster.economy.addMoney(player, coins);
                 utils.playSound(player, "claim-money");
             }
             String uuid = player.getUniqueId().toString();
-            Main.auctionsHandler.ownAuctions.get(uuid).remove(this);
-            if(Main.auctionsHandler.ownAuctions.get(uuid).isEmpty()){
-                Main.auctionsHandler.ownAuctions.remove(uuid);
+            AuctionMaster.auctionsHandler.ownAuctions.get(uuid).remove(this);
+            if(AuctionMaster.auctionsHandler.ownAuctions.get(uuid).isEmpty()){
+                AuctionMaster.auctionsHandler.ownAuctions.remove(uuid);
             }
-            Main.auctionsDatabase.removeFromOwnAuctions(uuid, id);
+            AuctionMaster.auctionsDatabase.removeFromOwnAuctions(uuid, id);
             if(!checkForDeletion()){
                 HashMap<String, String> toChange = new HashMap<>();
                 toChange.put("sellerClaimed", "1");
-                Main.auctionsDatabase.updateAuctionField(id, toChange);
+                AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
             }
         }
     }
@@ -185,36 +185,36 @@ public class AuctionClassic implements Auction{
     public void topBidClaim(Player player){
         if(!bids.getBidList().get(bids.getBidList().size()-1).isClaimed()) {
             bids.claimBid(player);
-            Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new TopBidClaim(player, this, item)));
+            Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new TopBidClaim(player, this, item)));
             player.getInventory().addItem(item);
             String uuid = player.getUniqueId().toString();
-            Main.auctionsDatabase.removeFromOwnBids(uuid, id);
-            Main.auctionsHandler.bidAuctions.get(uuid).remove(this);
-            if(Main.auctionsHandler.bidAuctions.get(uuid).isEmpty()){
-                Main.auctionsHandler.bidAuctions.remove(uuid);
+            AuctionMaster.auctionsDatabase.removeFromOwnBids(uuid, id);
+            AuctionMaster.auctionsHandler.bidAuctions.get(uuid).remove(this);
+            if(AuctionMaster.auctionsHandler.bidAuctions.get(uuid).isEmpty()){
+                AuctionMaster.auctionsHandler.bidAuctions.remove(uuid);
             }
             if(!checkForDeletion()){
                 HashMap<String, String> toChange = new HashMap<>();
                 toChange.put("bids", "'"+bids.getBidsAsString()+"'");
-                Main.auctionsDatabase.updateAuctionField(id, toChange);
+                AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
             }
         }
     }
 
     public void normalBidClaim(Player player){
         double coins = bids.claimBid(player);
-        Bukkit.getScheduler().runTask(Main.plugin, () -> Bukkit.getPluginManager().callEvent(new LostBidClaim(player, this, coins)));
-        Main.economy.addMoney(player, coins);
-        Main.auctionsDatabase.removeFromOwnBids(player.getUniqueId().toString(), id);
+        Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new LostBidClaim(player, this, coins)));
+        AuctionMaster.economy.addMoney(player, coins);
+        AuctionMaster.auctionsDatabase.removeFromOwnBids(player.getUniqueId().toString(), id);
         String uuid = player.getUniqueId().toString();
-        Main.auctionsHandler.bidAuctions.get(uuid).remove(this);
-        if(Main.auctionsHandler.bidAuctions.get(uuid).isEmpty()){
-            Main.auctionsHandler.bidAuctions.remove(uuid);
+        AuctionMaster.auctionsHandler.bidAuctions.get(uuid).remove(this);
+        if(AuctionMaster.auctionsHandler.bidAuctions.get(uuid).isEmpty()){
+            AuctionMaster.auctionsHandler.bidAuctions.remove(uuid);
         }
         if(!checkForDeletion()){
             HashMap<String, String> toChange = new HashMap<>();
             toChange.put("bids", "'"+bids.getBidsAsString()+"'");
-            Main.auctionsDatabase.updateAuctionField(id, toChange);
+            AuctionMaster.auctionsDatabase.updateAuctionField(id, toChange);
         }
     }
 
@@ -225,19 +225,19 @@ public class AuctionClassic implements Auction{
 
         utils.injectToLog("[Bid Place] "+player.getName()+" placed a bid of "+amount+"on classic auction with ID="+id);
 
-        endingDate+=Main.plugin.getConfig().getInt("add-time-to-auction")*1000;
+        endingDate+= AuctionMaster.plugin.getConfig().getInt("add-time-to-auction")*1000;
         coins=amount;
-        if(Main.auctionsHandler.bidAuctions.containsKey(player.getUniqueId().toString())){
+        if(AuctionMaster.auctionsHandler.bidAuctions.containsKey(player.getUniqueId().toString())){
             if(getLastBid(player.getUniqueId().toString())==null) {
-                Main.auctionsHandler.bidAuctions.get(player.getUniqueId().toString()).add(this);
-                Main.auctionsDatabase.addToOwnBids(player.getUniqueId().toString(), id);
+                AuctionMaster.auctionsHandler.bidAuctions.get(player.getUniqueId().toString()).add(this);
+                AuctionMaster.auctionsDatabase.addToOwnBids(player.getUniqueId().toString(), id);
             }
         }
         else{
             ArrayList<Auction> auctions = new ArrayList<>();
             auctions.add(this);
-            Main.auctionsHandler.bidAuctions.put(player.getUniqueId().toString(), auctions);
-            Main.auctionsDatabase.addToOwnBids(player.getUniqueId().toString(), id);
+            AuctionMaster.auctionsHandler.bidAuctions.put(player.getUniqueId().toString(), auctions);
+            AuctionMaster.auctionsDatabase.addToOwnBids(player.getUniqueId().toString(), id);
         }
         bids.placeBids(player, amount);
 
@@ -245,11 +245,11 @@ public class AuctionClassic implements Auction{
         fields.put("coins", String.valueOf(coins));
         fields.put("ending", String.valueOf(endingDate));
         fields.put("bids", "'"+bids.getBidsAsString()+"'");
-        Main.auctionsDatabase.updateAuctionField(id, fields);
+        AuctionMaster.auctionsDatabase.updateAuctionField(id, fields);
 
         Player seller = Bukkit.getPlayer(UUID.fromString(sellerUUID));
         if(seller!=null){
-            seller.sendMessage(utils.chat(Main.bidsRelatedCfg.getString("bid-message")).replace("%bidder%", player.getDisplayName()).replace("%bid-amount%", Main.numberFormatHelper.formatNumber(amount)).replace("%bid-item%", displayName));
+            seller.sendMessage(utils.chat(AuctionMaster.bidsRelatedCfg.getString("bid-message")).replace("%bidder%", player.getDisplayName()).replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(amount)).replace("%bid-item%", displayName));
         }
 
         ArrayList<Player> outbidPlayers = new ArrayList<>();
@@ -259,8 +259,8 @@ public class AuctionClassic implements Auction{
                 outbidPlayers.add(bidder);
         }
         String outbidMsg = "";
-        for (String msj : Main.configLoad.outbidMessage)
-            outbidMsg=outbidMsg+utils.chat(msj).replace("%outbid-player-display-name%", player.getDisplayName()).replace("%top-bid%", Main.numberFormatHelper.formatNumber(coins)).replace("%bid-item%", displayName)+"\n";
+        for (String msj : AuctionMaster.configLoad.outbidMessage)
+            outbidMsg=outbidMsg+utils.chat(msj).replace("%outbid-player-display-name%", player.getDisplayName()).replace("%top-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins)).replace("%bid-item%", displayName)+"\n";
         TextComponent clickMess = new TextComponent();
         clickMess.setText(outbidMsg.substring(0, outbidMsg.length()-1));
         clickMess.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ahview "+id));
@@ -287,7 +287,7 @@ public class AuctionClassic implements Auction{
     }
 
     public ItemStack getBidHistory(){
-        ItemStack toReturn=Main.configLoad.bidHistoryDefaultItem.clone();
+        ItemStack toReturn= AuctionMaster.configLoad.bidHistoryDefaultItem.clone();
 
         int numberOfBids=bids.getNumberOfBids();
         if(numberOfBids!=0){
@@ -301,9 +301,9 @@ public class AuctionClassic implements Auction{
 
             while(bidsIterator.hasNext()){
                 Bids.Bid bid = bidsIterator.next();
-                for(String line : Main.configLoad.bidHistoryItemLoreStructure){
+                for(String line : AuctionMaster.configLoad.bidHistoryItemLoreStructure){
                     lore.add(utils.chat(line
-                        .replace("%bid-amount%", Main.numberFormatHelper.formatNumber(bid.getCoins()))
+                        .replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bid.getCoins()))
                         .replace("%bidder-display-name%", bid.getBidderDisplayName())
                         .replace("%when-bidded%", utils.fromMiliseconds((int)(ZonedDateTime.now().toInstant().toEpochMilli()-bid.getBidDate())))
                     ));
@@ -327,19 +327,19 @@ public class AuctionClassic implements Auction{
             lore.addAll(meta.getLore());
         durationLine=lore.size();
         if(bids.getNumberOfBids()==0){
-            for(String line : Main.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-expired")) {
+            for(String line : AuctionMaster.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-expired")) {
                 lore.add(utils.chat(line
                         .replace("%display-name-seller%", sellerDisplayName)
-                        .replace("%starting-bid%", Main.numberFormatHelper.formatNumber(coins))
+                        .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                 ));
             }
         }
         else{
-            for(String line : Main.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-ended")) {
+            for(String line : AuctionMaster.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-ended")) {
                 lore.add(utils.chat(line
                         .replace("%display-name-seller%", sellerDisplayName)
-                        .replace("%starting-bid%", Main.numberFormatHelper.formatNumber(coins))
-                        .replace("%top-bid%", Main.numberFormatHelper.formatNumber(bids.getTopBidCoins()))
+                        .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
+                        .replace("%top-bid%", AuctionMaster.numberFormatHelper.formatNumber(bids.getTopBidCoins()))
                         .replace("%top-bid-player%", bids.getTopBid())
                         .replace("%bids%", String.valueOf(bids.getNumberOfBids()))
                 ));
@@ -361,10 +361,10 @@ public class AuctionClassic implements Auction{
         durationLine=lore.size();
         if(bids.getNumberOfBids()==0){
             int index=0;
-            for(String line : Main.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-no-bid")) {
+            for(String line : AuctionMaster.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-no-bid")) {
                 lore.add(utils.chat(line
                     .replace("%display-name-seller%", sellerDisplayName)
-                    .replace("%starting-bid%", Main.numberFormatHelper.formatNumber(coins))
+                    .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                     .replace("%duration%", utils.fromMilisecondsAuction(endingDate-ZonedDateTime.now().toInstant().toEpochMilli()))
                 ));
                 if(line.contains("%duration%")){
@@ -376,12 +376,12 @@ public class AuctionClassic implements Auction{
         }
         else{
             int index=0;
-            for(String line : Main.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-with-bids")) {
+            for(String line : AuctionMaster.auctionsManagerCfg.getStringList("auction-item-lore.auction-item-with-bids")) {
                 lore.add(utils.chat(line
                         .replace("%display-name-seller%", sellerDisplayName)
-                        .replace("%starting-bid%", Main.numberFormatHelper.formatNumber(coins))
+                        .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
                         .replace("%duration%", utils.fromMilisecondsAuction(endingDate-ZonedDateTime.now().toInstant().toEpochMilli()))
-                        .replace("%top-bid%", Main.numberFormatHelper.formatNumber(bids.getTopBidCoins()))
+                        .replace("%top-bid%", AuctionMaster.numberFormatHelper.formatNumber(bids.getTopBidCoins()))
                         .replace("%top-bid-player%", bids.getTopBid())
                         .replace("%bids%", String.valueOf(bids.getNumberOfBids()))
                 ));

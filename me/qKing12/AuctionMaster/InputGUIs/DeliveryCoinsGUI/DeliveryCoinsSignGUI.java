@@ -6,8 +6,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import me.qKing12.AuctionMaster.InputGUIs.MinecraftReflector;
-import me.qKing12.AuctionMaster.Main;
-import me.qKing12.AuctionMaster.Menus.AdminMenus.DeliveryAdminMenu;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.DeliveryHandleMenu;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.Bukkit;
@@ -62,7 +61,7 @@ public class DeliveryCoinsSignGUI {
 
         sign.update(false, false);
 
-        Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
+        Bukkit.getScheduler().runTaskLater(AuctionMaster.plugin, () -> {
             try {
                 openSignEditor(p, sign);
             } catch (Exception e) {
@@ -70,7 +69,7 @@ public class DeliveryCoinsSignGUI {
             }
         }, 2);
 
-        Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+        Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
         //if(!auxiliar.equals(Material.WALL_SIGN))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
@@ -169,7 +168,7 @@ public class DeliveryCoinsSignGUI {
 
     private void registerSignUpdateListener() {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        packetListener = new PacketAdapter(Main.plugin, PacketType.Play.Client.UPDATE_SIGN) {
+        packetListener = new PacketAdapter(AuctionMaster.plugin, PacketType.Play.Client.UPDATE_SIGN) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if(event.getPlayer().equals(p)) {
@@ -179,8 +178,8 @@ public class DeliveryCoinsSignGUI {
                     else
                         input = event.getPacket().getStringArrays().read(0)[0];
 
-                    Bukkit.getScheduler().runTask(Main.plugin, () -> {
-                        Bukkit.getScheduler().runTask(Main.plugin, () -> sign.getBlock().setType(Material.AIR));
+                    Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> {
+                        Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> sign.getBlock().setType(Material.AIR));
                         manager.removePacketListener(this);
                         HandlerList.unregisterAll(listener);
                         try {

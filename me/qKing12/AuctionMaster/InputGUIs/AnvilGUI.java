@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.InputGUIs;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -58,21 +58,21 @@ public class AnvilGUI {
         this.insert = slot;
         
 
-        Main.anvilHelper.handleInventoryCloseEvent(holder);
-        Main.anvilHelper.setActiveContainerDefault(holder);
+        AuctionMaster.anvilHelper.handleInventoryCloseEvent(holder);
+        AuctionMaster.anvilHelper.setActiveContainerDefault(holder);
 
-        Bukkit.getPluginManager().registerEvents(listener, Main.plugin);
+        Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
 
-        final Object container = Main.anvilHelper.newContainerAnvil(holder, "");
-        containerId = Main.anvilHelper.getNextContainerId(holder, container);
+        final Object container = AuctionMaster.anvilHelper.newContainerAnvil(holder, "");
+        containerId = AuctionMaster.anvilHelper.getNextContainerId(holder, container);
 
-        inventory = Main.anvilHelper.toBukkitInventory(container);
+        inventory = AuctionMaster.anvilHelper.toBukkitInventory(container);
         inventory.setItem(Slot.INPUT_LEFT, this.insert);
 
-        Main.anvilHelper.sendPacketOpenWindow(holder, containerId, "");
-        Main.anvilHelper.setActiveContainer(holder, container);
-        Main.anvilHelper.setActiveContainerId(container, containerId);
-        Main.anvilHelper.addActiveContainerSlotListener(container, holder);
+        AuctionMaster.anvilHelper.sendPacketOpenWindow(holder, containerId, "");
+        AuctionMaster.anvilHelper.setActiveContainer(holder, container);
+        AuctionMaster.anvilHelper.setActiveContainerId(container, containerId);
+        AuctionMaster.anvilHelper.addActiveContainerSlotListener(container, holder);
 
         open = true;
     }
@@ -111,8 +111,8 @@ public class AnvilGUI {
             if(e.getInventory().equals(inventory)) {
                 Player p = (Player)e.getPlayer();
                 e.getInventory().clear();
-                Main.anvilHelper.setActiveContainerDefault(holder);
-                Main.anvilHelper.sendPacketCloseWindow(holder, containerId);
+                AuctionMaster.anvilHelper.setActiveContainerDefault(holder);
+                AuctionMaster.anvilHelper.sendPacketCloseWindow(holder, containerId);
 
                 HandlerList.unregisterAll(listener);
             }

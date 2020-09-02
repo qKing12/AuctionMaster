@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.AuctionObjects;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Categories.*;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static me.qKing12.AuctionMaster.Main.buyItNowCfg;
-import static me.qKing12.AuctionMaster.Main.utilsAPI;
+import static me.qKing12.AuctionMaster.AuctionMaster.buyItNowCfg;
+import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class AuctionsHandler {
 
@@ -35,20 +35,20 @@ public class AuctionsHandler {
     public Global global;
 
     public AuctionsHandler(){
-        if(Main.plugin.getConfig().getBoolean("use-global-category")){
+        if(AuctionMaster.plugin.getConfig().getBoolean("use-global-category")){
             global=new Global();
         }
-        if(Main.menusCfg.getInt("browsing-menu.weapons-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.weapons-slot")!=-1)
             weapons=new Weapons();
-        if(Main.menusCfg.getInt("browsing-menu.armor-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.armor-slot")!=-1)
             armor=new Armor();
-        if(Main.menusCfg.getInt("browsing-menu.tools-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.tools-slot")!=-1)
             tools=new Tools();
-        if(Main.menusCfg.getInt("browsing-menu.consumables-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.consumables-slot")!=-1)
             consumables=new Consumables();
-        if(Main.menusCfg.getInt("browsing-menu.blocks-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.blocks-slot")!=-1)
             blocks=new Blocks();
-        if(Main.menusCfg.getInt("browsing-menu.others-slot")!=-1)
+        if(AuctionMaster.menusCfg.getInt("browsing-menu.others-slot")!=-1)
             others=new Others();
         if(buyItNowCfg.getBoolean("use-buy-it-now"))
             buyItNowSelected=new ArrayList<>();
@@ -64,24 +64,24 @@ public class AuctionsHandler {
             ownAuctions.put(auction.getSellerUUID(), auctions);
         }
 
-        Main.auctionsDatabase.addToOwnAuctions(auction.getSellerUUID(), auction.getId());
-        Main.auctionsDatabase.insertAuction(auction);
+        AuctionMaster.auctionsDatabase.addToOwnAuctions(auction.getSellerUUID(), auction.getId());
+        AuctionMaster.auctionsDatabase.insertAuction(auction);
 
         addToBrowse(auction);
         auctions.put(auction.getId(), auction);
 
         Player p = Bukkit.getPlayerExact(auction.getSellerName());
         if(p!=null) {
-            String permission = Main.plugin.getConfig().getString("broadcast-new-auction-permission");
-            if (Main.plugin.getConfig().getBoolean("broadcast-new-auction") && (permission.equals("none") || p.hasPermission(permission))) {
-                if (!Main.plugin.getConfig().getString("broadcast-new-auction-message").equals("none")) {
+            String permission = AuctionMaster.plugin.getConfig().getString("broadcast-new-auction-permission");
+            if (AuctionMaster.plugin.getConfig().getBoolean("broadcast-new-auction") && (permission.equals("none") || p.hasPermission(permission))) {
+                if (!AuctionMaster.plugin.getConfig().getString("broadcast-new-auction-message").equals("none")) {
                     TextComponent clickMess = new TextComponent();
-                    clickMess.setText(utilsAPI.chat(p, Main.plugin.getConfig().getString("broadcast-new-auction-message").replace("%seller-username%", p.getName()).replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auction.getDisplayName()).replace("%coins%", Main.numberFormatHelper.formatNumber(auction.getCoins()))));
+                    clickMess.setText(utilsAPI.chat(p, AuctionMaster.plugin.getConfig().getString("broadcast-new-auction-message").replace("%seller-username%", p.getName()).replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auction.getDisplayName()).replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins()))));
                     clickMess.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ahview " + auction.getId()));
                     Bukkit.spigot().broadcast(clickMess);
                 }
-                for (String line : Main.plugin.getConfig().getStringList("broadcast-commands")) {
-                    Bukkit.dispatchCommand(Main.plugin.getServer().getConsoleSender(), line.replace("%seller-username%", p.getName()).replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auction.getDisplayName()).replace("%coins%", Main.numberFormatHelper.formatNumber(auction.getCoins())));
+                for (String line : AuctionMaster.plugin.getConfig().getStringList("broadcast-commands")) {
+                    Bukkit.dispatchCommand(AuctionMaster.plugin.getServer().getConsoleSender(), line.replace("%seller-username%", p.getName()).replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auction.getDisplayName()).replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins())));
                 }
             }
         }

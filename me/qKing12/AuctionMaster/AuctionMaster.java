@@ -34,14 +34,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.annotation.Inherited;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
-public class Main extends JavaPlugin{
+public class AuctionMaster extends JavaPlugin{
 
-    public static Main plugin;
+    public static AuctionMaster plugin;
 
     public static FileConfiguration adminCfg;
     public static FileConfiguration armorCfg;
@@ -174,7 +172,7 @@ public class Main extends JavaPlugin{
             saveDefaultConfig();
         }
 
-        File database = new File(Main.plugin.getDataFolder(), "database");
+        File database = new File(AuctionMaster.plugin.getDataFolder(), "database");
         if(!database.exists()){
             database.mkdir();
         }

@@ -3,7 +3,7 @@ package me.qKing12.AuctionMaster.Currency;
 import ch.njol.skript.variables.Variables;
 import org.bukkit.entity.Player;
 
-import static me.qKing12.AuctionMaster.Main.currencyCfg;
+import static me.qKing12.AuctionMaster.AuctionMaster.currencyCfg;
 
 public class SkriptImpl implements Currency {
 

@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.Utils;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -13,7 +13,7 @@ public class NumberFormatHelper {
     public NumberFormatHelper(){
         this.numberFormat = NumberFormat.getInstance();
         numberFormat.setGroupingUsed(true);
-        if(Main.plugin.getConfig().getBoolean("number-format.use-decimals")){
+        if(AuctionMaster.plugin.getConfig().getBoolean("number-format.use-decimals")){
             numberFormat.setMaximumFractionDigits(2);
             useDecimals=true;
         }

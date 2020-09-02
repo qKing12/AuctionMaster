@@ -1,6 +1,6 @@
 package me.qKing12.AuctionMaster.Currency;
 
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -26,7 +26,7 @@ public class PlayerPointsImpl implements Currency {
     }
 
     public PlayerPointsImpl(){
-            final Plugin plugin2 = Main.plugin.getServer().getPluginManager().getPlugin("PlayerPoints");
+            final Plugin plugin2 = AuctionMaster.plugin.getServer().getPluginManager().getPlugin("PlayerPoints");
             playerPoints = (PlayerPoints) plugin2;
     }
 }

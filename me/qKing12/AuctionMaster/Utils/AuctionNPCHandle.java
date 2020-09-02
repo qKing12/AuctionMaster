@@ -1,7 +1,6 @@
 package me.qKing12.AuctionMaster.Utils;
 
-import me.qKing12.AuctionMaster.AuctionObjects.Categories.Armor;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.MainAuctionMenu;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
@@ -29,10 +28,10 @@ public class AuctionNPCHandle implements Listener {
     private double holoHeight;
 
     public AuctionNPCHandle(){
-        Bukkit.getPluginManager().registerEvents(this, Main.plugin);
-        line1=utils.chat(Main.plugin.getConfig().getString("auction-npc-title.line-1"));
-        line2=Main.plugin.getConfig().getString("auction-npc-title.line-2");
-        holoHeight=Main.plugin.getConfig().getDouble("auction-npc-title.line-1-height");
+        Bukkit.getPluginManager().registerEvents(this, AuctionMaster.plugin);
+        line1=utils.chat(AuctionMaster.plugin.getConfig().getString("auction-npc-title.line-1"));
+        line2= AuctionMaster.plugin.getConfig().getString("auction-npc-title.line-2");
+        holoHeight= AuctionMaster.plugin.getConfig().getDouble("auction-npc-title.line-1-height");
     }
 
     public void unloadHolos(){
@@ -89,12 +88,12 @@ public class AuctionNPCHandle implements Listener {
         npc.spawn(p.getLocation());
         npc.data().setPersistent(NPC.PLAYER_SKIN_USE_LATEST, false);
         SkinnableEntity entity = (SkinnableEntity) npc.getEntity();
-        if (Main.plugin.getConfig().getBoolean("auction-npc-skin-texture")) {
-            String signature = Main.plugin.getConfig().getString("auction-npc-skin-signature");
-            String data = Main.plugin.getConfig().getString("auction-npc-skin-data");
+        if (AuctionMaster.plugin.getConfig().getBoolean("auction-npc-skin-texture")) {
+            String signature = AuctionMaster.plugin.getConfig().getString("auction-npc-skin-signature");
+            String data = AuctionMaster.plugin.getConfig().getString("auction-npc-skin-data");
             entity.setSkinPersistent("AuctionMaster", signature, data);
         } else
-            entity.setSkinName(Main.plugin.getConfig().getString("auction-npc-skin-name"));
+            entity.setSkinName(AuctionMaster.plugin.getConfig().getString("auction-npc-skin-name"));
 
         createHologram(npc);
     }
@@ -103,9 +102,9 @@ public class AuctionNPCHandle implements Listener {
     public void onNpcClick(NPCRightClickEvent event){
         NPC npc = event.getNPC();
         if(npc.getName().equals(utils.chat("&r"+line2))) {
-            if(!Main.plugin.getConfig().getString("auction-use-permission").equals("none"))
-                if(!event.getClicker().hasPermission(Main.plugin.getConfig().getString("auction-use-permission"))){
-                    event.getClicker().sendMessage(utils.chat(Main.plugin.getConfig().getString("auction-no-permission")));
+            if(!AuctionMaster.plugin.getConfig().getString("auction-use-permission").equals("none"))
+                if(!event.getClicker().hasPermission(AuctionMaster.plugin.getConfig().getString("auction-use-permission"))){
+                    event.getClicker().sendMessage(utils.chat(AuctionMaster.plugin.getConfig().getString("auction-no-permission")));
                     return;
                 }
             utils.playSound(event.getClicker(), "ah-npc-click");
@@ -118,9 +117,9 @@ public class AuctionNPCHandle implements Listener {
     public void onNpcClick(NPCLeftClickEvent event){
         NPC npc = event.getNPC();
         if(npc.getName().equals(utils.chat("&r"+line2))) {
-            if(!Main.plugin.getConfig().getString("auction-use-permission").equals("none"))
-                if(!event.getClicker().hasPermission(Main.plugin.getConfig().getString("auction-use-permission"))){
-                    event.getClicker().sendMessage(utils.chat(Main.plugin.getConfig().getString("auction-no-permission")));
+            if(!AuctionMaster.plugin.getConfig().getString("auction-use-permission").equals("none"))
+                if(!event.getClicker().hasPermission(AuctionMaster.plugin.getConfig().getString("auction-use-permission"))){
+                    event.getClicker().sendMessage(utils.chat(AuctionMaster.plugin.getConfig().getString("auction-no-permission")));
                     return;
                 }
             utils.playSound(event.getClicker(), "ah-npc-click");

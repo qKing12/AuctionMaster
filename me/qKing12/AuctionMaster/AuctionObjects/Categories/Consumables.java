@@ -1,7 +1,7 @@
 package me.qKing12.AuctionMaster.AuctionObjects.Categories;
 
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
-import me.qKing12.AuctionMaster.Main;
+import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static me.qKing12.AuctionMaster.Main.consumablesCfg;
+import static me.qKing12.AuctionMaster.AuctionMaster.consumablesCfg;
 
 public class Consumables implements Category{
 
@@ -64,7 +64,7 @@ public class Consumables implements Category{
     private ArrayList<ItemStack> priorityIds = new ArrayList<>();
 
     public ArrayList<Auction> getAuctions(Player p){
-        int sortIndex = Main.auctionsHandler.sortingObject.getSortIndex(p);
+        int sortIndex = AuctionMaster.auctionsHandler.sortingObject.getSortIndex(p);
         if(sortIndex==0){
             ArrayList<Auction> auctions = (ArrayList<Auction>)orderedAuctionsMoney.clone();
             Collections.reverse(auctions);
@@ -84,14 +84,14 @@ public class Consumables implements Category{
 
     public Consumables(){
         for (String line : consumablesCfg.getStringList("custom-item-ids")) {
-            priorityIds.add(Main.itemConstructor.getItemFromMaterial(line));
+            priorityIds.add(AuctionMaster.itemConstructor.getItemFromMaterial(line));
         }
-        backgroundGlass=Main.itemConstructor.getItemFromMaterial("160:"+Main.plugin.getConfig().getString("consumables-menu-color"));
+        backgroundGlass= AuctionMaster.itemConstructor.getItemFromMaterial("160:"+ AuctionMaster.plugin.getConfig().getString("consumables-menu-color"));
         ItemMeta meta = backgroundGlass.getItemMeta();
         meta.setDisplayName(" ");
         backgroundGlass.setItemMeta(meta);
 
-        displayCategoryItem=Main.itemConstructor.getItemFromMaterial(consumablesCfg.getString("consumables-menu-item"));
+        displayCategoryItem= AuctionMaster.itemConstructor.getItemFromMaterial(consumablesCfg.getString("consumables-menu-item"));
         meta = displayCategoryItem.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
         meta.setDisplayName(utils.chat(consumablesCfg.getString("consumables-menu-name")));
@@ -99,17 +99,17 @@ public class Consumables implements Category{
         for (String line : consumablesCfg.getStringList("consumables-menu-lore"))
             lore.add(utils.chat(line));
         lore.add(" ");
-        lore.add(utils.chat(Main.plugin.getConfig().getString("category-no-browsing")));
+        lore.add(utils.chat(AuctionMaster.plugin.getConfig().getString("category-no-browsing")));
         meta.setLore(lore);
         displayCategoryItem.setItemMeta(meta);
 
-        lore.set(lore.size()-1, utils.chat(Main.plugin.getConfig().getString("category-browsing")));
+        lore.set(lore.size()-1, utils.chat(AuctionMaster.plugin.getConfig().getString("category-browsing")));
         meta.setLore(lore);
         displayCategoryItemSelected=displayCategoryItem.clone();
         displayCategoryItemSelected.setItemMeta(meta);
         displayCategoryItemSelected.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
 
-        slot=Main.menusCfg.getInt("browsing-menu.consumables-slot");
+        slot= AuctionMaster.menusCfg.getInt("browsing-menu.consumables-slot");
         slot--;
         slot*=9;
     }
@@ -139,7 +139,7 @@ public class Consumables implements Category{
     }
 
     public boolean checkPriorityItem(ItemStack item){
-        if(Main.upperVersion){
+        if(AuctionMaster.upperVersion){
             for(ItemStack itemToCheck : priorityIds)
                 if(itemToCheck.getType().equals(item.getType()))
                     return true;
@@ -154,7 +154,7 @@ public class Consumables implements Category{
     }
 
     public boolean addToCategory(Auction auction){
-        String priority = Main.auctionsHandler.checkPriority(auction);
+        String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
         if(priority.equals("consumables"))
             return true;
         else if(!priority.equals("")){
