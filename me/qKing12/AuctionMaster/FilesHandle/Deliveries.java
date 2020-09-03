@@ -55,6 +55,11 @@ public class Deliveries {
     }
 
     public Deliveries(){
+        try{
+            Class.forName("org.sqlite.JDBC");
+        }catch(Exception x){
+            x.printStackTrace();
+        }
         url = "jdbc:sqlite:"+ AuctionMaster.plugin.getDataFolder()+"/database/deliveries.db";
         try{
             Connection Deliveries = DriverManager.getConnection(url);

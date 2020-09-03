@@ -21,6 +21,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.lang.reflect.Field;
 
+import static me.qKing12.AuctionMaster.AuctionMaster.upperVersion;
+
 public class DeliverySignGUI {
 
     private PacketAdapter packetListener;
@@ -40,7 +42,7 @@ public class DeliverySignGUI {
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
+        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN"));
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
         sign.setLine(1, utils.chat("^^^^^^^^^^^^^^^"));
         sign.setLine(2, utils.chat("Enter player's"));
@@ -58,7 +60,7 @@ public class DeliverySignGUI {
 
         Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
-        //if(!auxiliar.equals(Material.WALL_SIGN))
+        //if(!auxiliar.equals(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN")))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
     }
 

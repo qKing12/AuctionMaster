@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import static me.qKing12.AuctionMaster.AuctionMaster.upperVersion;
 import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class StartingBidSignGUI {
@@ -42,7 +43,7 @@ public class StartingBidSignGUI {
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
+        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN"));
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
         ArrayList<String> lines = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message");
@@ -62,7 +63,7 @@ public class StartingBidSignGUI {
 
         Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
-        //if(!auxiliar.equals(Material.WALL_SIGN))
+        //if(!auxiliar.equals(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN")))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
     }
 

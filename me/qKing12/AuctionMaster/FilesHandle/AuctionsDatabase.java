@@ -116,6 +116,11 @@ public class AuctionsDatabase {
     }
 
     public AuctionsDatabase() {
+        try{
+            Class.forName("org.sqlite.JDBC");
+        }catch(Exception x){
+            x.printStackTrace();
+        }
         url = "jdbc:sqlite:" + AuctionMaster.plugin.getDataFolder() + "/database/auctionsData.db";
         loadAuctionsFile();
         loadAuctionsDataFromFile();

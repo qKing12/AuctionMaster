@@ -374,7 +374,8 @@ public class ViewAuctionMenu {
                         utils.playSound(player, "go-back-click");
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
-                        new ViewAuctionAdminMenu(player, auction, goBackTo);
+                        if(player.hasPermission("auctionmaster.admin"))
+                            new ViewAuctionAdminMenu(player, auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if(canEndAuction){
@@ -447,15 +448,18 @@ public class ViewAuctionMenu {
                 e.setCancelled(true);
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.bid-amount-change-slot")){
-                        utils.playSound(player, "bid-editor-click");
-                        BidSelectGUI.selectUpdateBid.openGUI(player, auction, goBackTo, bidAmount);
+                        if(!ownAuction) {
+                            utils.playSound(player, "bid-editor-click");
+                            BidSelectGUI.selectUpdateBid.openGUI(player, auction, goBackTo, bidAmount);
+                        }
                     }
                     else if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot")) {
                         goBack();
                         utils.playSound(player, "go-back-click");
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
-                        new ViewAuctionAdminMenu(player, auction, goBackTo);
+                        if(player.hasPermission("auctionmaster.admin"))
+                            new ViewAuctionAdminMenu(player, auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if(canEndAuction){

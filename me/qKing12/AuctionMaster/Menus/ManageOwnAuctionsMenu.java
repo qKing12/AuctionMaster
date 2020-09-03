@@ -64,8 +64,8 @@ public class ManageOwnAuctionsMenu {
             ArrayList<Auction> auctions = AuctionMaster.auctionsHandler.ownAuctions.get(player.getUniqueId().toString());
 
             int size = 2;
-            size += auctions.size() / 9;
-            if (auctions.size() % 9 > 0)
+            size += auctions.size() / 7;
+            if (auctions.size() % 7 > 0)
                 size += 1;
             size *= 9;
 

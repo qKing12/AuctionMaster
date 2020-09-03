@@ -37,7 +37,7 @@ public class DurationSelectMenu {
     public DurationSelectMenu(Player player){
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
-            inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.mainMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.mainMenuName));
+            inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.durationMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.mainMenuName));
 
             if (AuctionMaster.plugin.getConfig().getBoolean("use-duration-limit"))
                 maximum_hours = getMaximumDuration(player);
@@ -51,7 +51,7 @@ public class DurationSelectMenu {
 
 
             if (AuctionMaster.configLoad.useBackgoundGlass)
-                for (int i = 0; i < AuctionMaster.configLoad.mainMenuSize; i++)
+                for (int i = 0; i < configLoad.durationMenuSize; i++)
                     inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
 
             boolean custom = true;

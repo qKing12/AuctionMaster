@@ -1,6 +1,8 @@
 package me.qKing12.AuctionMaster.Utils;
 
 import me.qKing12.AuctionMaster.AuctionMaster;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -66,7 +68,13 @@ public class SkullTexture {
         texture=texture.replace(" ", "");
         if(texture.length()>16) {
             try {
-                ItemStack skull = AuctionMaster.configLoad.skullItem.clone();
+                ItemStack skull;
+                if(AuctionMaster.upperVersion) {
+                    skull = new ItemStack(Material.PLAYER_HEAD, 1);
+                }
+                else {
+                    skull = new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) 3);
+                }
                 final ItemMeta meta = skull.getItemMeta();
                 try {
                     final Object profile = GAME_PROFILE_CONSTRUCTOR.newInstance(UUID.randomUUID(), UUID.randomUUID().toString().substring(17).replace("-", ""));
@@ -92,7 +100,13 @@ public class SkullTexture {
                     texture = "mhf_question";
                 }
             }
-            ItemStack playerHead= AuctionMaster.configLoad.skullItem.clone();
+            ItemStack playerHead;
+            if(AuctionMaster.upperVersion) {
+                playerHead = new ItemStack(Material.PLAYER_HEAD, 1);
+            }
+            else {
+                playerHead = new ItemStack(Material.getMaterial("SKULL_ITEM"), 1, (short) 3);
+            }
             SkullMeta sm = (SkullMeta) playerHead.getItemMeta();
             sm.setOwner(texture);
             playerHead.setItemMeta(sm);

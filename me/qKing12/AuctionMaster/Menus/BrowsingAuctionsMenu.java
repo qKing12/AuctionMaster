@@ -307,7 +307,7 @@ public class BrowsingAuctionsMenu {
                         }
                     }
                     else if(AuctionMaster.auctionsHandler.global!=null && e.getSlot()== AuctionMaster.auctionsHandler.global.getSlot()){
-                        if(!(category instanceof Others)){
+                        if(!(category instanceof Global)){
                             utils.playSound(player, "category-click");
                             new BrowsingAuctionsMenu(player, "global", 0, null);
                         }

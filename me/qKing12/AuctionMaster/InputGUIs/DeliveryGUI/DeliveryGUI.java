@@ -29,7 +29,7 @@ public class DeliveryGUI {
             ArrayList<String> lore=new ArrayList<>();
             lore.add(utils.chat("&7^^^^^^^^^^^^^^^"));
             lore.add(utils.chat("&fPlease enter the player's"));
-            lore.add(utils.chat("&fname whose deliveeries you"));
+            lore.add(utils.chat("&fname whose deliveries you"));
             lore.add(utils.chat("&fwant to manage."));
             paper= AuctionMaster.itemConstructor.getItem(paper, " ", lore);
             deliveryInstance =this::anvilTrigger;
@@ -53,7 +53,7 @@ public class DeliveryGUI {
     private void chatTrigger(Player p){
         p.sendMessage(utils.chat("&7&m----------------"));
         p.sendMessage(utils.chat("&fPlease enter the player's"));
-        p.sendMessage(utils.chat("&fname whose deliveeries you"));
+        p.sendMessage(utils.chat("&fname whose deliveries you"));
         p.sendMessage(utils.chat("&fwant to manage."));
         new ChatListener(p, (reply) -> {
             new DeliveryAdminMenu(p, reply.replace(" ", "").equals("")?null:reply);

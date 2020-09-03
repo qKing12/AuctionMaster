@@ -24,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import static me.qKing12.AuctionMaster.AuctionMaster.upperVersion;
+
 public class DeliveryCoinsSignGUI {
 
     private PacketAdapter packetListener;
@@ -53,7 +55,7 @@ public class DeliveryCoinsSignGUI {
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
+        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN"));
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
         sign.setLine(1, utils.chat("^^^^^^^^^^^^^^^"));
         sign.setLine(2, utils.chat("Enter amount of"));
@@ -71,7 +73,7 @@ public class DeliveryCoinsSignGUI {
 
         Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
-        //if(!auxiliar.equals(Material.WALL_SIGN))
+        //if(!auxiliar.equals(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN")))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
     }
 

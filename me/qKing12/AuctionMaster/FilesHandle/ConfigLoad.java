@@ -45,8 +45,6 @@ public class ConfigLoad {
         return false;
     }
 
-    public ItemStack skullItem;
-
     public boolean useBackgoundGlass;
     public ItemStack backgroundGlass;
 
@@ -198,6 +196,8 @@ public class ConfigLoad {
     public String manageOwnAuctionsMenuName;
 
     public String browsingMenuName;
+
+    public int durationMenuSize;
 
     public String viewAuctionMenuName;
     public int viewAuctionMenuSize;
@@ -399,14 +399,6 @@ public class ConfigLoad {
     public boolean endOwnAuction;
 
     public ConfigLoad(){
-
-        if(AuctionMaster.upperVersion) {
-            skullItem = new ItemStack(Material.getMaterial("PLAYER_HEAD"), 1);
-        }
-        else {
-            skullItem = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-        }
-
         endOwnAuction= AuctionMaster.plugin.getConfig().getBoolean("use-end-own-auction");
 
         backgroundGlass= AuctionMaster.itemConstructor.getItem("160:"+ AuctionMaster.plugin.getConfig().getInt("background-color"),  " ", null);
@@ -715,5 +707,7 @@ public class ConfigLoad {
         editBINPriceName= AuctionMaster.buyItNowCfg.getString("buy-it-now-select-price.name");
         editBINPriceLore=(ArrayList<String>) AuctionMaster.buyItNowCfg.getStringList("buy-it-now-select-price.lore");
         editBINPriceMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("buy-it-now-select-price.item-id"));
+
+        durationMenuSize=AuctionMaster.menusCfg.getInt("duration-select-menu.size");
     }
 }

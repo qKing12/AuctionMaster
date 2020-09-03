@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.lang.reflect.Field;
 import java.time.ZonedDateTime;
 
+import static me.qKing12.AuctionMaster.AuctionMaster.upperVersion;
 import static me.qKing12.AuctionMaster.AuctionMaster.utilsAPI;
 
 public class EditDurationSignGUI {
@@ -49,7 +50,7 @@ public class EditDurationSignGUI {
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(Material.WALL_SIGN);
+        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN"));
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
         sign.setLine(1, utilsAPI.chat(p, "Enter minutes"));
@@ -68,7 +69,7 @@ public class EditDurationSignGUI {
 
         Bukkit.getPluginManager().registerEvents(listener, AuctionMaster.plugin);
         registerSignUpdateListener();
-        //if(!auxiliar.equals(Material.WALL_SIGN))
+        //if(!auxiliar.equals(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN")))
         //    Bukkit.getScheduler().runTaskLater(plugin, () -> p.getWorld().getBlockAt(x_start, y_start, z_start).setType(auxiliar), 40);
     }
 

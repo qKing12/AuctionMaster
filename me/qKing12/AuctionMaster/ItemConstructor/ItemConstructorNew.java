@@ -55,9 +55,24 @@ public class ItemConstructorNew implements ItemConstructor {
     public ItemStack getItemFromMaterial(String material) {
         if(material.startsWith("skull:") || material.startsWith("head:"))
             return getSkull(material.split(":")[1]);
+        int customModelData=-1;
+        if(material.contains("#"))
+            try{
+                customModelData=Integer.parseInt(material.split("#")[1]);
+                material=material.split("#")[0];
+            }catch (Exception x){
+                customModelData=-1;
+            }
         Material mat = Material.getMaterial(material);
-        if (mat != null)
-            return new ItemStack(mat, 1);
+        if (mat != null) {
+            ItemStack toReturn = new ItemStack(mat, 1);
+            if(customModelData!=-1) {
+                ItemMeta meta = toReturn.getItemMeta();
+                meta.setCustomModelData(customModelData);
+                toReturn.setItemMeta(meta);
+            }
+            return toReturn;
+        }
         else {
             short data;
             if (material.split(":").length == 2)
