@@ -136,11 +136,9 @@ public class Commands implements CommandExecutor {
                             new DeliveryAdminMenu(p, null);
                         return true;
                     }
-                    else if(args[0].equalsIgnoreCase("manage")){
-                        if(args[1].equalsIgnoreCase("ended")) {
-                            new EndedAuctionsMenu(p, 0);
-                            return true;
-                        }
+                    else if(args[0].equalsIgnoreCase("manage")) {
+                        new EndedAuctionsMenu(p, 0);
+                        return true;
                     }
                     else if (args[0].equalsIgnoreCase("give")) {
                         if (args.length >= 2) {

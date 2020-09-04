@@ -43,7 +43,11 @@ public class StartingBidSignGUI {
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(upperVersion?Material.OAK_WALL_SIGN:Material.getMaterial("WALL_SIGN"));
+
+        Material material = Material.getMaterial("OAK_WALL_SIGN");
+        if(material==null)
+            material=Material.getMaterial("WALL_SIGN");
+        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(material);
         sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
         ArrayList<String> lines = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message");

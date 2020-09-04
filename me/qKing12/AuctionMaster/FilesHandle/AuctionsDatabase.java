@@ -220,7 +220,7 @@ public class AuctionsDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
-                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownBids = REPLACE(REPLACE(ownBids, '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
+                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownBids = REPLACE(REPLACE(REPLACE(ownBids, '" + toRemove + ".', ''), '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
             ) {
                 stmt.setString(1, player);
                 stmt.executeUpdate();
@@ -237,7 +237,7 @@ public class AuctionsDatabase {
         Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = DriverManager.getConnection(url);
-                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownAuctions = REPLACE(REPLACE(ownBids, '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
+                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownAuctions = REPLACE(REPLACE(REPLACE(ownAuctions, '" + toRemove + ".', ''), '." + toRemove + "', ''), '" + toRemove + "', '') WHERE id = ?");
             ) {
                 stmt.setString(1, player);
                 stmt.executeUpdate();
@@ -348,6 +348,10 @@ public class AuctionsDatabase {
                 if(!ownAuctions.equals("")) {
                     for (String idToAdd : ownAuctions.split("\\.")) {
                         try {
+                            if(idToAdd.equals("")){
+                                AuctionMaster.plugin.getLogger().warning("Tried to add an null auction to the own auctions list");
+                                continue;
+                            }
                             Auction auction = AuctionMaster.auctionsHandler.auctions.get(idToAdd);
                             if(auction!=null)
                                 AuctionsArray.add(auction);
@@ -364,7 +368,17 @@ public class AuctionsDatabase {
                 if(!ownBids.equals("")) {
                     for (String idToAdd : ownBids.split("\\."))
                         try {
-                            AuctionsArray.add(AuctionMaster.auctionsHandler.auctions.get(idToAdd));
+                            if(idToAdd.equals("")){
+                                AuctionMaster.plugin.getLogger().warning("Tried to add an null auction to the bid list");
+                                continue;
+                            }
+
+                            Auction auction = AuctionMaster.auctionsHandler.auctions.get(idToAdd);
+                            if(auction!=null)
+                                AuctionsArray.add(auction);
+                            else{
+                                AuctionMaster.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own bids. ID=" + idToAdd);
+                            }
                         } catch (Exception x) {
                             AuctionMaster.plugin.getLogger().warning("Tried to add an auction that is not in the auction list to own bids. ID=" + idToAdd);
                         }

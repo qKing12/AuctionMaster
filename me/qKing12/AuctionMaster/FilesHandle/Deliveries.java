@@ -175,7 +175,7 @@ public class Deliveries {
         Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Deliveries = DriverManager.getConnection(url);
-                    PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET items = items || (CASE WHEN items = '' THEN '" + toAdd + "' ELSE '." + toAdd + "' END) WHERE id = ?");
+                    PreparedStatement stmt1 = Deliveries.prepareStatement("UPDATE Deliveries SET items = items || (CASE WHEN items = '' THEN '" + toAdd + "' ELSE '," + toAdd + "' END) WHERE id = ?");
                     PreparedStatement stmt2 = Deliveries.prepareStatement("INSERT INTO Deliveries VALUES (?, 0, ?)");
             ) {
                 stmt1.setString(1, uuid);

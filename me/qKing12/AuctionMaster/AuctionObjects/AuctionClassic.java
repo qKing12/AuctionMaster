@@ -77,9 +77,13 @@ public class AuctionClassic implements Auction{
         HashMap<String, Double> cache = new HashMap<>();
         for(Bids.Bid bid : bids.getBidList()){
             if(!bid.isClaimed() && !cache.containsKey(bid.getBidderUUID())) {
-                AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).remove(this);
-                if (AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).isEmpty())
-                    AuctionMaster.auctionsHandler.bidAuctions.remove(bid.getBidderUUID());
+                try {
+                    AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).remove(this);
+                    if (AuctionMaster.auctionsHandler.bidAuctions.get(bid.getBidderUUID()).isEmpty())
+                        AuctionMaster.auctionsHandler.bidAuctions.remove(bid.getBidderUUID());
+                }catch(Exception x){
+                    AuctionMaster.plugin.getLogger().info("Tried to remove auction from own bids for player "+bid.getBidderUUID()+" but it was not there!");
+                }
             }
             cache.put(bid.getBidderUUID(), bid.getCoins());
         }
@@ -98,9 +102,13 @@ public class AuctionClassic implements Auction{
 
         if(!sellerClaimed) {
             AuctionMaster.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
-            AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
-            if (AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()) {
-                AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
+            try {
+                AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
+                if (AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()) {
+                    AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
+                }
+            }catch(Exception x){
+                AuctionMaster.plugin.getLogger().info("Tried to remove auction from own auctions for player "+sellerUUID+" but it was not there!");
             }
         }
 

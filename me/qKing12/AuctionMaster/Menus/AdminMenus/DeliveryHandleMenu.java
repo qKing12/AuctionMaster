@@ -123,7 +123,7 @@ public class DeliveryHandleMenu {
                             Player p = Bukkit.getPlayer(UUID.fromString(targetPlayer));
                             if(p!=null) {
                                 utils.playSound(p, "ah-delivery-got");
-                                p.sendMessage(utilsAPI.chat(p, plugin.getConfig().getString("delivery-got-message").replace("%coins%", numberFormatHelper.formatNumber(deliveryCoins)).replace("%item-count%", deliveryItems.size() + "")));
+                                p.sendMessage(utilsAPI.chat(p, plugin.getConfig().getString("delivery-got-message").replace("%coins%", numberFormatHelper.formatNumber(deliveryCoins)).replace("%item-count%", itemStacks.size() + "")));
                             }
                         }
                         deliveryItems.addAll(itemStacks);
