@@ -76,7 +76,10 @@ public class BrowsingAuctionsMenu {
 
     private CheckForSort checkForSort;
 
-    private void loadAuctions(boolean binUpdate){
+    private void loadAuctions(){
+        for(int slot : auctions.keySet())
+            inventory.setItem(slot, new ItemStack(Material.AIR));
+
         auctions.clear();
 
         ArrayList<Auction> auctions=this.category.getAuctions(player);
@@ -124,12 +127,6 @@ public class BrowsingAuctionsMenu {
                     }
                 }
             }
-        }
-
-        if(binUpdate){
-            do{
-                inventory.setItem(currentSlot, new ItemStack(Material.AIR));
-            }while(currentSlot<44 && inventory.getItem(currentSlot)!=null);
         }
 
         if(page!=0)
@@ -190,7 +187,7 @@ public class BrowsingAuctionsMenu {
                 inventory.setItem(i + 8, backgroundGlass.clone());
             }
 
-            loadAuctions(false);
+            loadAuctions();
 
             if (auctionsHandler.buyItNowSelected != null)
                 inventory.setItem(51, AuctionMaster.auctionsHandler.sortingObject.getSortItemBIN(player));
@@ -261,13 +258,13 @@ public class BrowsingAuctionsMenu {
                             checkForSort=(auction) -> !auction.isBIN();
                         else
                             checkForSort=(auction) -> auction.isBIN();
-                        loadAuctions(true);
+                        loadAuctions();
                         inventory.setItem(51, AuctionMaster.auctionsHandler.sortingObject.getSortItemBIN(player));
                     }
                     else if(e.getSlot()==52){
                         utils.playSound(player, "sort-item-click");
                         AuctionMaster.auctionsHandler.sortingObject.changeSort(player);
-                        loadAuctions(false);
+                        loadAuctions();
                         inventory.setItem(52, AuctionMaster.auctionsHandler.sortingObject.getSortItem(player));
                     }
                     else if(AuctionMaster.auctionsHandler.weapons!=null && e.getSlot()== AuctionMaster.auctionsHandler.weapons.getSlot()){

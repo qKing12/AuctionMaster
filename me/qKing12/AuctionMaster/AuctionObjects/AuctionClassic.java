@@ -227,7 +227,7 @@ public class AuctionClassic implements Auction{
     }
 
     public boolean placeBid(Player player, double amount, int cacheBids){
-        if(cacheBids!=bids.getNumberOfBids()) {
+        if(isEnded() || bids==null || cacheBids!=bids.getNumberOfBids()) {
             return false;
         }
 

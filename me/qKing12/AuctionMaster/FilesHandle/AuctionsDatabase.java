@@ -233,6 +233,23 @@ public class AuctionsDatabase {
         });
     }
 
+    public void resetOwnBids(String player){
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
+            try (
+                    Connection Auctions = DriverManager.getConnection(url);
+                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownBids = '' WHERE id = ?");
+            ) {
+                stmt.setString(1, player);
+                stmt.executeUpdate();
+            } catch (Exception x) {
+                if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> resetOwnBids(player), 7);
+                } else
+                    x.printStackTrace();
+            }
+        });
+    }
+
     public void removeFromOwnAuctions(String player, String toRemove){
         Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
@@ -244,6 +261,23 @@ public class AuctionsDatabase {
             } catch (Exception x) {
                 if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
                     Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> removeFromOwnAuctions(player, toRemove), 7);
+                } else
+                    x.printStackTrace();
+            }
+        });
+    }
+
+    public void resetOwnAuctions(String player){
+        Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
+            try (
+                    Connection Auctions = DriverManager.getConnection(url);
+                    PreparedStatement stmt = Auctions.prepareStatement("UPDATE AuctionLists SET ownAuctions = '' WHERE id = ?");
+            ) {
+                stmt.setString(1, player);
+                stmt.executeUpdate();
+            } catch (Exception x) {
+                if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> resetOwnAuctions(player), 7);
                 } else
                     x.printStackTrace();
             }

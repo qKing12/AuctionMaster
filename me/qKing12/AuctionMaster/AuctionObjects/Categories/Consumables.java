@@ -155,8 +155,15 @@ public class Consumables implements Category{
 
     public boolean addToCategory(Auction auction){
         String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
-        if(priority.equals("consumables"))
+        if(priority.equals("consumables")) {
+            if(!orderedAuctionsBids.contains(auction)) {
+                orderedAuctionsBids.add(auction);
+                orderedAuctionsMoney.add(auction);
+                orderedAuctionsTime.add(auction);
+                sort();
+            }
             return true;
+        }
         else if(!priority.equals("")){
             return false;
         }

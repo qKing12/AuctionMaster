@@ -1,6 +1,7 @@
 package me.qKing12.AuctionMaster;
 
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import me.qKing12.AuctionMaster.API.API;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionsHandler;
 import me.qKing12.AuctionMaster.Currency.*;
 import me.qKing12.AuctionMaster.FilesHandle.AuctionsDatabase;
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 public class AuctionMaster extends JavaPlugin{
 
     public static AuctionMaster plugin;
+    public static me.qKing12.AuctionMaster.API.API API;
 
     public static FileConfiguration adminCfg;
     public static FileConfiguration armorCfg;
@@ -230,6 +232,7 @@ public class AuctionMaster extends JavaPlugin{
         new EditDurationGUI();
 
         new Commands();
+        API=new API();
     }
 
     @Override

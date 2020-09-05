@@ -3,6 +3,7 @@ package me.qKing12.AuctionMaster.AuctionObjects.Categories;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
+import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -146,8 +147,9 @@ public class Blocks implements Category{
         }
         else{
             for(ItemStack itemToCheck : priorityIds){
-                if(itemToCheck.getType().equals(item.getType()) && itemToCheck.getData().equals(item.getData()))
+                if(itemToCheck.getType().equals(item.getType()) && itemToCheck.getData().equals(item.getData())) {
                     return true;
+                }
             }
         }
         return false;
@@ -155,8 +157,15 @@ public class Blocks implements Category{
 
     public boolean addToCategory(Auction auction){
         String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
-        if(priority.equals("blocks"))
+        if(priority.equals("blocks")) {
+            if(!orderedAuctionsBids.contains(auction)) {
+                orderedAuctionsBids.add(auction);
+                orderedAuctionsMoney.add(auction);
+                orderedAuctionsTime.add(auction);
+                sort();
+            }
             return true;
+        }
         else if(!priority.equals("")){
             return false;
         }

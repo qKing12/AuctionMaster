@@ -155,14 +155,21 @@ public class Armor implements Category{
 
     public boolean addToCategory(Auction auction){
         String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
-        if(priority.equals("armor"))
+        if(priority.equals("armor")) {
+            if(!orderedAuctionsBids.contains(auction)) {
+                orderedAuctionsBids.add(auction);
+                orderedAuctionsMoney.add(auction);
+                orderedAuctionsTime.add(auction);
+                sort();
+            }
             return true;
+        }
         else if(!priority.equals("")){
             return false;
         }
 
         String checkMaterial = auction.getItemStack().getType().toString();
-        if(checkMaterial.contains("BOW") || checkMaterial.contains("SWORD") || checkMaterial.contains("TRIDENT")) {
+        if(checkMaterial.contains("BOOTS") || checkMaterial.contains("LEGGINGS") || checkMaterial.contains("CHESTPLATE") || checkMaterial.contains("HELMET")) {
             if(!orderedAuctionsBids.contains(auction)) {
                 orderedAuctionsBids.add(auction);
                 orderedAuctionsMoney.add(auction);

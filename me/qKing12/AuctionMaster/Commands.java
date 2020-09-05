@@ -113,6 +113,44 @@ public class Commands implements CommandExecutor {
                         p.sendMessage(utils.chat("&aAdditional Note: &fReload works only on messages and some small settings. Things the plugin considers important need a restart to update."));
                         return true;
                     }
+                    else if(args[0].equalsIgnoreCase("resetOwnAuctions")){
+                        if(args.length>1){
+                            String uuid=null;
+                            Player p2 = Bukkit.getPlayerExact(args[1]);
+                            if(p2!=null){
+                                uuid=p2.getUniqueId().toString();
+                            }
+                            else if(args[1].length()>16){
+                                uuid=args[1];
+                            }
+                            if(uuid!=null){
+                                auctionsDatabase.resetOwnAuctions(uuid);
+                                if(auctionsHandler.ownAuctions.containsKey(uuid))
+                                    auctionsHandler.ownAuctions.remove(uuid);
+                                p.sendMessage(utils.chat("&aDone!"));
+                            }
+                        }
+                        return true;
+                    }
+                    else if(args[0].equalsIgnoreCase("resetBiddedAuctions")){
+                        if(args.length>1){
+                            String uuid=null;
+                            Player p2 = Bukkit.getPlayerExact(args[1]);
+                            if(p2!=null){
+                                uuid=p2.getUniqueId().toString();
+                            }
+                            else if(args[1].length()>16){
+                                uuid=args[1];
+                            }
+                            if(uuid!=null){
+                                auctionsDatabase.resetOwnBids(uuid);
+                                if(auctionsHandler.bidAuctions.containsKey(uuid))
+                                    auctionsHandler.bidAuctions.remove(uuid);
+                                p.sendMessage(utils.chat("&aDone!"));
+                            }
+                        }
+                        return true;
+                    }
                     else if(args[0].equalsIgnoreCase("createNPC")){
                         if(AuctionMaster.auctionNPC!=null)
                             AuctionMaster.auctionNPC.createNpc(p);

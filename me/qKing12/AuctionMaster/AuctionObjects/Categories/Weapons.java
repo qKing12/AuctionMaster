@@ -155,8 +155,15 @@ public class Weapons implements Category{
 
     public boolean addToCategory(Auction auction){
         String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
-        if(priority.equals("weapons"))
+        if(priority.equals("weapons")) {
+            if(!orderedAuctionsBids.contains(auction)) {
+                orderedAuctionsBids.add(auction);
+                orderedAuctionsMoney.add(auction);
+                orderedAuctionsTime.add(auction);
+                sort();
+            }
             return true;
+        }
         else if(!priority.equals("")){
             return false;
         }

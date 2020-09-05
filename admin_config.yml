@@ -9,7 +9,7 @@ npccreate-item-lore:
   - '&7can use basic Citizens commands'
   - '&7on it.'
   - ''
-  - '&7You need &aCitizens &7and &aHolographicDisplays'
+  - '&7You need &aCitizens'
   - '&7for this option to work properly!'
 
 npc-debug-item-name: '&aDebug NPCs'

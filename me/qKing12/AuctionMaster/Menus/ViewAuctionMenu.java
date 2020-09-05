@@ -403,10 +403,13 @@ public class ViewAuctionMenu {
                                 e.getCurrentItem().setAmount(1);
                             }
                             else {
-                                AuctionMaster.economy.removeMoney(player, bidAmount);
-                                auction.placeBid(player, bidAmount, cacheBids);
-
-                                player.getInventory().addItem(auction.getItemStack());
+                                if(auction.placeBid(player, bidAmount, cacheBids)) {
+                                    AuctionMaster.economy.removeMoney(player, bidAmount);
+                                    player.getInventory().addItem(auction.getItemStack());
+                                }
+                                else{
+                                    player.sendMessage(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
+                                }
                                 goBack();
                             }
                         }

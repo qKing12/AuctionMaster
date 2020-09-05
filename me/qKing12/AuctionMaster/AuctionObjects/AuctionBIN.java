@@ -67,9 +67,13 @@ public class AuctionBIN implements Auction{
         }
 
         AuctionMaster.auctionsDatabase.removeFromOwnAuctions(sellerUUID, id);
-        AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
-        if(AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()){
-            AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
+        try {
+            AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).remove(this);
+            if (AuctionMaster.auctionsHandler.ownAuctions.get(sellerUUID).isEmpty()) {
+                AuctionMaster.auctionsHandler.ownAuctions.remove(sellerUUID);
+            }
+        }catch(Exception x){
+            AuctionMaster.plugin.getLogger().info("Error while trying to delete from seller with id "+sellerUUID+" his BIN Auction");
         }
 
         AuctionMaster.auctionsDatabase.deleteAuction(id);
@@ -145,6 +149,8 @@ public class AuctionBIN implements Auction{
     }
 
     public boolean placeBid(Player player, double amount, int cacheBids){
+        if(isEnded() || bids==null)
+            return false;
         Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> Bukkit.getPluginManager().callEvent(new BINPurchaseEvent(player, this, amount)));
         bids.placeBids(player, amount);
         endingDate=ZonedDateTime.now().toInstant().toEpochMilli()-1000;
@@ -247,22 +253,26 @@ public class AuctionBIN implements Auction{
     private ItemStack endedDisplay;
     public ItemStack getUpdatedDisplay(){
         if(endedDisplay!=null){
-            return endedDisplay;
+            return endedDisplay.clone();
         }
         else if(ZonedDateTime.now().toInstant().toEpochMilli()>=endingDate){
-            return generateEndedDisplay();
+            return generateEndedDisplay().clone();
         }
         else if(cacheBids!=bids.getNumberOfBids() || this.lore==null)
-            return generateDisplay();
+            return generateDisplay().clone();
         else {
-            ItemStack updated = item.clone();
-            ItemMeta meta = updated.getItemMeta();
-            meta.setDisplayName(displayName);
-            ArrayList<String> lore = (ArrayList<String>) this.lore.clone();
-            lore.set(durationLine, durationLineString.replace("%duration%", utils.fromMilisecondsAuction(endingDate - ZonedDateTime.now().toInstant().toEpochMilli())));
-            meta.setLore(lore);
-            updated.setItemMeta(meta);
-            return updated;
+            try {
+                ItemStack updated = item.clone();
+                ItemMeta meta = updated.getItemMeta();
+                meta.setDisplayName(displayName);
+                ArrayList<String> lore = (ArrayList<String>) this.lore.clone();
+                lore.set(durationLine, durationLineString.replace("%duration%", utils.fromMilisecondsAuction(endingDate - ZonedDateTime.now().toInstant().toEpochMilli())));
+                meta.setLore(lore);
+                updated.setItemMeta(meta);
+                return updated;
+            }catch(Exception x){
+                return generateDisplay().clone();
+            }
         }
     }
 
