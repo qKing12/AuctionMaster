@@ -196,7 +196,7 @@ public class utils {
             return Integer.toString(secunda).concat(" ").concat(AuctionMaster.configLoad.seconds);
         }
         else
-            return utils.chat("&eEnding Soon!");
+            return "0 ".concat(AuctionMaster.configLoad.seconds);
     }
 
     public static int toMiliseconds(String a){

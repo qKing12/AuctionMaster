@@ -22,6 +22,7 @@ import me.qKing12.AuctionMaster.ItemConstructor.ItemConstructorNew;
 import me.qKing12.AuctionMaster.PlaceholderAPISupport.PlaceholderAPISupport;
 import me.qKing12.AuctionMaster.PlaceholderAPISupport.PlaceholderAPISupportNo;
 import me.qKing12.AuctionMaster.PlaceholderAPISupport.PlaceholderAPISupportYes;
+import me.qKing12.AuctionMaster.PlaceholderAPISupport.PlaceholderRegister;
 import me.qKing12.AuctionMaster.Utils.AuctionNPCHandle;
 import me.qKing12.AuctionMaster.Utils.NumberFormatHelper;
 import me.qKing12.AuctionMaster.bStats.MetricsLite;
@@ -122,8 +123,10 @@ public class AuctionMaster extends JavaPlugin{
     }
 
     private void loadPlaceholderAPISupport(){
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-            utilsAPI=new PlaceholderAPISupportYes();
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            utilsAPI = new PlaceholderAPISupportYes();
+            new PlaceholderRegister().register();
+        }
         else
             utilsAPI=new PlaceholderAPISupportNo();
     }
@@ -216,7 +219,8 @@ public class AuctionMaster extends JavaPlugin{
             Bukkit.getPluginManager().registerEvents(new DeliveryAlert(), this);
         }
         auctionsDatabase=new AuctionsDatabase();
-        setupAnvilHelper();
+        if(AuctionMaster.plugin.getConfig().getBoolean("use-anvil-instead-sign") || !AuctionMaster.hasProtocolLib)
+            setupAnvilHelper();
 
         if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
             hasProtocolLib=true;

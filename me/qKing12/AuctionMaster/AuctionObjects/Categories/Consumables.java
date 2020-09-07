@@ -169,7 +169,7 @@ public class Consumables implements Category{
         }
 
         String checkMaterial = auction.getItemStack().getType().toString();
-        if(checkMaterial.contains("POTION") || checkMaterial.contains("BOOK") || auction.getItemStack().getType().isEdible()) {
+        if(checkMaterial.contains("POTION") || checkMaterial.contains("BOOK") || auction.getItemStack().getType().isEdible() || checkMaterial.contains("TOTEM_OF_UNDYING")) {
             if(!orderedAuctionsBids.contains(auction)) {
                 orderedAuctionsBids.add(auction);
                 orderedAuctionsMoney.add(auction);

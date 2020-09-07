@@ -149,7 +149,7 @@ public class ConfigLoad {
             return (Double)engine.eval(formula.replace("x", Integer.toString(hours)));
         }catch(Exception x){
             try {
-                return (Double)engine.eval(formula.replace("x", Integer.toString(hours)));
+                return Double.valueOf((Integer)engine.eval(formula.replace("x", Integer.toString(hours))));
             } catch (ScriptException e) {
                 e.printStackTrace();
                 return 0d;

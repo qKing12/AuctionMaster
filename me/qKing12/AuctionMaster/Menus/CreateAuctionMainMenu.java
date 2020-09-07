@@ -253,22 +253,22 @@ public class CreateAuctionMainMenu {
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("create-auction-menu.create-auction-button-slot")){
                         if(AuctionMaster.auctionsHandler.previewItems.containsKey(player.getUniqueId().toString())){
-                            if(AuctionMaster.economy.hasMoney(player, startingBidFee+startingFeeTime)) {
-                                utils.playSound(player, "create-auction-item-click");
-                                new CreateAuctionConfirmMenu(player, startingBidFee + startingFeeTime);
+                            if(AuctionMaster.auctionsHandler.ownAuctions.getOrDefault(player.getUniqueId().toString(), new ArrayList<>()).size()<getMaximumAuctions()) {
+                                if (AuctionMaster.economy.hasMoney(player, startingBidFee + startingFeeTime)) {
+                                    utils.playSound(player, "create-auction-item-click");
+                                    new CreateAuctionConfirmMenu(player, startingBidFee + startingFeeTime);
+                                } else {
+                                    player.sendMessage(utilsAPI.chat(player, AuctionMaster.auctionsManagerCfg.getString("not-enough-money-auction")));
+                                }
                             }
-                            else{
-                                player.sendMessage(utilsAPI.chat(player, AuctionMaster.auctionsManagerCfg.getString("not-enough-money-auction")));
-                            }
+                            else
+                                player.sendMessage(utilsAPI.chat(player, AuctionMaster.plugin.getConfig().getString("auction-limit-reached-message")));
                         }
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("create-auction-menu.go-back-slot")){
                         utils.playSound(player, "go-back-click");
                         if(AuctionMaster.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString())){
-                            if(AuctionMaster.auctionsHandler.ownAuctions.get(player.getUniqueId().toString()).size()<getMaximumAuctions())
                                 new ManageOwnAuctionsMenu(player);
-                            else
-                                player.sendMessage(utilsAPI.chat(player, AuctionMaster.plugin.getConfig().getString("auction-limit-reached-message")));
                         }
                         else
                             new MainAuctionMenu(player);
