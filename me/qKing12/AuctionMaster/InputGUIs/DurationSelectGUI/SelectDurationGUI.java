@@ -50,6 +50,8 @@ public class SelectDurationGUI {
         ArrayList<String> lore = new ArrayList<>();
         for(String line : meta.getLore())
             lore.add(line.replace("%time-format%", minutes? AuctionMaster.configLoad.minutes: AuctionMaster.configLoad.hours));
+        meta.setLore(lore);
+        paperClone.setItemMeta(meta);
         new AnvilGUI(p, paperClone, (reply) ->{
             try{
                 int timeInput = Integer.parseInt(reply);
@@ -84,6 +86,7 @@ public class SelectDurationGUI {
     private void chatTrigger(Player p, int maximum_hours, boolean minutes){
         for(String line : AuctionMaster.auctionsManagerCfg.getStringList("duration-sign-message"))
             p.sendMessage(utils.chat(line.replace("%time-format%", minutes? AuctionMaster.configLoad.minutes: AuctionMaster.configLoad.hours)));
+        p.closeInventory();
         new ChatListener(p, (reply) ->{
             try{
                 int timeInput = Integer.parseInt(reply);

@@ -66,6 +66,7 @@ public class EditDurationGUI {
         p.sendMessage(utilsAPI.chat(p, "Enter minutes"));
         p.sendMessage(utilsAPI.chat(p, "Examples: 20"));
         p.sendMessage(utilsAPI.chat(p, "or -20 to speed"));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             try{
                 int timeInput = Integer.parseInt(reply);

@@ -23,6 +23,8 @@ import static me.qKing12.AuctionMaster.AuctionMaster.*;
 public class DurationSelectMenu {
 
     private static int getMaximumDuration(Player p){
+        if(p.hasPermission("auctionmaster.limit.duration.-1"))
+            return -1;
         for (int start = 48; start >= 1; start--)
             if (p.hasPermission("auctionmaster.limit.duration." + start))
                 return start;
@@ -58,7 +60,7 @@ public class DurationSelectMenu {
             double hoursToCompare;
 
             hoursToCompare = AuctionMaster.menusCfg.getDouble("duration-select-menu.first-item.hours");
-            if (maximum_hours == -1 || hoursToCompare >= maximum_hours) {
+            if (maximum_hours == -1 || hoursToCompare <= maximum_hours) {
                 if (hoursToCompare < 1)
                     hoursToCompare = hoursToCompare * 6000000;
                 else
@@ -72,7 +74,7 @@ public class DurationSelectMenu {
             }
 
             hoursToCompare = AuctionMaster.menusCfg.getDouble("duration-select-menu.second-item.hours");
-            if (maximum_hours == -1 || hoursToCompare >= maximum_hours) {
+            if (maximum_hours == -1 || hoursToCompare <= maximum_hours) {
                 if (hoursToCompare < 1)
                     hoursToCompare = hoursToCompare * 6000000;
                 else
@@ -86,7 +88,7 @@ public class DurationSelectMenu {
             }
 
             hoursToCompare = AuctionMaster.menusCfg.getDouble("duration-select-menu.third-item.hours");
-            if (maximum_hours == -1 || hoursToCompare >= maximum_hours) {
+            if (maximum_hours == -1 || hoursToCompare <= maximum_hours) {
                 if (hoursToCompare < 1)
                     hoursToCompare = hoursToCompare * 6000000;
                 else
@@ -100,7 +102,7 @@ public class DurationSelectMenu {
             }
 
             hoursToCompare = AuctionMaster.menusCfg.getDouble("duration-select-menu.forth-item.hours");
-            if (maximum_hours == -1 || hoursToCompare >= maximum_hours) {
+            if (maximum_hours == -1 || hoursToCompare <= maximum_hours) {
                 if (hoursToCompare < 1)
                     hoursToCompare = hoursToCompare * 6000000;
                 else
@@ -114,7 +116,7 @@ public class DurationSelectMenu {
             }
 
             hoursToCompare = AuctionMaster.menusCfg.getDouble("duration-select-menu.fifth-item.hours");
-            if (maximum_hours == -1 || hoursToCompare >= maximum_hours) {
+            if (maximum_hours == -1 || hoursToCompare <= maximum_hours) {
                 if (hoursToCompare < 1)
                     hoursToCompare = hoursToCompare * 6000000;
                 else

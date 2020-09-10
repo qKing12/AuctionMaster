@@ -35,8 +35,15 @@ public class Bids {
     public Bids(String bids, String id){
         this.id=id;
         String[] bidsTopData=bids.split(",,,")[0].split(" ");
-        this.topBid=bidsTopData[0];
-        this.topBidCoins=Double.parseDouble(bidsTopData[1]);
+        if(bidsTopData.length==2) {
+            this.topBid = bidsTopData[0];
+            this.topBidCoins = Double.parseDouble(bidsTopData[1]);
+        }
+        else{
+            String coins=bidsTopData[bidsTopData.length-1];
+            this.topBid=bids.split(",,,")[0].replace(" "+coins, "");
+            this.topBidCoins = Double.parseDouble(coins);
+        }
         bids=bids.split(",,,")[1];
         if(bids.equals(" "))
             return;

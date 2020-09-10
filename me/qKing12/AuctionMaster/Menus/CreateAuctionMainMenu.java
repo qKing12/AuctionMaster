@@ -91,9 +91,11 @@ public class CreateAuctionMainMenu {
     private void setupStartingBidItem(){
         ArrayList<String> lore = new ArrayList<>();
         if(buyItNow){
-            for (String line : AuctionMaster.configLoad.switchToAuctionLore)
-                lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot"), itemConstructor.getItem(AuctionMaster.configLoad.switchToAuctionMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.switchToAuctionName), lore));
+            if(auctionsHandler.buyItNowSelected!=null) {
+                for (String line : AuctionMaster.configLoad.switchToAuctionLore)
+                    lore.add(utilsAPI.chat(player, line));
+                inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot"), itemConstructor.getItem(AuctionMaster.configLoad.switchToAuctionMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.switchToAuctionName), lore));
+            }
 
             lore = new ArrayList<>();
             for (String line : AuctionMaster.configLoad.editBINPriceLore)
@@ -104,9 +106,11 @@ public class CreateAuctionMainMenu {
             inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.starting-bid-slot"), itemConstructor.getItem(AuctionMaster.configLoad.editBINPriceMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.editBINPriceName.replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(startingBid)).replace("%fee%", AuctionMaster.numberFormatHelper.formatNumber(startingBidFee))), lore));
         }
         else {
-            for (String line : AuctionMaster.configLoad.switchToBinLore)
-                lore.add(utilsAPI.chat(player, line));
-            inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot"), itemConstructor.getItem(AuctionMaster.configLoad.switchToBinMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.switchToBinName), lore));
+            if(auctionsHandler.buyItNowSelected!=null) {
+                for (String line : AuctionMaster.configLoad.switchToBinLore)
+                    lore.add(utilsAPI.chat(player, line));
+                inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot"), itemConstructor.getItem(AuctionMaster.configLoad.switchToBinMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.switchToBinName), lore));
+            }
 
             lore = new ArrayList<>();
             for (String line : AuctionMaster.configLoad.startingBidItemLore)

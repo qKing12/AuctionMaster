@@ -64,6 +64,7 @@ public class StartingBidGUI {
     private void chatTrigger(Player p){
         for(String line : AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message"))
             p.sendMessage(utilsAPI.chat(p, line));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             try {
                 double timeInput = AuctionMaster.numberFormatHelper.useDecimals ? Double.parseDouble(reply) : Math.floor(Double.parseDouble(reply));

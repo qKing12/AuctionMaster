@@ -51,6 +51,7 @@ public class SearchGUI {
     private void chatTrigger(Player p, String category){
         for(String line : AuctionMaster.auctionsManagerCfg.getStringList("search-sign-message"))
             p.sendMessage(utils.chat(line));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             new BrowsingAuctionsMenu(p, category, 0, reply.equals("")?null:reply);
         });

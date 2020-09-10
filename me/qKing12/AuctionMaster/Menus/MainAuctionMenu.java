@@ -69,7 +69,7 @@ public class MainAuctionMenu {
             }
             inventory.setItem(AuctionMaster.menusCfg.getInt("main-menu.manage-auctions-menu-slot"), itemConstructor.getItem(AuctionMaster.configLoad.manageAuctionsItemMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.manageAuctionsItemName), lore));
 
-            if (AuctionMaster.deliveries != null) {
+            if (AuctionMaster.deliveries != null && AuctionMaster.menusCfg.getInt("main-menu.delivery-menu-slot")!=-1) {
                 lore = new ArrayList<>();
                 for (String line : AuctionMaster.configLoad.mainMenuDeliveryLore)
                     lore.add(utilsAPI.chat(player, line));

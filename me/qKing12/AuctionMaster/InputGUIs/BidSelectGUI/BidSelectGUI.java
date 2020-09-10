@@ -65,6 +65,7 @@ public class BidSelectGUI {
     private void chatTrigger(Player p, Auction auction, String goBackTo, double minimumBid){
         for(String line : AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message"))
             p.sendMessage(utilsAPI.chat(p, line));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             try{
                 double bidSelect = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(reply):Math.floor(Double.parseDouble(reply));

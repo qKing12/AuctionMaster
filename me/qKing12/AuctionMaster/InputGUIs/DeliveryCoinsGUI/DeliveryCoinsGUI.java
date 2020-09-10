@@ -59,6 +59,7 @@ public class DeliveryCoinsGUI {
         p.sendMessage(utils.chat("&7&m----------------"));
         p.sendMessage(utils.chat("&fEnter the amount of coins"));
         p.sendMessage(utils.chat("&fyou want to deliver."));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             try {
                 new DeliveryHandleMenu(p, targetPlayerUUID, Double.valueOf(reply), deliveryItems, send, inventory);

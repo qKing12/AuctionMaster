@@ -55,6 +55,7 @@ public class DeliveryGUI {
         p.sendMessage(utils.chat("&fPlease enter the player's"));
         p.sendMessage(utils.chat("&fname whose deliveries you"));
         p.sendMessage(utils.chat("&fwant to manage."));
+        p.closeInventory();
         new ChatListener(p, (reply) -> {
             new DeliveryAdminMenu(p, reply.replace(" ", "").equals("")?null:reply);
         });

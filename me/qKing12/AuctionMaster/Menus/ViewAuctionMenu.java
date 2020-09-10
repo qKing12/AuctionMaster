@@ -381,9 +381,11 @@ public class ViewAuctionMenu {
                         if(canEndAuction){
                             double coins = plugin.getConfig().getDouble("end-own-auction-fee");
                             if(economy.removeMoney(player, coins)){
-                                auction.forceEnd();
-                                utils.injectToLog("[Player Force End] Auction with ID="+auction.getId()+" was ended by seller "+player.getName());
-                                player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
+                                if(auction.forceEnd()) {
+                                    utils.injectToLog("[Player Force End] Auction with ID=" + auction.getId() + " was ended by seller " + player.getName());
+                                    player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
+                                    player.closeInventory();
+                                }
                             }
                             else{
                                 player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-no-money-message")));
@@ -468,9 +470,11 @@ public class ViewAuctionMenu {
                         if(canEndAuction){
                             double coins = plugin.getConfig().getDouble("end-own-auction-fee");
                             if(economy.removeMoney(player, coins)){
-                                auction.forceEnd();
-                                utils.injectToLog("[Player Force End] Auction with ID="+auction.getId()+" was ended by seller "+player.getName());
-                                player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
+                                if(auction.forceEnd()) {
+                                    utils.injectToLog("[Player Force End] Auction with ID=" + auction.getId() + " was ended by seller " + player.getName());
+                                    player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
+                                    player.closeInventory();
+                                }
                             }
                             else{
                                 player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-no-money-message")));
