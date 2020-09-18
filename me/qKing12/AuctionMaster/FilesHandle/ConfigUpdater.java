@@ -98,7 +98,7 @@ public class ConfigUpdater {
             String thisLine = "";
             while ((thisLine = in.readLine()) != null) {
                 if (thisLine.startsWith("version:"))
-                    out.println("version: 3.0");
+                    out.println("version: 3.2");
                 else {
                     out.println(thisLine);
                     if(thisLine.startsWith("delivery-menu-name:")){
@@ -149,7 +149,7 @@ public class ConfigUpdater {
                     } else if (thisLine.startsWith("use-anvil-instead-sign:")) {
                         if (!keys.contains("use-chat-instead-sign")) {
                             out.println("");
-                            out.println("#If you want to use th chat instead of the sign gui");
+                            out.println("#If you want to use the chat instead of the sign gui");
                             out.println("#set the option bellow to true");
                             out.println("#Sign lines will become the message sent in chat");
                             out.println("#The player has 10 seconds to give a price, afterwards");
@@ -165,6 +165,41 @@ public class ConfigUpdater {
                             out.println("#If you want to use only commands and cancel the auction-message set it to 'none'");
                             out.println("broadcast-commands: []");
                         }
+                    }
+                }
+            }
+            out.flush();
+            out.close();
+            in.close();
+
+            inFile.delete();
+            outFile.renameTo(inFile);
+
+            //menus.yml update
+
+            inFile = new File(plugin.getDataFolder(), "menus.yml");
+            outFile = new File(plugin.getDataFolder(), "$$$$$$$$.tmp");
+
+            // input
+            fis = new FileInputStream(inFile);
+            in = new BufferedReader(new InputStreamReader(fis));
+
+            // output
+            fos = new FileOutputStream(outFile);
+            out = new PrintWriter(fos);
+
+            keys = YamlConfiguration.loadConfiguration(inFile).getKeys(true);
+
+            while ((thisLine = in.readLine()) != null) {
+                out.println(thisLine);
+                if (thisLine.startsWith("  global-slot:")) {
+                    if (!keys.contains("browsing-menu.go-back-slot")) {
+                        out.println("  go-back-slot: 49");
+                        out.println("  search-slot: 48");
+                        out.println("  bin-filter-slot: 51");
+                        out.println("  sort-filter-slot: 52");
+                        out.println("  previous-page-slot: 46");
+                        out.println("  next-page-slot: 53");
                     }
                 }
             }

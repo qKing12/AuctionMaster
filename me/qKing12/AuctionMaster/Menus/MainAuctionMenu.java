@@ -116,8 +116,8 @@ public class MainAuctionMenu {
                         new DeliveryPlayerMenu(player, true);
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("main-menu.close-menu-slot")){
-                        player.closeInventory();
                         utils.playSound(player, "close-menu-click");
+                        player.closeInventory();
                     }
                 }
             }

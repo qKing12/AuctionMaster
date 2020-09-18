@@ -140,6 +140,13 @@ public class ConfigLoad {
     public ArrayList<String> editBINPriceLore;
     public ItemStack editBINPriceMaterial;
 
+    public int browsingGoBackSlot;
+    public int browsingSearchSlot;
+    public int browsingBinFilter;
+    public int browsingSortFilter;
+    public int browsingPreviousPage;
+    public int browsingNextPage;
+
     private ScriptEngine engine = new ScriptEngineManager(null).getEngineByExtension("js");
     private String formula;
     public Double durationFeeCalculator(int hours){
@@ -514,7 +521,7 @@ public class ConfigLoad {
             int minutes = (int) fractional;
             double firstTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(firstTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             firstTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
@@ -523,7 +530,7 @@ public class ConfigLoad {
             int hours=(int)time;
             double firstTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(firstTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(firstTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             firstTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.first-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
@@ -537,7 +544,7 @@ public class ConfigLoad {
             int minutes = (int) fractional;
             double secondTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(secondTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             secondTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
@@ -546,7 +553,7 @@ public class ConfigLoad {
             int hours=(int)time;
             double secondTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(secondTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(secondTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             secondTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.second-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
@@ -560,7 +567,7 @@ public class ConfigLoad {
             int minutes = (int) fractional;
             double thirdTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(thirdTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             thirdTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
@@ -569,7 +576,7 @@ public class ConfigLoad {
             int hours=(int)time;
             double thirdTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(thirdTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(thirdTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             thirdTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.third-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
@@ -583,7 +590,7 @@ public class ConfigLoad {
             int minutes = (int) fractional;
             double forthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(forthTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             forthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
@@ -592,7 +599,7 @@ public class ConfigLoad {
             int hours=(int)time;
             double forthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(forthTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(forthTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             forthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.forth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
@@ -606,7 +613,7 @@ public class ConfigLoad {
             int minutes = (int) fractional;
             double fifthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(minutesFee) : minutesFee;
             if(fifthTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             fifthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+minutes+" "+(minutes==1?minute:this.minutes), lore);
@@ -615,7 +622,7 @@ public class ConfigLoad {
             int hours=(int)time;
             double fifthTimeFee = AuctionMaster.numberFormatHelper.useDecimals? Math.floor(durationFeeCalculator(hours)) : durationFeeCalculator(hours);
             if(fifthTimeFee!=0)
-                lore.add(utils.chat("&7")+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+utils.chat("&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
+                lore.add(utils.chat("&7"+ AuctionMaster.auctionsManagerCfg.getString("extra-fee-message")+"&6")+ AuctionMaster.numberFormatHelper.formatNumber(fifthTimeFee));
             lore.add("");
             lore.add(utils.chat(AuctionMaster.auctionsManagerCfg.getString("duration-selection-lore")));
             fifthTimeItem= AuctionMaster.itemConstructor.getItem(AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("duration-select-menu.fifth-item.material")), utils.chat("&a")+hours+" "+(hours==1?hour:this.hours), lore);
@@ -709,5 +716,12 @@ public class ConfigLoad {
         editBINPriceMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.buyItNowCfg.getString("buy-it-now-select-price.item-id"));
 
         durationMenuSize=AuctionMaster.menusCfg.getInt("duration-select-menu.size");
+
+        browsingGoBackSlot=AuctionMaster.menusCfg.getInt("browsing-menu.go-back-slot");
+        browsingBinFilter=AuctionMaster.menusCfg.getInt("browsing-menu.bin-filter-slot");
+        browsingSearchSlot=AuctionMaster.menusCfg.getInt("browsing-menu.search-slot");
+        browsingSortFilter=AuctionMaster.menusCfg.getInt("browsing-menu.sort-filter-slot");
+        browsingPreviousPage=AuctionMaster.menusCfg.getInt("browsing-menu.previous-page-slot");
+        browsingNextPage=AuctionMaster.menusCfg.getInt("browsing-menu.next-page-slot");
     }
 }

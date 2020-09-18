@@ -59,6 +59,12 @@ browsing-menu:
   #It can be any slot but make sure to not put
   #it where the auctions should be
   global-slot: 50
+  go-back-slot: 49
+  search-slot: 48
+  bin-filter-slot: 51
+  sort-filter-slot: 52
+  previous-page-slot: 46
+  next-page-slot: 53
 view-auction-menu:
   size: 54
   auction-display-slot: 13

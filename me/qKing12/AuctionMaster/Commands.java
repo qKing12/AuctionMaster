@@ -1,5 +1,6 @@
 package me.qKing12.AuctionMaster;
 
+import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.FilesHandle.ConfigLoad;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.DeliveryAdminMenu;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.EndedAuctionsMenu;
@@ -44,6 +45,11 @@ public class Commands implements CommandExecutor {
                     new DeliveryPlayerMenu(p, false);
                     return true;
                 }
+                else if(args.length>0 && args[0].equalsIgnoreCase("help")){
+                    for(String line : plugin.getConfig().getStringList("player-commands-help-display"))
+                        p.sendMessage(utilsAPI.chat(p, line));
+                    return true;
+                }
 
                 if(canAuction.equals("none") || p.hasPermission(canAuction)) {
                     if(canUseCommand.equals("none") || p.hasPermission(canUseCommand)) {
@@ -81,6 +87,11 @@ public class Commands implements CommandExecutor {
             else if (cmd.getName().equalsIgnoreCase("ahview")) {
                 if(args.length>0){
                     try{
+                        Auction auction = auctionsHandler.auctions.get(args[0]);
+                        if(auction==null){
+                            p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
+                            return true;
+                        }
                         new ViewAuctionMenu(p, AuctionMaster.auctionsHandler.auctions.get(args[0]), "Close", 0);
                     }catch(Exception x){
                         p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));

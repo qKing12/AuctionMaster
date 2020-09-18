@@ -69,7 +69,7 @@ global-category-lore:
 #inside the anvil gui
 use-anvil-instead-sign: false
 
-#If you want to use th chat instead of the sign gui
+#If you want to use the chat instead of the sign gui
 #set the option bellow to true
 #Sign lines will become the message sent in chat
 #The player has 10 seconds to give a price, afterwards
@@ -331,4 +331,4 @@ blacklist-item-message: '&cThis item is not auctionable!'
 #This option is configurable in menu's file.
 
 #Please do not modify this
-version: 3.0
+version: 3.2

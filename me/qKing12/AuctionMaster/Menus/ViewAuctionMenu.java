@@ -506,6 +506,7 @@ public class ViewAuctionMenu {
                                             }
                                         } else {
                                             e.getCurrentItem().setAmount(3);
+                                            player.sendMessage(utils.chat(AuctionMaster.plugin.bidsRelatedCfg.getString("placed-bid-message")));
                                             AuctionMaster.economy.removeMoney(player, amountToSkip == 0 ? bidAmount : amountToSkip);
                                             goBack();
                                         }
