@@ -273,6 +273,11 @@ public class ViewAuctionMenu {
     }
 
     public ViewAuctionMenu(Player player, Auction auction, String goBackTo, double bidAmount){
+        String canAuction = plugin.getConfig().getString("auction-use-permission");
+        if(!canAuction.equals("none") && !player.hasPermission(canAuction)){
+            player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("auction-no-permission")));
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             this.player = player;
             this.goBackTo = goBackTo;
@@ -364,10 +369,11 @@ public class ViewAuctionMenu {
     public class ClickListenBIN implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot")) {
                         goBack();
@@ -447,10 +453,11 @@ public class ViewAuctionMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot() == AuctionMaster.menusCfg.getInt("view-auction-menu.bid-amount-change-slot")){
                         if(!ownAuction) {

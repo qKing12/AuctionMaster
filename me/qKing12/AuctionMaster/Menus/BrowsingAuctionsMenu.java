@@ -48,7 +48,12 @@ public class BrowsingAuctionsMenu {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
-                inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                try {
+                    inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                }catch(NullPointerException x){
+                    if(inventory!=null)
+                        x.printStackTrace();
+                }
             }
         }, 20, 20);
     }
@@ -64,9 +69,9 @@ public class BrowsingAuctionsMenu {
     private void setupNextPage(){
         ArrayList<String> lore = new ArrayList<>();
         for(String line : AuctionMaster.configLoad.nextPageLore)
-            lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page))));
+            lore.add(utilsAPI.chat(player, line.replace("%page-number%", String.valueOf(page+2))));
 
-        inventory.setItem(AuctionMaster.configLoad.browsingNextPage, itemConstructor.getItem(AuctionMaster.configLoad.nextPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.nextPageName.replace("%page-number%", String.valueOf(page))), lore));
+        inventory.setItem(AuctionMaster.configLoad.browsingNextPage, itemConstructor.getItem(AuctionMaster.configLoad.nextPageMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.nextPageName.replace("%page-number%", String.valueOf(page+2))), lore));
     }
 
 
@@ -82,7 +87,7 @@ public class BrowsingAuctionsMenu {
 
         auctions.clear();
 
-        ArrayList<Auction> auctions=this.category.getAuctions(player);
+        ArrayList<Auction> auctions=(ArrayList<Auction>)this.category.getAuctions(player).clone();
         Iterator<Auction> auctionIterator=auctions.iterator();
 
         int toSkip=page*24;
@@ -189,7 +194,7 @@ public class BrowsingAuctionsMenu {
 
             loadAuctions();
 
-            if (auctionsHandler.buyItNowSelected != null)
+            if (auctionsHandler.buyItNowSelected != null && !configLoad.onlyBuyItNow)
                 inventory.setItem(AuctionMaster.configLoad.browsingBinFilter, AuctionMaster.auctionsHandler.sortingObject.getSortItemBIN(player));
             inventory.setItem(AuctionMaster.configLoad.browsingSortFilter, AuctionMaster.auctionsHandler.sortingObject.getSortItem(player));
 
@@ -217,10 +222,11 @@ public class BrowsingAuctionsMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot()==AuctionMaster.configLoad.browsingSearchSlot){
                         utils.playSound(player, "search-item-click");
@@ -243,7 +249,7 @@ public class BrowsingAuctionsMenu {
                         new MainAuctionMenu(player);
                     }
                     else if(e.getSlot()==AuctionMaster.configLoad.browsingBinFilter){
-                        if(auctionsHandler.buyItNowSelected==null)
+                        if(auctionsHandler.buyItNowSelected==null || configLoad.onlyBuyItNow)
                             return;
                         utils.playSound(player, "sort-item-click");
                         AuctionMaster.auctionsHandler.sortingObject.changeSortBIN(player);

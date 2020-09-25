@@ -98,7 +98,7 @@ public class ConfigUpdater {
             String thisLine = "";
             while ((thisLine = in.readLine()) != null) {
                 if (thisLine.startsWith("version:"))
-                    out.println("version: 3.2");
+                    out.println("version: 3.22");
                 else {
                     out.println(thisLine);
                     if(thisLine.startsWith("delivery-menu-name:")){
@@ -282,6 +282,40 @@ public class ConfigUpdater {
                         out.println("");
                     }
                 }
+                out.println(thisLine);
+            }
+            out.flush();
+            out.close();
+            in.close();
+
+            inFile.delete();
+            outFile.renameTo(inFile);
+
+            //buyItNow.yml update
+
+            inFile = new File(plugin.getDataFolder(), "buyItNow.yml");
+            outFile = new File(plugin.getDataFolder(), "$$$$$$$$.tmp");
+
+            // input
+            fis = new FileInputStream(inFile);
+            in = new BufferedReader(new InputStreamReader(fis));
+
+            // output
+            fos = new FileOutputStream(outFile);
+            out = new PrintWriter(fos);
+
+            out.println(in.readLine());
+
+            keys = YamlConfiguration.loadConfiguration(inFile).getKeys(false);
+            if(!keys.contains("use-buy-it-now-as-default")){
+                out.println("#This will make the buy-it-now auction to be the default one");
+                out.println("#in the create auction menu (use-buy-it-now needs to be enabled)");
+                out.println("use-buy-it-now-as-default: false");
+                out.println("#This will disable normal auctions");
+                out.println("use-only-buy-it-now: false");
+            }
+
+            while ((thisLine = in.readLine()) != null) {
                 out.println(thisLine);
             }
             out.flush();

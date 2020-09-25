@@ -86,10 +86,11 @@ public class MainAuctionMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if (e.getSlot() == AuctionMaster.menusCfg.getInt("main-menu.manage-auctions-menu-slot")) {
                         utils.playSound(player, "own-auctions-click");

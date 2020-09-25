@@ -1,12 +1,12 @@
 name: AuctionMaster
 author: qKing12
-version: "3.2"
+version: "3.2.2"
 main: me.qKing12.AuctionMaster.AuctionMaster
 description: A not so simple plugin for auctions.
 
 api-version: "1.13"
 
-softdepend: [Citizens, Vault, PlayerPoints, TokenManager, PlaceholderAPI, Skript, ProtocolLib, HeadDatabase]
+softdepend: [CustomEconomy, Citizens, Vault, PlayerPoints, TokenManager, PlaceholderAPI, Skript, ProtocolLib, HeadDatabase]
 
 commands:
   auction:

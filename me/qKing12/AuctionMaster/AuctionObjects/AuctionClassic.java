@@ -410,7 +410,7 @@ public class AuctionClassic implements Auction{
     private ArrayList<String> lore;
     private String durationLineString;
     private int durationLine;
-    private int cacheBids;
+    private int cacheBids=0;
     private ItemStack endedDisplay;
     public ItemStack getUpdatedDisplay(){
         if(endedDisplay!=null){

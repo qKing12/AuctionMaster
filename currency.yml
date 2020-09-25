@@ -4,6 +4,8 @@
 #Put 'Vault' for Vault Currency(Default)
 #Put 'TokenManager' for TokenManager Currency
 #Put 'PlayerPoints' for PlayerPoints Currency
+#Put 'CustomEconomy-Balance' for CustomEconomy Balance Mode
+#Put 'CustomEconomy-Tokens' for CustomEconomy Tokens Mode
 #Put 'Skript' for Skript Currency
 #If you misspell the currency type, it will automatically select Vault
 currency-type: 'Vault'

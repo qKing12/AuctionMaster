@@ -91,7 +91,7 @@ public class CreateAuctionMainMenu {
     private void setupStartingBidItem(){
         ArrayList<String> lore = new ArrayList<>();
         if(buyItNow){
-            if(auctionsHandler.buyItNowSelected!=null) {
+            if(auctionsHandler.buyItNowSelected!=null && !configLoad.onlyBuyItNow) {
                 for (String line : AuctionMaster.configLoad.switchToAuctionLore)
                     lore.add(utilsAPI.chat(player, line));
                 inventory.setItem(AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot"), itemConstructor.getItem(AuctionMaster.configLoad.switchToAuctionMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.switchToAuctionName), lore));
@@ -130,8 +130,9 @@ public class CreateAuctionMainMenu {
             inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.createAuctionMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.createAuctionMenuName));
 
             generateCreateAuctionItemNo();
-            if (auctionsHandler.buyItNowSelected != null && auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString()))
+            if (auctionsHandler.buyItNowSelected != null && (configLoad.onlyBuyItNow || ((AuctionMaster.configLoad.defaultBuyItNow && !auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString())) || (!configLoad.defaultBuyItNow && auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString()))))) {
                 buyItNow = true;
+            }
             else
                 buyItNow = false;
 
@@ -196,10 +197,11 @@ public class CreateAuctionMainMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(player.getInventory())){
                     if(AuctionMaster.configLoad.isBlacklisted(e.getCurrentItem())){
                         player.sendMessage(utilsAPI.chat(player, AuctionMaster.plugin.getConfig().getString("blacklist-item-message")));
@@ -231,13 +233,19 @@ public class CreateAuctionMainMenu {
                         }
                     }
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("create-auction-menu.switch-type-slot")){
-                        if(auctionsHandler.buyItNowSelected!=null){
+                        if(auctionsHandler.buyItNowSelected!=null && !configLoad.onlyBuyItNow){
                             if(buyItNow) {
-                                auctionsHandler.buyItNowSelected.remove(player.getUniqueId().toString());
+                                if(configLoad.defaultBuyItNow)
+                                    auctionsHandler.buyItNowSelected.add(player.getUniqueId().toString());
+                                else
+                                    auctionsHandler.buyItNowSelected.remove(player.getUniqueId().toString());
                                 buyItNow=false;
                             }
                             else {
-                                auctionsHandler.buyItNowSelected.add(player.getUniqueId().toString());
+                                if(configLoad.defaultBuyItNow)
+                                    auctionsHandler.buyItNowSelected.remove(player.getUniqueId().toString());
+                                else
+                                    auctionsHandler.buyItNowSelected.add(player.getUniqueId().toString());
                                 buyItNow=true;
                             }
                             startingBidFee=startingBid*(buyItNow? configLoad.startingBidBINFee: AuctionMaster.configLoad.startingBidFee)/100;
@@ -284,11 +292,12 @@ public class CreateAuctionMainMenu {
         @EventHandler
         public void onClose(InventoryCloseEvent e){
             if(inventory.equals(e.getInventory())) {
-                if(AuctionMaster.auctionsHandler.previewItems.containsKey(e.getPlayer().getUniqueId().toString()))
-                    AuctionMaster.auctionsDatabase.registerPreviewItem(player.getUniqueId().toString(), utils.itemToBase64(AuctionMaster.auctionsHandler.previewItems.get(e.getPlayer().getUniqueId().toString())));
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                            if (AuctionMaster.auctionsHandler.previewItems.containsKey(e.getPlayer().getUniqueId().toString()))
+                                AuctionMaster.auctionsDatabase.registerPreviewItem(player.getUniqueId().toString(), utils.itemToBase64(AuctionMaster.auctionsHandler.previewItems.get(e.getPlayer().getUniqueId().toString())));
+                        });
                 HandlerList.unregisterAll(this);
                 inventory = null;
-                player = null;
             }
         }
     }

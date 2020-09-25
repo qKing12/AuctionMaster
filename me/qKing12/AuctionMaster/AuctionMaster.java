@@ -76,15 +76,16 @@ public class AuctionMaster extends JavaPlugin{
         String currency = currencyCfg.getString("currency-type");
         if(currency.equalsIgnoreCase("Vault")){
             economy=new VaultImpl();
-        }
-        else if(currency.equalsIgnoreCase("PlayerPoints")){
-            economy=new PlayerPointsImpl();
-        }
-        else if(currency.equalsIgnoreCase("TokenManager")){
-            economy=new TokenManagerImpl();
-        }
-        else if(currency.equalsIgnoreCase("Skript")){
-            economy=new SkriptImpl();
+        } else if (currency.equalsIgnoreCase("CustomEconomy-Balance")) {
+            economy = new CustomEconomyBalance();
+        } else if (currency.equalsIgnoreCase("CustomEconomy-Tokens")) {
+            economy = new CustomEconomyTokens();
+        } else if (currency.equalsIgnoreCase("PlayerPoints")) {
+            economy = new PlayerPointsImpl();
+        } else if (currency.equalsIgnoreCase("TokenManager")) {
+            economy = new TokenManagerImpl();
+        } else if (currency.equalsIgnoreCase("Skript")) {
+            economy = new SkriptImpl();
         }
     }
 
@@ -172,7 +173,7 @@ public class AuctionMaster extends JavaPlugin{
 
         MetricsLite metrics = new MetricsLite(this, 8726);
 
-        if(this.getConfig().getDouble("version")<3.2){
+        if(this.getConfig().getDouble("version")<3.22){
             new ConfigUpdater(this);
             saveDefaultConfig();
         }

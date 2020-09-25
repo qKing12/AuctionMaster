@@ -31,7 +31,12 @@ public class ViewPlayerAuctions {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
-                inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                try {
+                    inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                }catch(NullPointerException x){
+                    if(inventory!=null)
+                        x.printStackTrace();
+                }
             }
         }, 20, 20);
     }
@@ -97,10 +102,11 @@ public class ViewPlayerAuctions {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if(auctions.containsKey(e.getSlot())){
                         new ViewAuctionMenu(player, auctions.get(e.getSlot()), uuid, 0);

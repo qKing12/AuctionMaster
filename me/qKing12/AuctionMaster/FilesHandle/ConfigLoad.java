@@ -201,6 +201,7 @@ public class ConfigLoad {
     public ItemStack searchItemMaterial;
 
     public String manageOwnAuctionsMenuName;
+    public String manageOwnBidsMenuName;
 
     public String browsingMenuName;
 
@@ -405,7 +406,13 @@ public class ConfigLoad {
 
     public boolean endOwnAuction;
 
+    public boolean defaultBuyItNow;
+    public boolean onlyBuyItNow;
+
     public ConfigLoad(){
+        defaultBuyItNow=buyItNowCfg.getBoolean("use-buy-it-now-as-default");
+        onlyBuyItNow=buyItNowCfg.getBoolean("use-only-buy-it-now");
+
         endOwnAuction= AuctionMaster.plugin.getConfig().getBoolean("use-end-own-auction");
 
         backgroundGlass= AuctionMaster.itemConstructor.getItem("160:"+ AuctionMaster.plugin.getConfig().getInt("background-color"),  " ", null);
@@ -640,6 +647,7 @@ public class ConfigLoad {
         collectAllLoreBids=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("collect-all-item-lore.own-bids");
 
         manageOwnAuctionsMenuName= AuctionMaster.auctionsManagerCfg.getString("manage-own-auctions-menu-name");
+        manageOwnBidsMenuName= AuctionMaster.plugin.getConfig().getString("view-bids-menu-name");
         browsingMenuName= AuctionMaster.plugin.getConfig().getString("browsing-menu-name");
 
         searchItemName= AuctionMaster.auctionsManagerCfg.getString("search-auction-item-name");

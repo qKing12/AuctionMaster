@@ -51,7 +51,12 @@ public class ManageOwnBidsMenu {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
-                inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                try {
+                    inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                }catch(NullPointerException x){
+                    if(inventory!=null)
+                        x.printStackTrace();
+                }
             }
         }, 20, 20);
     }
@@ -68,7 +73,7 @@ public class ManageOwnBidsMenu {
                 size += 1;
             size *= 9;
 
-            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, AuctionMaster.configLoad.manageOwnAuctionsMenuName));
+            inventory = Bukkit.createInventory(player, size, utilsAPI.chat(player, configLoad.manageOwnBidsMenuName));
 
             int relativeSlot = size - 9;
             for (int i = 1; i < 8; i++) {
@@ -109,7 +114,7 @@ public class ManageOwnBidsMenu {
                 }
                 collectAllSlot = size - 8;
                 lore = new ArrayList<>();
-                for (String line : AuctionMaster.configLoad.collectAllLoreOwnAuctions)
+                for (String line : AuctionMaster.configLoad.collectAllLoreBids)
                     lore.add(utilsAPI.chat(player, line
                             .replace("%auctions%", String.valueOf(toCollectAll.size()))
                             .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(coinsToCollect))
@@ -128,10 +133,11 @@ public class ManageOwnBidsMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot() == goBackSlot) {
                         utils.playSound(player, "go-back-click");

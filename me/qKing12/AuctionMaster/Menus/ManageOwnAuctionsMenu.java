@@ -52,7 +52,12 @@ public class ManageOwnAuctionsMenu {
             Iterator<Map.Entry<Integer, Auction>> auction = auctions.entrySet().iterator();
             while(auction.hasNext()){
                 Map.Entry<Integer, Auction> entry=auction.next();
-                inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                try {
+                    inventory.setItem(entry.getKey(), entry.getValue().getUpdatedDisplay());
+                }catch(NullPointerException x){
+                    if(inventory!=null)
+                        x.printStackTrace();
+                }
             }
         }, 20, 20);
     }
@@ -136,10 +141,11 @@ public class ManageOwnAuctionsMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if (e.getSlot() == createMenuSlot) {
                         new CreateAuctionMainMenu(player);

@@ -16,7 +16,11 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class utils {
     private static File log = new File(AuctionMaster.plugin.getDataFolder(), "database/logs.txt");
@@ -76,16 +80,19 @@ public class utils {
             itemName = getNameMethod.invoke(nmsItemStack);
 
             name = itemName.toString();
-            if(name.contains("null")){
+            if(name.contains("player_head.named")){
+                String player=name.split("args=\\[")[1].split("]")[0];
+                name=player+"'s Head";
+            }
+            else if(name.contains("null")){
                 name=name.split("'")[1].split("minecraft")[1].substring(1);
                 StringBuilder sbName = new StringBuilder();
                 for (String subName : name.split("_"))
                     sbName.append(subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase()).append(" ");
-                name = sbName.toString().substring(0, sbName.length() - 1);
+                name = sbName.substring(0, sbName.length() - 1);
             }
             else
                 name=itemName.toString();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -99,8 +106,9 @@ public class utils {
         else {
             itemName = getName(item);
         }
-        if(itemName.startsWith("TextComponent"))
-            itemName=itemName.split("'")[1];
+        if(itemName.startsWith("TextComponent")) {
+            itemName = itemName.split("'")[1];
+        }
         return itemName;
     }
 
@@ -138,11 +146,22 @@ public class utils {
     }
 
 
-    public static String chat (String s){
-        if(s==null)
+    public static String chat (String msg){
+        if(msg==null)
             return ChatColor.translateAlternateColorCodes('&', "&cConfig Missing Text");
-        byte[] temp = s.getBytes(Charsets.UTF_8);
-        return ChatColor.translateAlternateColorCodes('&', new String(temp, Charsets.UTF_8));
+        else if (!Pattern.compile("\\{#[0-9A-Fa-f]{6}}").matcher(msg).find()) {
+            return ChatColor.translateAlternateColorCodes('&', msg);
+        } else {
+            Matcher m = Pattern.compile("\\{#[0-9A-Fa-f]{6}}").matcher(msg);
+            String s;
+            String sNew;
+            while (m.find()) {
+                s = m.group();
+                sNew = "§x" + ((String) Arrays.stream(s.split("")).map((s2) -> "§" + s2).collect(Collectors.joining())).replace("§#", "");
+                msg = msg.replace(s, sNew.replace("§{", "").replace("§}", ""));
+            }
+            return ChatColor.translateAlternateColorCodes('&', msg);
+        }
     }
 
     public static String fromMilisecondsAuction(Long a){

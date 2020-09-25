@@ -57,10 +57,11 @@ public class CreateAuctionConfirmMenu {
     public class ClickListen implements Listener {
         @EventHandler
         public void onClick(InventoryClickEvent e){
-            if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR))
-                return;
             if(e.getInventory().equals(inventory)){
                 e.setCancelled(true);
+                if(e.getCurrentItem()==null || e.getCurrentItem().getType().equals(Material.AIR)) {
+                    return;
+                }
                 if(e.getClickedInventory().equals(inventory)) {
                     if (e.getSlot() == AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.cancel-item-slot")) {
                         utils.playSound(player, "auction-cancel");

@@ -45,7 +45,11 @@ public class DeliveryGUI {
 
     private void anvilTrigger(Player p){
         new AnvilGUI(p, paper.clone(), (reply) ->{
-            new DeliveryAdminMenu(p, reply.replace(" ", "").equals("")?null:reply);
+            try {
+                new DeliveryAdminMenu(p, reply.replace(" ", "").equals("") ? null : reply);
+            }catch(Exception x){
+
+            }
             return null;
         });
     }
