@@ -82,7 +82,7 @@ public class CreateAuctionConfirmMenu {
                             duration= AuctionMaster.configLoad.defaultDuration;
                         AuctionMaster.economy.removeMoney(player, fee);
                         Auction auction;
-                        if(AuctionMaster.auctionsHandler.buyItNowSelected!=null && AuctionMaster.auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString()))
+                        if(auctionsHandler.buyItNowSelected != null && (configLoad.onlyBuyItNow || ((AuctionMaster.configLoad.defaultBuyItNow && !auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString())) || (!configLoad.defaultBuyItNow && auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString())))))
                             AuctionMaster.auctionsHandler.createAuction(auction=new AuctionBIN(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
                         else
                             AuctionMaster.auctionsHandler.createAuction(auction=new AuctionClassic(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
