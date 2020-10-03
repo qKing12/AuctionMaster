@@ -2,6 +2,7 @@ package me.qKing12.AuctionMaster.FilesHandle;
 
 import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Utils.utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,9 +38,10 @@ public class ConfigLoad {
                     return true;
         }
         else{
-            for(ItemStack item2 : blacklistIds)
-                if(item.getType().equals(item2.getType()) && item.getData()==item2.getData())
+            for(ItemStack item2 : blacklistIds) {
+                if (item.getType().equals(item2.getType()) && item.getData().getData() == item2.getData().getData())
                     return true;
+            }
         }
 
         return false;

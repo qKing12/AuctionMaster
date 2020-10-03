@@ -84,6 +84,9 @@ public class utils {
                 String player=name.split("args=\\[")[1].split("]")[0];
                 name=player+"'s Head";
             }
+            else if(name.contains("TextComponent{text='")){
+                name="§f"+name.split("TextComponent\\{text='")[1].split("'")[0];
+            }
             else if(name.contains("null")){
                 name=name.split("'")[1].split("minecraft")[1].substring(1);
                 StringBuilder sbName = new StringBuilder();

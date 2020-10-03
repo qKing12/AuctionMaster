@@ -76,6 +76,26 @@ public class AuctionsDatabase {
         }
     }
 
+    public void loadPreviewItems(){
+        try(
+                Connection Auctions = DriverManager.getConnection(url);
+                ResultSet resultSet = Auctions.prepareStatement("SELECT * FROM PreviewData").executeQuery();
+        ){
+            while(resultSet.next()) {
+                String uuid = resultSet.getString(1);
+                if(!uuid.equalsIgnoreCase("serverCloseDate")){
+                    try{
+                        AuctionMaster.auctionsHandler.previewItems.put(uuid, utils.itemFromBase64(resultSet.getString(2)));
+                    }catch (Exception x){
+                        AuctionMaster.plugin.getLogger().info("Tried to load preview item for player with UUID="+uuid+" but failed!");
+                    }
+                }
+            }
+        }catch(Exception x){
+            x.printStackTrace();
+        }
+    }
+
     public void registerPreviewItem(String player, String item) {
         try (
                 Connection Auctions = DriverManager.getConnection(url);
@@ -424,5 +444,6 @@ public class AuctionsDatabase {
             x.printStackTrace();
         }
         addAllToBrowse();
+        loadPreviewItems();
     }
 }
