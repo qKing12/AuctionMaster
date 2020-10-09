@@ -16,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
@@ -105,6 +106,10 @@ public class Commands implements CommandExecutor {
                 }
                 if (args.length > 0) {
                     if(args[0].equalsIgnoreCase("reload")){
+                        Plugin addon = Bukkit.getPluginManager().getPlugin("AuctionMasterItemDisplay");
+                        if(addon!=null){
+                            Bukkit.getPluginManager().disablePlugin(addon);
+                        }
                         plugin.reloadConfig();
                         adminCfg = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "admin_config.yml"));
                         buyItNowCfg = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "buyItNow.yml"));
@@ -120,6 +125,9 @@ public class Commands implements CommandExecutor {
                         toolsCfg = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "menus/tools.yml"));
                         weaponsCfg = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "menus/weapons.yml"));
                         configLoad=new ConfigLoad();
+                        if(addon!=null){
+                            Bukkit.getPluginManager().enablePlugin(addon);
+                        }
                         p.sendMessage(utils.chat("&aPlugin reloaded!"));
                         p.sendMessage(utils.chat("&aAdditional Note: &fReload works only on messages and some small settings. Things the plugin considers important need a restart to update."));
                         return true;

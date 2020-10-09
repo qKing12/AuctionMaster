@@ -237,7 +237,7 @@ extra-fee-formula: '5*(x+3)+5*x*(Math.floor(x/9)+Math.floor(x/20))'
 #The fee for minutes is fixed (5 minutes - 59 minutes)
 extra-fee-minutes: '500'
 
-extra-fee-message: 'Extra fee: '
+extra-fee-message: '&7Extra fee: &6'
 
 duration-menu-name: '&8Auction Duration'
 #This is the message used into duration selection menu

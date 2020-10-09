@@ -427,7 +427,8 @@ public class AuctionClassic implements Auction{
                 ItemStack updated = item.clone();
                 ItemMeta meta = updated.getItemMeta();
                 meta.setDisplayName(displayName);
-                ArrayList<String> lore = (ArrayList<String>) this.lore.clone();
+                ArrayList<String> lore;
+                lore = (ArrayList<String>) this.lore.clone();
                 lore.set(durationLine, durationLineString.replace("%duration%", utils.fromMilisecondsAuction(endingDate - ZonedDateTime.now().toInstant().toEpochMilli())));
                 meta.setLore(lore);
                 updated.setItemMeta(meta);
