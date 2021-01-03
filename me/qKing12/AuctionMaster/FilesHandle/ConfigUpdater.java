@@ -98,7 +98,7 @@ public class ConfigUpdater {
             String thisLine = "";
             while ((thisLine = in.readLine()) != null) {
                 if (thisLine.startsWith("version:"))
-                    out.println("version: 3.22");
+                    out.println("version: 3.23");
                 else {
                     out.println(thisLine);
                     if(thisLine.startsWith("delivery-menu-name:")){
@@ -313,6 +313,9 @@ public class ConfigUpdater {
                 out.println("use-buy-it-now-as-default: false");
                 out.println("#This will disable normal auctions");
                 out.println("use-only-buy-it-now: false");
+            }
+            if(!keys.contains("use-bin-timer")){
+                out.println("use-bin-timer: true");
             }
 
             while ((thisLine = in.readLine()) != null) {

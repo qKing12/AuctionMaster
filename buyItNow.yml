@@ -1,3 +1,4 @@
+use-bin-timer: true
 use-buy-it-now: true
 #This will make the buy-it-now auction to be the default one
 #in the create auction menu (use-buy-it-now needs to be enabled)

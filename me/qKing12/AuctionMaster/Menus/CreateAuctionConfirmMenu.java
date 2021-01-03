@@ -55,6 +55,8 @@ public class CreateAuctionConfirmMenu {
     }
 
     public class ClickListen implements Listener {
+        private boolean singleClick=false;
+
         @EventHandler
         public void onClick(InventoryClickEvent e){
             if(e.getInventory().equals(inventory)){
@@ -68,6 +70,9 @@ public class CreateAuctionConfirmMenu {
                         new CreateAuctionMainMenu(player);
                     }
                     else if (e.getSlot() == AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot")){
+                        if(singleClick)
+                            return;
+                        singleClick=true;
                         utils.playSound(player, "auction-confirm");
                         String uuid = player.getUniqueId().toString();
                         double startingBid;

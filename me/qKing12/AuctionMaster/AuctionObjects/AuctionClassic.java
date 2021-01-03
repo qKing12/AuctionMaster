@@ -215,7 +215,11 @@ public class AuctionClassic implements Auction{
         AuctionMaster.economy.addMoney(player, coins);
         AuctionMaster.auctionsDatabase.removeFromOwnBids(player.getUniqueId().toString(), id);
         String uuid = player.getUniqueId().toString();
-        AuctionMaster.auctionsHandler.bidAuctions.get(uuid).remove(this);
+        try {
+            AuctionMaster.auctionsHandler.bidAuctions.get(uuid).remove(this);
+        }catch(Exception x){
+            x.printStackTrace();
+        }
         if(AuctionMaster.auctionsHandler.bidAuctions.get(uuid).isEmpty()){
             AuctionMaster.auctionsHandler.bidAuctions.remove(uuid);
         }

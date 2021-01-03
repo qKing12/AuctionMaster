@@ -121,6 +121,8 @@ public class AuctionMaster extends JavaPlugin{
             anvilHelper=new Wrapper1_16_R1();
         else if(version.equals("v1_16_R2"))
             anvilHelper=new Wrapper1_16_R2();
+        else if(version.equals("v1_16_R3"))
+            anvilHelper=new Wrapper1_16_R3();
     }
 
     private void loadPlaceholderAPISupport(){
@@ -173,7 +175,7 @@ public class AuctionMaster extends JavaPlugin{
 
         MetricsLite metrics = new MetricsLite(this, 8726);
 
-        if(this.getConfig().getDouble("version")<3.22){
+        if(this.getConfig().getDouble("version")<3.23){
             new ConfigUpdater(this);
             saveDefaultConfig();
         }

@@ -89,7 +89,7 @@ public class Commands implements CommandExecutor {
                 if(args.length>0){
                     try{
                         Auction auction = auctionsHandler.auctions.get(args[0]);
-                        if(auction==null){
+                        if(auction==null || auction.isEnded()){
                             p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
                             return true;
                         }

@@ -179,7 +179,9 @@ public class AuctionBIN implements Auction{
     }
 
     public boolean isEnded(){
-        return endingDate<=ZonedDateTime.now().toInstant().toEpochMilli();
+        if(!AuctionMaster.configLoad.BinTimer)
+            return bids.getNumberOfBids()!=0;
+        else return endingDate<=ZonedDateTime.now().toInstant().toEpochMilli();
     }
 
     public ItemStack getBidHistory(){
@@ -231,7 +233,7 @@ public class AuctionBIN implements Auction{
                 lore.add(utils.chat(line
                     .replace("%display-name-seller%", sellerDisplayName)
                     .replace("%starting-bid%", AuctionMaster.numberFormatHelper.formatNumber(coins))
-                    .replace("%duration%", utils.fromMilisecondsAuction(endingDate-ZonedDateTime.now().toInstant().toEpochMilli()))
+                    .replace("%duration%", AuctionMaster.configLoad.BinTimer?utils.fromMilisecondsAuction(endingDate-ZonedDateTime.now().toInstant().toEpochMilli()):"Never Expire")
                 ));
                 if(line.contains("%duration%")){
                     durationLine+=index;
@@ -266,7 +268,7 @@ public class AuctionBIN implements Auction{
                 ItemMeta meta = updated.getItemMeta();
                 meta.setDisplayName(displayName);
                 ArrayList<String> lore = (ArrayList<String>) this.lore.clone();
-                lore.set(durationLine, durationLineString.replace("%duration%", utils.fromMilisecondsAuction(endingDate - ZonedDateTime.now().toInstant().toEpochMilli())));
+                lore.set(durationLine, durationLineString.replace("%duration%", AuctionMaster.configLoad.BinTimer?utils.fromMilisecondsAuction(endingDate - ZonedDateTime.now().toInstant().toEpochMilli()):"Never Expire"));
                 meta.setLore(lore);
                 updated.setItemMeta(meta);
                 return updated;

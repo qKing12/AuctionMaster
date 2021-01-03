@@ -95,6 +95,22 @@ public class AuctionsDatabase {
             x.printStackTrace();
         }
     }
+    
+    public void deletePreviewItems(String id){
+    	try (
+                Connection Auctions = DriverManager.getConnection(url);
+                PreparedStatement stmt1 = Auctions.prepareStatement("DELETE FROM PreviewData WHERE id = ?;");
+        ) {
+            stmt1.setString(1, id);;
+            stmt1.executeUpdate();
+
+        } catch (Exception x) {
+            if (x.getMessage().startsWith("[SQLITE_BUSY]")) {
+                Bukkit.getScheduler().runTaskLaterAsynchronously(AuctionMaster.plugin, () -> deletePreviewItems(id), 7);
+            } else
+                x.printStackTrace();
+        }
+    }
 
     public void registerPreviewItem(String player, String item) {
         try (

@@ -218,7 +218,7 @@ public class utils {
             return Integer.toString(secunda).concat(" ").concat(AuctionMaster.configLoad.seconds);
         }
         else
-            return "0 ".concat(AuctionMaster.configLoad.seconds);
+            return "Never Expire";
     }
 
     public static int toMiliseconds(String a){
